@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision: IDEs and tooling</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>IDEs and tooling</h1>
+    <p class="lede">What Android Studio actually is, what the SDK versions on a project screen
+    mean, how code becomes an installable APK, and what the alternative toolkits (React Native,
+    Cordova, Flutter, Unity, App Inventor) each are. This is the vocabulary of every later
+    tutorial.</p>
+
+    <h2>What an IDE does for you</h2>
+    <p>You cannot write programs on a phone (the lecture concedes you might on a tablet), so
+    development happens on a computer. An <strong>IDE</strong> (Integrated Development
+    Environment) is a program that lets you develop software for a platform on a PC; normally it
+    bundles a source editor, a compiler and/or interpreter, and a debugger. When everything is
+    fine, you transfer the app to the phone. Sometimes an SDK for a specific device model is
+    required.</p>
+    <p>The lecture's tool lists: for Android, AIDE, App Inventor, DroidScript, CppDroid, Android
+    Web Developer, Python/Java suites, Eclipse, Arduino, Visual Studio, Unreal Engine, Android
+    Studio, Corona, PhoneGap and more; for iOS, Xcode, AppCode, Atom, SublimeText 3, CodeRunner 2.
+    The two that matter in this course: <strong>Eclipse</strong> (the historical Android IDE,
+    Java only) and <strong>Android Studio</strong> (Java and Kotlin: the slides describe Kotlin
+    as "aiming at simplifying Java syntax"). For iOS there is <strong>Xcode</strong>
+    (Objective-C / Swift), which runs only on macOS; the lecture lists cloud Mac services
+    (MacInCloud and friends, with academic pricing) for students without a Mac.</p>
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 2-13.</p>
+
+    <h2>Inside Android Studio: SDK, AVD, emulator</h2>
+    <p>Google ships one all-in-one developer tool, and Tutorial 1 names its parts: Android SDK
+    Tools, Android Platform-tools, the latest Android platform, and the latest Android system
+    image for the emulator. The mental model:</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 240" role="img" aria-label="Build pipeline from source to device">
+        <rect x="15" y="80" width="120" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="75" y="105" text-anchor="middle" font-size="12" fill="currentColor">Your sources</text>
+        <text x="75" y="125" text-anchor="middle" font-size="11" fill="currentColor">.kt / .java + XML</text>
+        <rect x="185" y="80" width="120" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="245" y="105" text-anchor="middle" font-size="12" fill="currentColor">Build tools</text>
+        <text x="245" y="125" text-anchor="middle" font-size="11" fill="currentColor">compile + package</text>
+        <rect x="355" y="80" width="110" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="410" y="105" text-anchor="middle" font-size="12" fill="currentColor">APK</text>
+        <text x="410" y="125" text-anchor="middle" font-size="11" fill="currentColor">signed, installable</text>
+        <rect x="515" y="30" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="570" y="55" text-anchor="middle" font-size="12" fill="currentColor">Emulator</text>
+        <text x="570" y="73" text-anchor="middle" font-size="11" fill="currentColor">a simulated AVD</text>
+        <rect x="515" y="140" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="570" y="165" text-anchor="middle" font-size="12" fill="currentColor">Real phone</text>
+        <text x="570" y="183" text-anchor="middle" font-size="11" fill="currentColor">USB + dev options</text>
+        <line x1="135" y1="115" x2="183" y2="115" stroke="currentColor" stroke-width="2" marker-end="url(#arr3)"/>
+        <line x1="305" y1="115" x2="353" y2="115" stroke="currentColor" stroke-width="2" marker-end="url(#arr3)"/>
+        <line x1="465" y1="105" x2="513" y2="75" stroke="currentColor" stroke-width="2" marker-end="url(#arr3)"/>
+        <line x1="465" y1="125" x2="513" y2="160" stroke="currentColor" stroke-width="2" marker-end="url(#arr3)"/>
+        <defs>
+          <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>The same APK lands on an emulator or a real device; only the target changes.</figcaption>
+    </figure>
+    <p>An <strong>Android Virtual Device (AVD)</strong> is a configuration defining the
+    characteristics of an Android phone, tablet, Android Wear or Android TV device that you want
+    to simulate in the Android Emulator. The AVD Manager (Tools &gt; Device Manager, or its icon)
+    creates and manages them via "Add a new device &rarr; Create Virtual Device". The lecture's
+    warning is practical: different virtual devices place different CPU and memory requirements on
+    your computer.</p>
+
+    <h3>The four SDK versions, once and for all</h3>
+    <p>Module settings (right-click "app" &rarr; "Open Module Settings") hold four numbers that
+    students confuse for a year running. The lecture's definitions:</p>
+    <ul>
+      <li><strong>Compile SDK version</strong>: that SDK version is used for compilation.</li>
+      <li><strong>Build Tools version</strong>: that version of build tools is used for building
+      the APK.</li>
+      <li><strong>Min SDK version</strong>: your user needs that SDK version or above to install
+      and run your app.</li>
+      <li><strong>Target SDK version</strong>: your app is targeted at that SDK version; if the
+      user runs that version, performance is optimal.</li>
+    </ul>
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>One-liner: compile is about your build machine, min is about your users' floor, target is
+      the behaviour contract you opt into. A question "a user on API 24 tries to install an app
+      with min SDK 26: what happens?" has exactly one right answer: they cannot install it.</p>
+    </div>
+    <p>On real devices: Android recognises signed APK files by default, so tapping any signed APK
+    installs it. For development, connect by USB; the phone then appears as a run target alongside
+    emulators, once "Developer options" is turned on (the lecture links Samsung's steps as the
+    example).</p>
+    <p class="source">Source: COMP3330_Tutorial1.pdf, slides 3-8.</p>
+
+    <h2>Hands-on: the tutorial's own flow</h2>
+    <p>Tutorial 1's path is the skeleton of every project in this course: launch Android Studio
+    &rarr; new project &rarr; "Empty Views Activity" for "Phone and Tablet" &rarr; application
+    name, package name, language <strong>Kotlin</strong>, minimum SDK (e.g. API 26). The project
+    then holds a layout file (<code>activity_main.xml</code>) and a main program whose
+    <code>onCreate()</code> calls <code>setContentView(R.layout.activity_main)</code> to inflate
+    the layout. Gradle is the build system driving compilation and packaging: the course notes
+    (Chapter 0) that Gradle packages native C/C++ libraries into the APK (built with CMake and
+    called through JNI), and Tutorial 1 has you set the build tools version used for building the
+    APK. Third-party libraries go in <code>app/libs</code> and are attached with "Add As Library"
+   : you will do exactly that with JEP in the Card 24 project.</p>
+    <p>The worked example is a BMI calculator (BMI = weight in kg divided by height in m squared).
+    Three steps worth re-typing into muscle memory: declare fields for the widgets, bind them in
+    <code>onCreate()</code> with <code>findViewById</code>, and give the button a handler. The
+    tutorial wires the handler through the XML <code>onClick</code> attribute ("calc") instead of
+    a listener.</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class MainActivity : AppCompatActivity() {
+    private var height: EditText? = null
+    private var weight: EditText? = null
+    private var result: TextView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        height = findViewById&lt;EditText&gt;(R.id.editText1)
+        weight = findViewById&lt;EditText&gt;(R.id.editText2)
+        result = findViewById&lt;TextView&gt;(R.id.textView)
+    }
+
+    fun calc(v: View?) {
+        val h = height!!.text.toString().toFloat()
+        val w = weight!!.text.toString().toFloat()
+        val bmi = w / h / h
+        result!!.text = "Your BMI is: $bmi"
+    }
+}</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>public class MainActivity extends AppCompatActivity {
+    private EditText height, weight;
+    private TextView result;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        height = findViewById(R.id.editText1);
+        weight = findViewById(R.id.editText2);
+        result = findViewById(R.id.textView);
+    }
+
+    // bound to the button via the XML android:onClick="calc" attribute
+    public void calc(View v) {
+        float h = Float.parseFloat(height.getText().toString());
+        float w = Float.parseFloat(weight.getText().toString());
+        float bmi = w / h / h;
+        result.setText("Your BMI is: " + bmi);
+    }
+}</code></pre></div>
+      </section>
+    </div>
+    <p>Read that as three facts, not thirty lines: views are declared as fields and found by
+    resource id; the string in an <code>EditText</code> must be converted to a number before
+    arithmetic; and "$bmi" is string interpolation (page 5 covers the syntax). The layout work is
+    Tutorial 1's step "drag a LinearLayout (vertical), two Plain Text fields, one button, one
+    TextView into it and name them": page 4 explains what those names are doing.</p>
+    <div class="callout tip"><span class="tag">Tip</span>
+      <p>Submission mechanics are part of the tooling story too: File &rarr; Export &rarr; Export to
+      Zip File is how you package a project, and the course accepts that as proof of tutorial
+      work.</p>
+    </div>
+    <p class="source">Source: COMP3330_Tutorial1.pdf, slides 12-22; COMP3330_Tutorial2.pdf, slides 19-20 (JEP library in app/libs);
+    COMP3330_Ch00_CourseInfo.pdf, slide 3.</p>
+
+    <h2>The cross-platform tools, sorted by idea</h2>
+    <p>Chapter 3 surveys many tools; they collapse into four ideas. Learn the idea and the names
+    stick.</p>
+    <ol>
+      <li><strong>Native UI, other language.</strong> <strong>React Native</strong> (Facebook):
+      build cross-platform apps with only JavaScript, using the same design as React for web
+      applications and composing UI from declarative components. The claim from the slides: you
+      build a real mobile app indistinguishable from one built in Objective-C / Swift / Java /
+      Kotlin, because React Native uses the same fundamental UI building blocks as regular iOS
+      and Android apps: you assemble them with JavaScript and React.</li>
+      <li><strong>Own UI, own renderer.</strong> <strong>Flutter</strong> (Google, introduced May
+      2017): an open-source SDK for Android and iOS whose engine, written mainly in C++, renders
+      with Google's Skia graphics library and interfaces with the platform SDKs. Apps are written
+      in <strong>Dart</strong>. Page 7 covers it hands-on.</li>
+      <li><strong>Web page in a box.</strong> <strong>Apache Cordova</strong>: an open-source
+      framework using standard web technologies (HTML5, CSS3, JavaScript) for cross-platform
+      development. Applications execute within wrappers targeted to each platform and rely on
+      standards-compliant API bindings to reach device capabilities (sensors, data, network
+      status). This is the hybrid app of page 1, with the toolkit named.</li>
+      <li><strong>Game engines.</strong> A game engine is a framework for making video games:
+      main game program (the game logic), rendering engine (2D/3D display), audio engine, physics
+      engine, and AI usually factored into a specialist module. <strong>Unity</strong> (Tuanjie in
+      China and HKSAR; C#) and <strong>Unreal</strong> (C++) target web plugins, desktop and
+      mobile. <strong>Cocos Creator</strong> is an open-source 2D/3D graphics engine and content
+      platform scripting in JavaScript and TypeScript.</li>
+    </ol>
+    <p>The <strong>frame</strong> concept explains why engines exist: the UI is updated frame by
+    frame (the whole screen), with all updates made in a buffer first and then copied to the
+    screen as one complete frame. The time axis is divided into frames updated at predefined
+    intervals, like a cinema movie; any change goes into the next frame. That buffer-then-swap is
+    what keeps animation smooth when several components update at once.</p>
+    <p><strong>Mini Programs</strong> (WeChat Mini Program, launched end of 2016; Alipay and
+    Baidu equivalents) are the lecture's newest category: obtained by searching inside another
+    app, scanning a QR code, or opening a shared link; tiny memory and storage, no installation,
+    quick to open, with a user experience closer to a native app. Structurally the slides call
+    them hybrid apps: a native container at the bottom layer, and WXML, WXS and JS (developed
+    from HTML and CSS) on top for business development: similar to a browser and server-side
+    architecture. WeChat DevTools is the development environment.</p>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: a client wants one codebase for iOS and Android, a heavily custom
+      visual design, and a smooth animated UI. Argue for exactly one of React Native, Flutter or
+      Unity, using the lecture's own descriptions of each. Evidence that would change your mind:
+      the client hires a team fluent in only one of the three languages involved (JS/TS, Dart,
+      C#).</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 14-29.</p>
+
+    <h2>MIT App Inventor: the visual programming route</h2>
+    <p>Chapter 3A exists as a research pointer, and the slides say outright: "You are not
+    supposed to use App Inventor in this course." It still shows up in exam discussions of
+    programming education, so know what it is.</p>
+    <p>A <strong>visual programming language (VPL)</strong> lets programmers code graphically:
+    the IDE provides graphical elements (spatial texts, nodes, icons) that users assemble to
+    program. The advantage the lecture gives: young children find complicated syntax hard, so a
+    VPL lets them understand what a program is and basic programming logic. It is a research
+    direction in the programming community (the slides cite Choi et al. 2013 and Fields et al.
+    2013).</p>
+    <p><strong>App Inventor</strong> for Android is an open-source web application, originally
+    from Google and now maintained by MIT. Its interface, similar to Scratch and StarLogo TNG,
+    lets users drag-and-drop visual objects to create an Android app; it is widely used by Hong
+    Kong primary and junior secondary students. The working area has four panes:
+    <strong>Palette</strong> (materials for making your application), <strong>Viewer</strong> (how
+    the application looks on the phone screen), <strong>Components</strong> (all components
+    including hidden ones) and <strong>Properties</strong> (each selected component's settings).
+    The Blocks editor offers Control, Logic, Math, Text, Colors, Variables and Procedures blocks,
+    and only correctly shaped blocks combine: that snap-together constraint is the type system
+    made visible.</p>
+    <p>The lecture's button-and-label walkthrough is a full pipeline in miniature: drop a Button
+    and a Label in the Viewer, set FontSize/Height/Width/Text in Properties, snap
+    "when Button1.Click" together with "set Label1.Text to" and a "Hello" text block, then
+    <strong>Build &rarr; Android App (.apk)</strong> and install via USB transfer or QR code. The
+    phone blocks installation by default until you allow apps outside the Play Store: the same
+    open-distribution story as page 2.</p>
+    <div class="callout compare"><span class="tag">Compare</span>
+      <p>App Inventor produces an APK like Android Studio does, but expresses logic as blocks
+      instead of text. Same lifecycle, same distribution, different notation: which is exactly
+      why it is cited as an easy-to-learn IDE research direction.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch03A_App_Inventor.pdf, slides 2-19.</p>
+
+    <h2>Check yourself</h2>
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A student sets min SDK 26 and target SDK 33. A user on Android 7.0
+      (API 24) tries to install the app. What does the lecture's rule say?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">The user needs SDK 26 or above, so they cannot install and run the app.</button>
+        <button class="quiz-option">It installs, but performance is sub-optimal because the user is below the target SDK.</button>
+        <button class="quiz-option">The compile SDK version decides installation, so it installs fine.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Min SDK version is the user's floor: "your user needs that Sdk version or above to install and run your app." Target SDK is about optimal behaviour on matching devices, and compile SDK is purely about building.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Which description matches Apache Cordova in the lecture?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">HTML5, CSS3 and JavaScript apps running inside per-platform wrappers with API bindings to device capabilities.</button>
+        <button class="quiz-option">A C++ game engine with a rendering pipeline organised around frames.</button>
+        <button class="quiz-option">A graphical block-based IDE for Android aimed at school students.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">That is the slide definition of Cordova. The middle option is a game engine (Unity/Unreal/Cocos territory), the last is App Inventor.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">In the game-engine frame concept, why are updates made in a buffer first?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">So several component updates appear together as one complete frame, keeping animation smooth.</button>
+        <button class="quiz-option">So the game can run without a rendering engine.</button>
+        <button class="quiz-option">So each component can update the screen at its own pace.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">"All updates are made in a buffer first and then contents of the buffer are copied to the screen (a complete frame)... the frame concept can ensure smooth animation" because a game updates several components at once.</span></p>
+    </div>
+
+    <h2>Recap flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does an IDE bundle, per the lecture?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Source editor, compiler and/or interpreter, debugger: plus transfer to the phone when everything is fine.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">AVD: definition in one line.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A configuration defining the characteristics of a phone/tablet/Wear/TV device to simulate in the Android Emulator; managed via the AVD Manager.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Compile vs. min vs. target SDK.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Compile: SDK used to compile. Min: lowest SDK a user needs to install/run. Target: SDK the app is optimised for.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">React Native and Flutter: the core difference.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">React Native assembles the platform's own UI building blocks using JavaScript/React. Flutter ships its own engine (C++, Skia) and draws its own UI in Dart.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is a Mini Program, structurally?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A hybrid-style app: native container underneath, WXML/WXS/JS (from HTML/CSS) on top; obtained by search, QR code or link inside another app; no installation, tiny footprint.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">App Inventor's four working-area panes.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Palette (materials), Viewer (phone-screen preview), Components (all, including hidden), Properties (of the selected component).</span>
+      </span></button>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="03-ide-1">
+          <span class="check-text">State the four SDK version settings and what each governs.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-ide-2">
+          <span class="check-text">Describe what an AVD is and where the emulator fits in the build pipeline.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-ide-3">
+          <span class="check-text">Given the BMI tutorial code, say which line binds a widget and which line converts user input.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-ide-4">
+          <span class="check-text">Sort React Native, Flutter, Cordova, Unity/Unreal and App Inventor into the four ideas on this page.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-ide-5">
+          <span class="check-text">Explain the frame/buffer idea in a sentence a non-programmer would follow.</span></li>
+    </ul>
+
+    <div class="callout tip"><span class="tag">Practise this</span>
+      <p><a href="practice-03-ide-and-tooling.html">Practice set 3: IDEs and tooling</a>: SDK
+      version decisions, pipeline reasoning and toolkit matching, with full worked answers.</p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 2-29; COMP3330_Ch03A_App_Inventor.pdf,
+    slides 2-19; COMP3330_Tutorial1.pdf, slides 3-22.</p>
+
+    <nav class="pager">
+      <a class="prev" href="02-app-lifecycle.html">&larr; Previous: the app lifecycle</a>
+      <a class="next" href="04-ui-and-layouts.html">Next: UI and layouts &rarr;</a>
+    </nav>
+  </main>
+</body>
+</html>

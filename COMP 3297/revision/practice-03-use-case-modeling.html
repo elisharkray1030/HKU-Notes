@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Use case modeling practice</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Use case modeling: practice</h1>
+    <p class="lede">Exercises on actors, use cases, associations, the system boundary, and use case descriptions that actually communicate. Diagram answers use the lecture's notation: stick figures with names below, names inside the ellipses, plain lines.</p>
+    <p>Background: <a href="03-use-case-modeling.html">Use case modeling</a>.</p>
+
+    <h2>Quiz</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A teammate draws the actor-to-use-case associations with arrows showing who starts the interaction. What does the lecture say?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Use plain lines. Formally, arrows in the UML indicate the direction of flow of messages, which is not what a use case association means.</button>
+        <button class="quiz-option">Arrows are fine and clearer than lines, as long as they point at the use case.</button>
+        <button class="quiz-option">Arrows are required, because the actor initiates the use case.</button>
+        <button class="quiz-option">Use dashed lines instead, to show the interaction is only a scenario.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's answer to its own "common question 1" is exactly this: use case diagrams should use lines without arrows, because arrows in the UML indicate the direction of flow of messages. The trap is that arrows feel informative here. They import a meaning that belongs to sequence diagrams.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">For a CampusBike lending kiosk, which of these is a valid actor?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">The bank's payment gateway: an external system outside the kiosk's boundary.</button>
+        <button class="quiz-option">The kiosk's own deposit module: it takes part in every transaction.</button>
+        <button class="quiz-option">The bike database: every use case reads from it.</button>
+        <button class="quiz-option">"Borrow bike": the main thing the kiosk does.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Actors may be people or external systems. The payment gateway is external, so it qualifies, and the lecture draws even the external "Patient record system" as a stick-figure actor. The deposit module and the database are inside the system boundary, so they are not actors. "Borrow bike" is a use case: a discrete task involving external interaction.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">What does a use case diagram alone NOT give you?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A complete description of the interaction: you still need a textual or tabular description, or a sequence diagram.</button>
+        <button class="quiz-option">An overview of which actors interact with which tasks.</button>
+        <button class="quiz-option">A way to show that an external system takes part in a task.</button>
+        <button class="quiz-option">A basis for discussing requirements with stakeholders.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture is blunt about this: use case diagrams give a simple overview of interaction, and more detail is needed for a complete interaction description: a simple textual description, a structured description in a table, or a sequence diagram. The diagram is an index into those descriptions, not a substitute.</span></p>
+    </div>
+
+    <h2>Guided exercises</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: building a use case diagram from a brief</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>CampusBike is a self-service bicycle lending kiosk. Borrowers use it to take and return bikes. Faults can be reported by borrowers and inspected by technicians. Taking a bike requires a deposit, settled through the bank's payment gateway, an external system. Build the use case diagram: name the actors, name the use cases, and draw the associations.</p>
+      <details class="step"><summary>Step 1: find the things outside the system that interact with it</summary>
+        <p>People and external systems that pass information or commands across the boundary. Here: borrowers, technicians, and the bank's payment gateway. Everything the kiosk does internally (its deposit module, its bike database) is inside the boundary and is not an actor.</p>
+      </details>
+      <details class="step"><summary>Step 2: name each use case as a discrete task with external interaction</summary>
+        <p>The lecture's test: a use case represents a discrete task that involves external interaction with the system. Borrow a bike, return a bike, report a fault, pay a deposit. Not "manage the kiosk" (too big), not "validate card number" (an internal step of paying the deposit).</p>
+      </details>
+      <details class="step"><summary>Step 3: connect each actor to the tasks it takes part in</summary>
+        <p>Plain lines, no arrows. One task can involve more than one actor: reporting a fault involves the borrower who reports and the technician who inspects; paying the deposit involves the borrower and the payment gateway.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 380" role="img" aria-label="CampusBike use case diagram: Borrower connected to Borrow bike, Return bike, Report fault and Pay deposit; Technician connected to Report fault; Payment gateway connected to Pay deposit.">
+            <g stroke="currentColor" fill="none" stroke-width="1.6">
+              <!-- Borrower -->
+              <circle cx="60" cy="70" r="13"/>
+              <line x1="60" y1="83" x2="60" y2="118"/>
+              <line x1="42" y1="95" x2="78" y2="95"/>
+              <line x1="60" y1="118" x2="46" y2="142"/>
+              <line x1="60" y1="118" x2="74" y2="142"/>
+              <!-- Technician -->
+              <circle cx="60" cy="238" r="13"/>
+              <line x1="60" y1="251" x2="60" y2="286"/>
+              <line x1="42" y1="263" x2="78" y2="263"/>
+              <line x1="60" y1="286" x2="46" y2="310"/>
+              <line x1="60" y1="286" x2="74" y2="310"/>
+              <!-- Payment gateway (external system, drawn as an actor per the lecture) -->
+              <circle cx="655" cy="222" r="13"/>
+              <line x1="655" y1="235" x2="655" y2="270"/>
+              <line x1="637" y1="247" x2="673" y2="247"/>
+              <line x1="655" y1="270" x2="641" y2="294"/>
+              <line x1="655" y1="270" x2="669" y2="294"/>
+              <!-- use cases -->
+              <ellipse cx="340" cy="60" rx="105" ry="32"/>
+              <ellipse cx="340" cy="145" rx="105" ry="32"/>
+              <ellipse cx="340" cy="230" rx="105" ry="32"/>
+              <ellipse cx="340" cy="315" rx="105" ry="32"/>
+              <!-- associations: plain lines -->
+              <line x1="80" y1="92" x2="238" y2="66"/>
+              <line x1="80" y1="104" x2="238" y2="140"/>
+              <line x1="80" y1="112" x2="238" y2="224"/>
+              <line x1="80" y1="118" x2="248" y2="306"/>
+              <line x1="80" y1="258" x2="238" y2="312"/>
+              <line x1="632" y1="234" x2="445" y2="230"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="14" text-anchor="middle">
+              <text x="60" y="164">Borrower</text>
+              <text x="60" y="332">Technician</text>
+              <text x="655" y="316">Payment gateway</text>
+              <text x="340" y="65">Borrow bike</text>
+              <text x="340" y="150">Return bike</text>
+              <text x="340" y="235">Pay deposit</text>
+              <text x="340" y="320">Report fault</text>
+            </g>
+          </svg>
+          <figcaption>CampusBike use case diagram, in the lecture's notation.</figcaption>
+        </figure>
+        <p>Reading the diagram back against the brief: borrowers take part in all four tasks; technicians take part in fault inspection; the payment gateway takes part in settling the deposit. Nothing in the brief is missing, and nothing inside the kiosk leaked out as an actor.</p>
+        <p>On the system boundary: the diagram above does not draw a boundary box, matching the lecture's own use case diagrams. What matters is the decision, not the rectangle. Inside: the kiosk's deposit module, bike database, screen and lock hardware as the system implements them. Outside: borrowers, technicians, the bank. Moving that line has profound effects on the requirements: if the deposit module were bought in from the bank, "pay deposit" would become system-to-system interaction and the requirements for it would change. Defining the boundary is a political judgment, and it is one you should be able to defend.</p>
+        <p>The trap: drawing the payment gateway as an ellipse ("Process payment") inside the system instead of as an external actor. The gateway is a system you talk to, not a task the kiosk performs. The rule from the slide is short: actors may be people or external systems; use cases are discrete tasks involving external interaction.</p>
+        <p>Reasoning chain: classify what is outside the boundary → name discrete externally-observable tasks → associate each actor with each task it touches → check the picture against the brief.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: writing a tabular use case description</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>RoomBook lets students book seminar rooms. Write the tabular description of the use case "Cancel booking" using the lecture's fields: Actors, Description, Stimulus, Response, Comments. The system's rules: a student may cancel any booking up to one hour before it starts; after that the booking stands and counts against the student's weekly quota; a cancelled room becomes available immediately.</p>
+      <details class="step"><summary>Step 1: fix the field meanings from the lecture's example</summary>
+        <p>Actors: who takes part. Description: what the interaction is. Stimulus: what starts it. Response: what the system does back. Comments: conditions and constraints, such as permissions. The lecture's 'Transfer data' table is the model: one row of fact per field, no design talk.</p>
+      </details>
+      <details class="step"><summary>Step 2: put each fact in its field</summary>
+        <p>The cancellation rules are the substance: they belong in Description (the main behaviour) and Comments (the conditions). The command the student issues is the Stimulus; what the system confirms is the Response.</p>
+      </details>
+      <details class="step"><summary>Step 3: check the table against the use case diagram</summary>
+        <p>The lecture's rule: the model should align with the description. If your diagram has "Cancel booking" associated with a Student actor and a Clerk actor, the table must name both actors too.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>RoomBook system: Cancel booking</p>
+        <table>
+          <tr><th>Actors</th><td>Student</td></tr>
+          <tr><th>Description</th><td>A student cancels an existing room booking. If the booking starts more than one hour from now, the cancellation succeeds and the room becomes available immediately. If it starts within an hour, the system refuses the cancellation and the booking stands.</td></tr>
+          <tr><th>Stimulus</th><td>Cancel command issued by the student, naming a booking.</td></tr>
+          <tr><th>Response</th><td>Confirmation that the booking is cancelled and the room released, or a refusal message when the one-hour rule applies.</td></tr>
+          <tr><th>Comments</th><td>Refused cancellations still count against the student's weekly quota. Only the student who owns the booking may cancel it.</td></tr>
+        </table>
+        <p>The trap: writing the Description as a flow of screen interactions ("the student clicks Cancel, the dialog opens..."). The field wants what the interaction is, not how the screen is built. Screen detail is design, and it belongs to the prototype stage later in the pack (<a href="practice-05-ux-and-prototyping.html">practice page 5</a>). A second trap is burying the one-hour rule in Comments only; a reader who scans Description alone would build a system that always cancels.</p>
+        <p>Reasoning chain: fix field meanings → distribute the facts → verify the table against the diagram and the rules given.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: checking a diagram against a description</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>The requirements say: "At the clinic, a receptionist calls patients into the consulting room. A nurse can mark a patient as a no-show. Patients check themselves in at the kiosk. Reminder texts are delivered through the SMS gateway, an external system." A colleague draws: one actor "Receptionist", connected by arrows to three ellipses ("Call patient", "Check in", and "SMS gateway"), plus a line from "Receptionist" to a fourth ellipse "Mark no-show". List everything wrong with that diagram, then draw it correctly.</p>
+      <details class="step"><summary>Step 1: check the actors</summary>
+        <p>Who crosses the boundary according to the text? Receptionists, nurses, patients, and the SMS gateway (an external system). The colleague has one actor where the text has four participants.</p>
+      </details>
+      <details class="step"><summary>Step 2: check what counts as a use case</summary>
+        <p>Each use case is a discrete task involving external interaction. "Call patient", "Check in", "Mark no-show" qualify. "SMS gateway" is a thing, not a task: it is an external system, so it is an actor.</p>
+      </details>
+      <details class="step"><summary>Step 3: check the associations and the notation</summary>
+        <p>Who performs each task? Call patient is the receptionist's; Mark no-show is the nurse's; Check in is the patient's; sending a reminder is a task involving the SMS gateway. And the arrows must go: the lecture's rule is plain lines.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Four faults. (1) Nurse and Patient are missing as actors, though the text gives each their own interaction. (2) The SMS gateway is drawn as a use case; it is an external system, so it is an actor, the same class of mistake as treating the CampusBike payment gateway as a task. (3) Two tasks sit on the wrong actor: the text says the nurse performs "Mark no-show" and the patient performs "Check in", not the receptionist. (4) Arrows instead of plain lines: the trap, again: arrows carry message-flow meaning that belongs to sequence diagrams.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 360" role="img" aria-label="Corrected clinic use case diagram: Receptionist to Call patient; Nurse to Mark no-show; Patient to Check in; Receptionist and SMS gateway to Send reminder.">
+            <g stroke="currentColor" fill="none" stroke-width="1.6">
+              <!-- Receptionist -->
+              <circle cx="60" cy="60" r="13"/>
+              <line x1="60" y1="73" x2="60" y2="108"/>
+              <line x1="42" y1="85" x2="78" y2="85"/>
+              <line x1="60" y1="108" x2="46" y2="132"/>
+              <line x1="60" y1="108" x2="74" y2="132"/>
+              <!-- Nurse -->
+              <circle cx="60" cy="185" r="13"/>
+              <line x1="60" y1="198" x2="60" y2="233"/>
+              <line x1="42" y1="210" x2="78" y2="210"/>
+              <line x1="60" y1="233" x2="46" y2="257"/>
+              <line x1="60" y1="233" x2="74" y2="257"/>
+              <!-- Patient -->
+              <circle cx="60" cy="300" r="13"/>
+              <line x1="60" y1="313" x2="60" y2="338"/>
+              <line x1="42" y1="320" x2="78" y2="320"/>
+              <!-- SMS gateway -->
+              <circle cx="655" cy="245" r="13"/>
+              <line x1="655" y1="258" x2="655" y2="293"/>
+              <line x1="637" y1="270" x2="673" y2="270"/>
+              <line x1="655" y1="293" x2="641" y2="317"/>
+              <line x1="655" y1="293" x2="669" y2="317"/>
+              <!-- use cases -->
+              <ellipse cx="340" cy="60" rx="105" ry="32"/>
+              <ellipse cx="340" cy="145" rx="105" ry="32"/>
+              <ellipse cx="340" cy="230" rx="105" ry="32"/>
+              <ellipse cx="340" cy="315" rx="105" ry="32"/>
+              <!-- associations -->
+              <line x1="80" y1="82" x2="238" y2="62"/>
+              <line x1="80" y1="207" x2="238" y2="145"/>
+              <line x1="80" y1="318" x2="238" y2="313"/>
+              <line x1="80" y1="88" x2="238" y2="226"/>
+              <line x1="632" y1="252" x2="445" y2="234"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="14" text-anchor="middle">
+              <text x="60" y="154">Receptionist</text>
+              <text x="60" y="279">Nurse</text>
+              <text x="60" y="352">Patient</text>
+              <text x="655" y="339">SMS gateway</text>
+              <text x="340" y="65">Call patient</text>
+              <text x="340" y="150">Mark no-show</text>
+              <text x="340" y="235">Send reminder</text>
+              <text x="340" y="320">Check in</text>
+            </g>
+          </svg>
+          <figcaption>Corrected clinic use case diagram. "Send reminder" involves two actors: the receptionist who triggers it and the external SMS gateway that delivers it.</figcaption>
+        </figure>
+        <p>Reasoning chain: enumerate boundary-crossers as actors → classify each named thing as task or thing → reassociate by who performs the task → strip the arrows.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: deciding when a use case diagram earns its place</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>A student project is a single screen where a user pastes text and presses one button to count words. The team has produced: a use case diagram with one actor and one ellipse, and a tabular description of the task. A second team builds a tutoring platform with three user classes (student, tutor, administrator), an external payment service, and a video tool. For each project: does the use case diagram earn its place, what should it show, and what does the diagram still not tell you?</p>
+      <details class="step"><summary>Step 1: test what the diagram would add</summary>
+        <p>A use case diagram's value is the overview of interaction: which actors, which discrete tasks, how they cross. With one actor and one task, the diagram repeats one sentence.</p>
+      </details>
+      <details class="step"><summary>Step 2: apply it to the bigger system</summary>
+        <p>Three user classes and two external systems, each touching several tasks: that is where the overview pays: missing actors and misassigned tasks become visible at a glance.</p>
+      </details>
+      <details class="step"><summary>Step 3: state the standing limit</summary>
+        <p>Whatever the size, the diagram is only an overview. Complete interaction description needs the text.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Word counter: the diagram barely earns its place. One stick figure and one ellipse communicate nothing the sentence "the user pastes text and counts words" does not. The tabular description is the real deliverable. Draw the diagram anyway if the client wants a picture to nod at (the lecture notes models are used to communicate with customers), but do not pretend it adds information.</p>
+        <p>Tutoring platform: the diagram earns its place. It should show the three user classes as actors, the payment service and video tool as external-system actors, and one ellipse per discrete task (for example: book session, run session, pay for session, manage timetable, issue refund). Its payoff is exactly the errors Exercise 3 caught: missing actors and tasks attached to the wrong actor.</p>
+        <p>What it still does not tell you, in both cases: the order of interaction, the rules and conditions, the data. That is the lecture's point: the diagram gives a simple overview and must be supplemented by a textual description, a structured table, or a sequence diagram. The tabular description is where the one-hour cancellation rule from Exercise 2 could live; no ellipse could carry it.</p>
+        <p>Reasoning chain: measure the diagram by the overview it adds → apply to each system's actor and task count → restate the supplement rule regardless of size.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: mixed (from interview to use case model)</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This pulls in <a href="practice-02-requirements-engineering.html">practice page 2</a>. From an interview for RoomBook: "Students should be able to book a room, I mean they can pick a room and a slot and it's theirs unless a clash is found. Our two seminar rooms need the coordinator to approve the booking. Verifying their campus card at the door is done by the card system, not us." (1) Draw the use case model. (2) Write the tabular description of "Book room". (3) Write one user-requirement sentence from the quote, in the standard format. (4) Name one elicitation problem the quote shows.</p>
+      <details class="step"><summary>Step 1: separate actors from tasks</summary>
+        <p>Students (people), the coordinator (person), the card system (external system). Tasks with external interaction: book room, approve booking, verify card.</p>
+      </details>
+      <details class="step"><summary>Step 2: distribute the rules to their places</summary>
+        <p>The clash rule is system behaviour inside "Book room"; approval applies to the seminar rooms; card verification is a separate interaction with an external system.</p>
+      </details>
+      <details class="step"><summary>Step 3: write the requirement and name the elicitation problem</summary>
+        <p>The quote carries a self-correction ("I mean...") and a scope question (does every booking need approval or only the seminar rooms?).</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 330" role="img" aria-label="RoomBook use case diagram: Student to Book room and Verify card; Coordinator to Approve booking; Card system to Verify card.">
+            <g stroke="currentColor" fill="none" stroke-width="1.6">
+              <!-- Student -->
+              <circle cx="60" cy="60" r="13"/>
+              <line x1="60" y1="73" x2="60" y2="108"/>
+              <line x1="42" y1="85" x2="78" y2="85"/>
+              <line x1="60" y1="108" x2="46" y2="132"/>
+              <line x1="60" y1="108" x2="74" y2="132"/>
+              <!-- Coordinator -->
+              <circle cx="60" cy="225" r="13"/>
+              <line x1="60" y1="238" x2="60" y2="273"/>
+              <line x1="42" y1="250" x2="78" y2="250"/>
+              <line x1="60" y1="273" x2="46" y2="297"/>
+              <line x1="60" y1="273" x2="74" y2="297"/>
+              <!-- Card system -->
+              <circle cx="655" cy="225" r="13"/>
+              <line x1="655" y1="238" x2="655" y2="273"/>
+              <line x1="637" y1="250" x2="673" y2="250"/>
+              <line x1="655" y1="273" x2="641" y2="297"/>
+              <line x1="655" y1="273" x2="669" y2="297"/>
+              <!-- use cases -->
+              <ellipse cx="340" cy="70" rx="105" ry="32"/>
+              <ellipse cx="340" cy="165" rx="105" ry="32"/>
+              <ellipse cx="340" cy="260" rx="105" ry="32"/>
+              <!-- associations -->
+              <line x1="80" y1="82" x2="238" y2="70"/>
+              <line x1="80" y1="112" x2="238" y2="252"/>
+              <line x1="80" y1="247" x2="238" y2="168"/>
+              <line x1="632" y1="232" x2="445" y2="256"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="14" text-anchor="middle">
+              <text x="60" y="154">Student</text>
+              <text x="60" y="319">Coordinator</text>
+              <text x="655" y="319">Card system</text>
+              <text x="340" y="75">Book room</text>
+              <text x="340" y="170">Approve booking</text>
+              <text x="340" y="265">Verify card</text>
+            </g>
+          </svg>
+          <figcaption>RoomBook use case diagram from the interview quote.</figcaption>
+        </figure>
+        <p>One judgment call worth naming: the quote says card verification is "done by the card system, not us", so a strict boundary reading drops "Verify card" from RoomBook's own use cases and treats the card system as an external service RoomBook relies on. The diagram above keeps "Verify card" as a task that crosses the boundary, with the card system as an actor; either reading is defensible, but the card system is never a use case.</p>
+        <p>2. RoomBook system: Book room. Actors: Student. Description: A student chooses a room and a time slot. If the room is free at that slot and the booking does not clash with the student's other bookings, the booking is created; for the two seminar rooms the booking is created with status "awaiting approval". If a clash is found, the booking is refused. Stimulus: Book command issued by the student, naming a room and slot. Response: Confirmation of the created booking (or its pending-approval status), or a clash message. Comments: Seminar-room bookings require the coordinator's approval before the room is held; other rooms are held immediately.</p>
+        <p>3. "The system shall let a student book a free room for a chosen time slot (rationale: booking is the service RoomBook exists to provide)." The clash rule becomes its own mandatory requirement: "The system shall refuse a booking that clashes with an existing booking for the same room."</p>
+        <p>4. The quote shows requirements in the stakeholder's own terms, with self-correction and an unstated scope decision. "I mean they can pick a room and a slot" is a restatement under pressure; "our two seminar rooms need approval" leaves open whether approval covers anything else. Fix it the way page 2 says: separate the strands, confirm each back in writing.</p>
+        <p>Reasoning chain: actors and tasks from the quote → rules into the tabular fields → one sentence per requirement → name the elicitation defect and the repair.</p>
+      </details>
+    </section>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position: "For a system with one actor and three tasks, the use case diagram adds nothing. Write the three tabular descriptions and skip the picture." Defend or attack. Evidence that would change your mind: documented cases where a one-actor diagram still caught a real modelling error, or a review process that demonstrably reads pictures before text. The lecture values models for communication with customers; argue where that value starts and stops.</p>
+    </div>
+
+    <p class="source">Source: COMP 3297, L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 8-9 (context models and system boundaries), slides 11-22 (use case modeling, notation questions and answers, tabular 'Transfer data' description, the full Mentcare diagram), plus the course's own answers deck, L3 v2 _Answers.pdf, slides 15-19. Notation in the diagrams above was checked against the lecture slides: stick figures with names below, use case names inside the ellipses, plain association lines.</p>
+
+    <h2>Recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What counts as an actor?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A person or an external system that interacts across the system boundary. Components inside the system are not actors.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What counts as a use case?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A discrete task involving external interaction with the system. A set of use cases should describe all possible interactions with the system.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Lines or arrows for associations?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Plain lines. Formally, arrows in the UML indicate the direction of flow of messages.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Why does the system boundary matter?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">It defines what is inside and outside the system, and its position has a profound effect on the requirements. Defining it is a political judgment.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What must supplement a use case diagram?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A textual description, a structured table (Actors, Description, Stimulus, Response, Comments), or a sequence diagram. The diagram is only a simple overview.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Model the diagram must match what?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">The written description of the same use case. The 'Transfer data' model should align with the description of 'Transfer data'.</span>
+      </span></button>
+    </div>
+
+    <nav class="pager">
+      <a class="prev" href="practice-02-requirements-engineering.html"><span class="dir">Previous</span><span class="name">Requirements engineering practice</span></a>
+      <a class="next" href="practice-04-class-and-sequence-diagrams.html"><span class="dir">Next</span><span class="name">Class and sequence diagrams practice</span></a>
+    </nav>
+  </main>
+</body>
+</html>

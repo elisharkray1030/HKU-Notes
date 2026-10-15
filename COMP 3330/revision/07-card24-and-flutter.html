@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision: Card 24 and Flutter</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Card 24 and Flutter</h1>
+    <p class="lede">Tutorials 2 and 3 build one real Android app end to end; Tutorial 4 opens the
+    door to Flutter. This page walks the Card 24 codebase the way you should walk any unfamiliar
+    Android project, then explains what Flutter's widget-and-setState model changes.</p>
+
+    <h2>The game, specified like an exam question</h2>
+    <p><strong>Card24</strong> is an arithmetical card game: manipulate four poker cards' numbers
+    so the end result is 24. Cards run 1 to 13 (Ace, Jack, Queen, King represent 1, 11, 12, 13),
+    and the four operations plus brackets are allowed. The lecture's worked hand: for four cards,
+    one solution is (13 – 5) × (1 + 2) = 24.</p>
+    <p>The full specification, which is worth reading as a requirements document:</p>
+    <ul>
+      <li><strong>Start game</strong>: randomly pick 4 non-duplicate cards from 52 (jokers
+      excluded) and display them. The player then builds a formula from these cards and the
+      arithmetic symbols.</li>
+      <li><strong>Formula</strong>: the four symbols "+", "-", "x", "/" plus open and close
+      brackets. Evaluation order: bracket items, then multiplication/division, then
+      addition/subtraction. The slide's example "(1) + (11 – 2) x 6": (1) = 1, (11 – 2) = 9,
+      9 × 6 = 54, 1 + 54 = 55.</li>
+      <li><strong>Input sanity rules</strong>: a card or "(" can only be selected as the first
+      item, or after an arithmetic symbol or "(". A symbol or ")" can only be selected when the
+      last selected item is a card or ")". These rules exist to reject nonsense like "()1+/12".</li>
+      <li><strong>Winning</strong>: no error in the formula, all four cards used exactly once,
+      and the result equals 24.</li>
+      <li><strong>Components</strong>: 4 card buttons (ImageButtons), 6 symbol buttons
+      ("+","-","x","/","(",")"), 1 TextView showing the current formula, 2 buttons for new game
+      and clear, and 1 "=" button that evaluates the formula and tells the player win or lose.</li>
+      <li><strong>Edge cases</strong>: each card can be selected only once (button disabled after
+      use, with some indicator); "new game" and "clear" re-enable buttons and update the formula
+      display; an invalid formula at "=" counts as wrong (the player loses), with an error
+      message.</li>
+    </ul>
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>This spec is the model for "given a scenario, list the UI components and the state your
+      class must track". Every edge case in it maps to a field in the code below.</p>
+    </div>
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 2-9.</p>
+
+    <h2>Reading a real Android codebase</h2>
+    <p>When you open someone else's Android project, read in the same four moves every time:
+    find the <strong>UI</strong> (the layout XML), find the <strong>wiring</strong> (onCreate),
+    find the <strong>state</strong> (the fields), find the <strong>behaviour</strong> (methods and
+    listeners). Card 24, walked:</p>
+
+    <h3>1. The UI (Tutorial 2)</h3>
+    <p>The layout is nested: the outermost layout is a ScrollView while the inner layouts are
+    LinearLayouts: ScrollView so the whole board can scroll on small screens, LinearLayouts to
+    stack rows of buttons. A drawable resource <code>back_0.png</code> goes in the
+    <code>drawable</code> folder as the face-down card image, and images are resolved with
+    <code>resources.getIdentifier("back_0", "drawable", "hk.hkucs.card24")</code>: the resource
+    lookup that stands in for R.drawable.back_0 when names are built at run time.</p>
+
+    <h3>2. The state</h3>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>private lateinit var cards: Array&lt;ImageButton&gt;   // the four card buttons
+private lateinit var expression: TextView        // the formula display
+private lateinit var data: Array&lt;Int&gt;            // card values 1..13
+private lateinit var card: Array&lt;Int&gt;            // card ids 1..52
+private lateinit var imageCount: Array&lt;Int&gt;      // clicks per card (0 or more)
+private var rePick: Button? = null               // new game
+private var checkInput: Button? = null           // "="
+private var clear: Button? = null
+private var left, right, plus, minus, multiply, divide: Button? = null</code></pre></div>
+    <p>State to hold the game: four buttons, four values, four card ids, four use-counts, and the
+    formula text. If you can name the state, you can write the app.</p>
+
+    <h3>3. The wiring</h3>
+    <p>Everything is bound in <code>onCreate()</code> with <code>findViewById</code>, and each
+    button gets a listener (page 5's callback pattern):</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>cards = arrayOf(findViewById&lt;ImageButton&gt;(R.id.card1),
+                findViewById&lt;ImageButton&gt;(R.id.card2),
+                findViewById&lt;ImageButton&gt;(R.id.card3),
+                findViewById&lt;ImageButton&gt;(R.id.card4))
+// …and similarly for the symbol buttons and the TextView
+
+cards[0].setOnClickListener { clickCard(0) }
+cards[1].setOnClickListener { clickCard(1) }
+// …cards[2], cards[3]
+left!!.setOnClickListener { expression.append("(") }
+// …right, plus, minus, multiply, divide append ")" "+" "-" "*" "/" in the same way
+clear!!.setOnClickListener { setClear() }</code></pre></div>
+
+    <h3>4. The behaviour</h3>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>private fun setClear() {
+    var resID: Int
+    expression.text = ""
+    for (i in 0..3) {
+        imageCount[i] = 0
+        resID = resources.getIdentifier("card" + card[i], "drawable", packageName)
+        cards[i].setImageResource(resID)
+        cards[i].isClickable = true
+    }
+}
+
+private fun clickCard(i: Int) {
+    if (imageCount[i] == 0) {
+        val resId = resources.getIdentifier("back_0", "drawable", packageName)
+        cards[i].setImageResource(resId)   // show face-down
+        cards[i].isClickable = false       // disabled from now on
+        val value = data[i]
+        expression.append(value.toString())
+        imageCount[i]++
+    }
+}</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>private void setClear() {
+    int resID;
+    expression.setText("");
+    for (int i = 0; i &lt; 4; i++) {
+        imageCount[i] = 0;
+        resID = getResources().getIdentifier("card" + card[i], "drawable", getPackageName());
+        cards[i].setImageResource(resID);
+        cards[i].setClickable(true);
+    }
+}
+
+private void clickCard(int i) {
+    if (imageCount[i] == 0) {
+        int resId = getResources().getIdentifier("back_0", "drawable", getPackageName());
+        cards[i].setImageResource(resId);   // show face-down
+        cards[i].setClickable(false);       // disabled from now on
+        int value = data[i];
+        expression.append(String.valueOf(value));
+        imageCount[i]++;
+    }
+}</code></pre></div>
+      </section>
+    </div>
+    <p>Read those two methods as the spec executed. "Each of the 4 poker cards should only be
+    selected once" is <code>imageCount[i] == 0</code> plus
+    <code>isClickable = false</code>. "When 'new game' or 'clear' is pressed, some disabled
+    buttons may be enabled again" is <code>isClickable = true</code> in <code>setClear()</code>.
+    The symbol listeners are one-liners appending to the formula TextView, which is also how the
+    validity rules would be enforced (check what the previous item was before appending).</p>
+
+    <h2>Expression evaluation and the JEP library</h2>
+    <p>The program must evaluate strings like "(13 – 5) x (1 + 2)". The tutorial's own reasoning:
+    "since the evaluation orders of different parts of the expression are different, the
+    implementation requires an Expression Tree, which is quite complicated. To simplify our job,
+    we rely on the JEP Library." JEP (jep-java-3.4-trial.jar) is copied into
+    <code>app/libs</code>, right-clicked and "Add As Library"ed: the tooling habit from
+    <a href="03-ide-and-tooling.html">page 3</a>. The smoke test parses and evaluates a string and
+    shows the result in a Toast:</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>var jep = Jep()
+val res: Any = try {
+    jep.parse("(3 + 3) * (2 + 2)")
+    jep.evaluate()
+} catch (e: ParseException) {
+} catch (e: EvaluationException) {
+}
+val ca = res as Double
+Toast.makeText(this@MainActivity, ca.toString(), Toast.LENGTH_LONG).show()  // "24.0"</code></pre></div>
+    <p>The real checker wraps exactly this, with the win test at the end:</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>private fun checkInput(input: String): Boolean {
+    val jep = Jep()
+    val res: Any = try {
+        jep.parse(input)
+        jep.evaluate()
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        Toast.makeText(this@MainActivity, "Wrong Expression", Toast.LENGTH_SHORT).show()
+        return false
+    } catch (e: EvaluationException) {
+        e.printStackTrace()
+        Toast.makeText(this@MainActivity, "Wrong Expression", Toast.LENGTH_SHORT).show()
+        return false
+    }
+    val ca = res as Double
+    return abs(ca - 24) &lt; 1e-6
+}</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>private boolean checkInput(String input) {
+    Jep jep = new Jep();
+    Object res;
+    try {
+        jep.parse(input);
+        res = jep.evaluate();
+    } catch (ParseException e) {
+        e.printStackTrace();
+        Toast.makeText(MainActivity.this, "Wrong Expression", Toast.LENGTH_SHORT).show();
+        return false;
+    } catch (EvaluationException e) {
+        e.printStackTrace();
+        Toast.makeText(MainActivity.this, "Wrong Expression", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+    double ca = (Double) res;
+    return Math.abs(ca - 24) &lt; 1e-6;
+}</code></pre></div>
+      </section>
+    </div>
+    <p>Three things to notice. First, the exception handling is the input-validation layer: any
+    parse or evaluation failure means "Wrong Expression" and a false return. Second,
+    <code>res as Double</code>: JEP evaluates to a number typed as Any, so the cast is needed.
+    Third, <code>abs(ca - 24) &lt; 1e-6</code> compares with a tolerance rather than
+    <code>ca == 24.0</code>: division can produce values like 23.999999999, and a fixed-point
+    check would call a correct answer wrong.</p>
+    <p>The button listener then closes the loop: read the expression text, and on
+    <code>checkInput(inputStr) == true</code> show "Correct Answer" and call
+    <code>pickCard()</code> for a new hand; otherwise show "Wrong Answer" and
+    <code>setClear()</code>.</p>
+
+    <h3>Worked mini-example: one hand, traced</h3>
+    <p>Deal the tutorial's test hand: cards 4, 5, 9, 10 (the four numbers in
+    <code>pickCard()</code>'s testing stub). A solution: (9 – 5) × (10 – 4) = 4 × 6 = 24. Now
+    trace the app, because this is what "reading a codebase" means at the exam:</p>
+    <ol>
+      <li><code>onCreate()</code> binds views, sets listeners, calls <code>pickCard()</code>,
+      which fills <code>data</code> and <code>card</code>, then <code>setClear()</code>: empty
+      expression, imageCount all zero, card images set, all clickable.</li>
+      <li>Tap "(": left's listener appends "(" to expression: "(" is legal because it is the
+      first item. Tap "9": clickCard(2) (say card 3 is the 9) appends "9", shows the back image,
+      disables the button. Tap "-": legal because the last item is a card. Tap "5": clickCard on
+      the 5. Tap ")": legal after a card. Tap "*": legal after ")". Then "(" … "10", "-", "4",
+      ")".</li>
+      <li>Expression now reads "(9-5)*(10-4)". Tap "=": <code>checkInput</code> parses and
+      evaluates it to 24.0, the tolerance test passes, "Correct Answer", new hand.</li>
+    </ol>
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>Why the brackets are mandatory here: typed without them, "9-5*10-4" evaluates by
+      precedence as 9 − (5×10) − 4 = −45, not 24. The game's brackets are not cosmetic: they are
+      the only way to override the multiply-before-subtract order. And the tutorial's own gaps
+      (Task 5: make the deal random; require exactly four cards) mean the shipped code would
+      accept "9-5" using two cards: the win rule "all four cards selected exactly once" is
+      enforced by checking the used-counts before calling checkInput, which the starter code does
+      not do.</p>
+    </div>
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 16-21; COMP3330_Tutorial3.pdf, slides 3-18.</p>
+
+    <h2>Why a second toolkit exists</h2>
+    <p>Chapter 3 introduced Flutter in one slide pair; Tutorial 4 teaches it hands-on. The
+    motivation is the cross-platform problem from <a href="01-mobile-app-fundamentals.html">page
+    1</a>: native development means one codebase per platform, web/hybrid compromises on feel,
+    so a fourth option (own UI with its own renderer) was built. Flutter (Google, introduced May 2017)
+    is an open-source SDK for Android and iOS whose engine, written mainly in C++, renders with
+    Google's Skia graphics library and interfaces with the platform SDKs; apps are written in
+    <strong>Dart</strong>.</p>
+    <p>Tutorial 4's pitch, its own three words: <strong>fast</strong> (Flutter code compiles to
+    ARM or Intel machine code as well as JavaScript, for fast performance on any device),
+    <strong>productive</strong> (hot reload: update code and see changes almost instantly,
+    without losing state), <strong>flexible</strong> (control every pixel for customised, adaptive
+    designs on any screen). Dart backs hot reload, compiles to native machine code, and Flutter
+    relies on no browser or JavaScript runtime: apps for Android, iOS, Windows, macOS and Linux
+    run directly, with performance the tutorial describes as comparable to native apps. Dart's
+    asynchronous mechanism suits mobile work: network requests, file I/O, database operations.
+    Users named in the tutorial: eBay, Tencent, Alibaba Group.</p>
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 16-17; Tutorial_4.pdf, pages 3-5.</p>
+
+    <h2>Flutter's mental model: widgets and setState</h2>
+    <p>Two ideas replace the View tree and the listener code you now know:</p>
+    <ul>
+      <li><strong>Everything is a widget.</strong> The tutorial's example app starts from
+      <strong>MaterialApp</strong>, "one of the widgets in Flutter's Material component library,
+      which provides a Material Design interface and default theme for the application". Widgets
+      are the buttons, texts and layout boxes: composable objects rather than XML elements and
+      classes.</li>
+      <li><strong>UI is rebuilt from state.</strong> <code>setState()</code> "is the method in
+      Flutter used to notify the framework that the state has changed and the UI needs to be
+      rebuilt". In the tutorial's counter app, <code>_display</code> is the text currently
+      displayed on screen; a button click changes it and triggers the rebuild loop.</li>
+    </ul>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 260" role="img" aria-label="Flutter setState loop">
+        <rect x="230" y="15" width="170" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="315" y="39" text-anchor="middle" font-size="12" fill="currentColor">User clicks the button</text>
+        <rect x="230" y="70" width="170" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="315" y="94" text-anchor="middle" font-size="12" fill="currentColor">Button callback triggered</text>
+        <rect x="230" y="125" width="170" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="315" y="149" text-anchor="middle" font-size="12" fill="currentColor">State modified (_display)</text>
+        <rect x="230" y="180" width="170" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="315" y="204" text-anchor="middle" font-size="12" fill="currentColor">setState() called</text>
+        <line x1="315" y1="53" x2="315" y2="68" stroke="currentColor" stroke-width="2" marker-end="url(#arr7)"/>
+        <line x1="315" y1="108" x2="315" y2="123" stroke="currentColor" stroke-width="2" marker-end="url(#arr7)"/>
+        <line x1="315" y1="163" x2="315" y2="178" stroke="currentColor" stroke-width="2" marker-end="url(#arr7)"/>
+        <rect x="440" y="125" width="160" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="520" y="149" text-anchor="middle" font-size="12" fill="currentColor">build() re-executed</text>
+        <rect x="440" y="180" width="160" height="38" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="520" y="204" text-anchor="middle" font-size="12" fill="currentColor">New _display rendered</text>
+        <line x1="400" y1="199" x2="438" y2="155" stroke="currentColor" stroke-width="2" marker-end="url(#arr7)"/>
+        <line x1="520" y1="163" x2="520" y2="178" stroke="currentColor" stroke-width="2" marker-end="url(#arr7)"/>
+        <defs>
+          <marker id="arr7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>The tutorial's own loop (Tutorial_4.pdf, page 59): change state, call
+      setState(), and the framework re-runs build() to draw the new state.</figcaption>
+    </figure>
+    <div class="callout compare"><span class="tag">Compare</span>
+      <p>Card 24 in Android: listeners mutate widgets directly (expression.append, setImageResource,
+      isClickable = false). Flutter's counter: the callback mutates plain state and calls
+      setState(); the UI is a fresh description built from that state. Same callback idea you
+      learned on <a href="05-kotlin-and-java-syntax.html">page 5</a>, different deal about who
+      redraws the screen.</p>
+    </div>
+
+    <h3>Setup and running, in brief</h3>
+    <p>The tutorial's setup path (Linux via snap; macOS with git, Apple Silicon needing Rosetta;
+    adding <code>flutter/bin</code> to PATH in the right rc file; then <code>flutter doctor</code>
+    to check dependencies) ends in a dependency checklist: Android toolchain, Android Studio,
+    CocoaPods on macOS. Note "the Dart SDK is bundled with Flutter; it is not necessary to install
+    Dart separately". Running from VS Code: install the Flutter extension, Command Palette &rarr;
+    "Flutter: new project", template type "Application", then Run &rarr; Start Debugging and try
+    hot reload after a code change. Android Studio works too, with its Flutter plugin.</p>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: had Card 24 been assigned in Flutter, the group project would have
+      produced a better app: the tutorial's own claims for Flutter (hot reload, one codebase,
+      pixel control) are the evidence. Evidence that would change your mind: the course's actual
+      learning goals (CLO 2: develop apps with common IDEs in the community; understanding
+      Android's own components, intents and lifecycles): parts of the Android platform a
+      Skia-rendered UI would have hidden from you.</p>
+    </div>
+    <p class="source">Source: Tutorial_4.pdf, pages 6-65.</p>
+
+    <h2>Check yourself</h2>
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">In the tutorial's Card 24 code, what happens when the player taps a card
+      button a second time?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Nothing: clickCard disabled the button with isClickable = false on first tap.</button>
+        <button class="quiz-option">The card's value is appended to the expression again.</button>
+        <button class="quiz-option">The app shows "Wrong Answer" and clears.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">clickCard sets cards[i].isClickable = false after the first selection, implementing "once pressed, the card button should take no more effect (disabled)". The imageCount[i] == 0 guard backs it up.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Why does checkInput test abs(ca - 24) &lt; 1e-6 instead of ca == 24.0?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Division can yield values like 23.9999999, so a tolerance avoids rejecting correct answers.</button>
+        <button class="quiz-option">JEP returns integers, so the test converts them to doubles.</button>
+        <button class="quiz-option">1e-6 is JEP's required accuracy parameter.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">JEP evaluates to a Double (res as Double); floating-point arithmetic after division is not exact, so the code compares within a small tolerance: a correct formula like (1/3)*72 should not be called wrong.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">In Flutter, what does setState() do?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Notifies the framework that state changed and the UI must be rebuilt.</button>
+        <button class="quiz-option">Saves the current state to disk before the app closes.</button>
+        <button class="quiz-option">Replaces the current screen with a new route.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 4's definition: "setState() is the method in Flutter used to notify the framework that the state has changed and the UI needs to be rebuilt": then build() re-executes and the new _display is rendered.</span></p>
+    </div>
+
+    <h2>Recap flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Card 24: the three win conditions.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">No error in the formula; all four cards used exactly once; the formula's result equals 24.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Evaluation order for Card 24 formulas.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Bracket items first, then multiplication/division, then addition/subtraction. Brackets are the only way to override precedence: (9-5)*(10-4) = 24 while 9-5*10-4 = -45.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Why does Card 24 use the JEP library?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Correct evaluation order across parts of an expression needs an expression tree, which is complicated to write; JEP parses and evaluates the formula string instead.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The four moves for reading an Android codebase.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">UI (layout XML), wiring (onCreate / findViewById / listeners), state (fields), behaviour (methods the listeners call).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Flutter's three selling points and its language.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Fast (compiles to ARM/Intel machine code and JavaScript), Productive (hot reload without losing state), Flexible (pixel control). Written in Dart; rendered by its own C++/Skia engine.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What are MaterialApp and setState?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">MaterialApp: widget from the Material component library giving the app a Material Design interface and default theme. setState(): tells the framework state changed so build() re-runs and the UI redraws.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Card 24's input validity rules, in one line each.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A card or "(" only as the first item or after a symbol or "(". A symbol or ")" only after a card or ")".</span>
+      </span></button>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="07-card-1">
+          <span class="check-text">State the Card 24 spec from memory: components, validity rules, win conditions.</span></li>
+      <li><input type="checkbox" class="persist" data-id="07-card-2">
+          <span class="check-text">Walk an unfamiliar Android project using the UI / wiring / state / behaviour moves.</span></li>
+      <li><input type="checkbox" class="persist" data-id="07-card-3">
+          <span class="check-text">Explain what JEP replaces in the code and why the 24-check uses a tolerance.</span></li>
+      <li><input type="checkbox" class="persist" data-id="07-card-4">
+          <span class="check-text">Trace a hand: which listeners fire, what the expression TextView holds, what "=" does.</span></li>
+      <li><input type="checkbox" class="persist" data-id="07-card-5">
+          <span class="check-text">Describe Flutter's setState loop and say how it differs from mutating widgets directly.</span></li>
+    </ul>
+
+    <div class="callout tip"><span class="tag">Practise this</span>
+      <p><a href="practice-07-card24-and-flutter.html">Practice set 7: Card 24 and Flutter</a>: code-reading traces, spec-to-state reasoning and Flutter model questions, with full worked
+      answers.</p>
+    </div>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 2-22; COMP3330_Tutorial3.pdf, slides
+    2-20; Tutorial_4.pdf, pages 2-65.</p>
+
+    <nav class="pager">
+      <a class="prev" href="06-activities-and-fragments.html">&larr; Previous: activities and fragments</a>
+      <a class="next" href="index.html">Revision hub &rarr;</a>
+    </nav>
+  </main>
+</body>
+</html>

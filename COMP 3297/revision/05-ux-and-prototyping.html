@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: UX and prototyping</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>UX and prototyping</h1>
+    <p class="lede">How to spend the smallest amount of building effort to answer the biggest design questions, and the design vocabulary the lecture uses to judge what comes out: fidelity, success factors, risks, UX elements, usability and accessibility guidelines.</p>
+
+    <h2>The mental model: prototypes are questions, not products</h2>
+    <p>Every prototype exists to answer one question cheaply. That framing settles most of the advice on this page. The lecture opens with a pointed question of its own: do you "always need an executable prototype to resolve requirements uncertainties?", and the answer it gives is no. A <strong>paper prototype</strong>, "sometimes called a low-fidelity prototype, is a cheap, fast, and low-tech way to explore how a portion of an implemented system might look" (Rettig 1994). A <strong>storyboard</strong> is a similar deliverable: a sequence of sketches of how an interaction unfolds.</p>
+    <p><strong>Fidelity</strong> is the dial: how close the prototype looks and behaves to the real thing. Low fidelity (paper, sketch) is fastest and invites honest criticism because nobody mistakes it for finished. High fidelity (a clickable mock-up in a design tool) communicates look and feel but tempts everyone to treat it as the product. The course's bias is clear from its advice to create throwaway prototypes "as quickly and cheaply as possible".</p>
+    <p>One possible sequence of development activities, from use cases to detailed user interface design, is the lecture's spine for this whole topic (Wiegers and Beatty's PearlsFromSand.com example):</p>
+    <ol>
+      <li><strong>Use cases</strong>: the user classes and their tasks: Visitor (get information about the book or author, read sample chapters, read the blog, contact the author), Customer (order a product, download an electronic product, request assistance), Administrator (manage the product list, issue a refund, manage the email list).</li>
+      <li><strong>Dialog map</strong>: a conceptual page architecture: which pages exist and which links go where. Its jobs: discover new actions, and find ways to simplify and streamline the user's experience.</li>
+      <li><strong>Paper prototype / wireframe</strong>: "a hand-drawn sketch on paper, a simple line drawing, or a mock-up created with a dedicated prototyping or visual design tool". Goal: understand what page layout would make the pages easy to understand and use. The lecture's sample wireframe was made in PowerPoint "in just a few mins". That speed is the point.</li>
+      <li><strong>Detailed user interface design</strong>: then the implemented page.</li>
+    </ol>
+    <p>Read the ladder as increasing commitment. Use cases fix the tasks; the dialog map fixes the flow; the wireframe fixes the layout; only then does visual design and code spend money. Skipping a rung does not save effort — it moves the question to where it is most expensive to answer.</p>
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slides 2-7 (Wiegers and Beatty's PearlsFromSand.com example is credited there to <em>Software Requirements</em>, 2013, Chapter 15).</p>
+
+    <h2>Success factors and risks</h2>
+    <p>The lecture lists what keeps prototyping honest, and each rule is really a defence against one of the risks in the right-hand column of the same slide.</p>
+    <ul>
+      <li>Include prototyping tasks in your project plan. (Prototyping that is not scheduled does not happen, or happens instead of something else.)</li>
+      <li>State the purpose of each prototype before you build it, and explain what will happen with the outcome. A prototype with no decision attached is a toy.</li>
+      <li>Plan to develop multiple prototypes. One prototype answers one question; alternatives are where design learning comes from.</li>
+      <li>Create throwaway prototypes as quickly and cheaply as possible. "Don't include input data validations, defensive coding techniques, error-handling code, or extensive code doc." If you are writing validation for a throwaway, you have stopped prototyping and started building.</li>
+      <li>Do not prototype requirements you already understand, except to explore design alternatives.</li>
+      <li>Use plausible data in prototype screens and reports. Lorem ipsum hides layout problems that real names and real numbers expose.</li>
+      <li>Do not expect a prototype to replace written requirements.</li>
+    </ul>
+    <p>The four named risks: <strong>pressure to release</strong> ("it looks almost done!", a throwaway prototype is never production-ready), <strong>distraction by details</strong> (users fixate on how screens look instead of what the system must do), <strong>unrealistic performance</strong> (the mock-up feels faster than the real product will be), and <strong>excessive effort</strong> (a prototype is an experiment: keep it quick and cheap).</p>
+
+    <div class="callout why"><span class="tag">Why it matters</span>
+      <p>Notice that three of the four risks are social, not technical. The prototype succeeds or fails in the meeting where people react to it. Saying out loud "this will be thrown away, and the real system will be slower than this" before anyone clicks is the cheapest risk management in the whole course.</p>
+    </div>
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slide 8.</p>
+
+    <h2>User experience design</h2>
+    <p><strong>UX design</strong> is "a set of incremental process activities that help the development team and the project stakeholders focus on providing a positive experience for users of the software product", and it is broader than user interface design and usability or accessibility engineering. UI is what the user sees and touches; UX includes what the user is trying to do, in what order, with what expectations, and how the product leaves them feeling.</p>
+    <p>To make the task manageable, the lecture follows Garret (2010) in breaking it into five elements, from abstract to concrete:</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 260" role="img" aria-label="Garrett's five UX design elements as a stack: strategy, scope, structure, skeleton, surface">
+        <rect x="30" y="20" width="580" height="38" rx="6" fill="#dfe7f0" stroke="#5b7ba6" stroke-width="1.4"></rect>
+        <text x="46" y="44" font-size="14" font-weight="600" fill="#22303f">Strategy</text>
+        <text x="150" y="44" font-size="11.5" fill="#4a4a4a">what the product is for: user needs and product objectives</text>
+
+        <rect x="30" y="66" width="580" height="38" rx="6" fill="#e6ecf4" stroke="#5b7ba6" stroke-width="1.4"></rect>
+        <text x="46" y="90" font-size="14" font-weight="600" fill="#22303f">Scope</text>
+        <text x="150" y="90" font-size="11.5" fill="#4a4a4a">what is in it: features and content requirements</text>
+
+        <rect x="30" y="112" width="580" height="38" rx="6" fill="#edf1f7" stroke="#5b7ba6" stroke-width="1.4"></rect>
+        <text x="46" y="136" font-size="14" font-weight="600" fill="#22303f">Structure</text>
+        <text x="150" y="136" font-size="11.5" fill="#4a4a4a">how it fits together: interaction design and information architecture</text>
+
+        <rect x="30" y="158" width="580" height="38" rx="6" fill="#f2f4f8" stroke="#5b7ba6" stroke-width="1.4"></rect>
+        <text x="46" y="182" font-size="14" font-weight="600" fill="#22303f">Skeleton</text>
+        <text x="150" y="182" font-size="11.5" fill="#4a4a4a">how each screen works: interface, navigation, information design</text>
+
+        <rect x="30" y="204" width="580" height="38" rx="6" fill="#f7f8fa" stroke="#5b7ba6" stroke-width="1.4"></rect>
+        <text x="46" y="228" font-size="14" font-weight="600" fill="#22303f">Surface</text>
+        <text x="150" y="228" font-size="11.5" fill="#4a4a4a">how it looks and feels: visual design</text>
+      </svg>
+      <figcaption>Garret's component elements of UX design, abstract to concrete; each layer constrains the one below it. Drawing after L4 slide 10 (Garret [Gar10]).</figcaption>
+    </figure>
+
+    <p>Use the stack diagnostically. A user who "cannot find the checkout button" has a skeleton problem (navigation or layout), not a surface problem (colour). A user who "does not understand why this app exists" has a strategy problem. Most student projects polish the surface and skip the strategy, which is why the prototype sequence starts at use cases.</p>
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slides 9-10.</p>
+
+    <h2>Typical design errors</h2>
+    <p>The lecture's case slides walk through six error classes with real screenshots. The names matter: exam answers that say "the UI is bad" score nothing; answers that name the error class score.</p>
+    <ul>
+      <li><strong>Lack of consistency</strong>: inconsistent elements across screens (colour, shape, layout, controls). The fix shown: fix a colour palette and stick to it.</li>
+      <li><strong>Too much memorization</strong>: too much content on screen, or too many options at once; the user must remember too much to act.</li>
+      <li><strong>No guidance / help</strong>: a "no results found" page with no way forward. The fix shown: a help affordance.</li>
+      <li><strong>No context sensitivity</strong>: missing indicators of where the user is or what applies now; help that fires at the wrong moment (the poorly implemented Clippit example).</li>
+      <li><strong>Poor response</strong>: slow page loading, or no response at all when the user clicks a button or field.</li>
+      <li><strong>Arcane / unfriendly</strong>: poor touch targets, non-responsive layouts that break on other screen sizes (the fix shown for the latter: responsive frameworks such as Vue, Angular, React).</li>
+    </ul>
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slides 11-21, with the named answers in L4 - UX and Prototyping v1 _Answers.pdf, slides 12-21.</p>
+
+    <h2>Usability and accessibility guidelines</h2>
+    <p>Fourteen usability guidelines, in the lecture's words where they are sharp:</p>
+    <ul>
+      <li><strong>Anticipation</strong>: design so the application anticipates the user's next move.</li>
+      <li><strong>Communication</strong>: the interface communicates the status of any activity the user started.</li>
+      <li><strong>Consistency</strong>: navigation controls, menus, icons, aesthetics (colour, shape, layout) used consistently throughout.</li>
+      <li><strong>Controlled autonomy</strong>: let users move freely, but within the navigation conventions the application established.</li>
+      <li><strong>Efficiency</strong>: optimise the <em>user's</em> work efficiency, "NOT the efficiency of the developer who designs/builds it or the client-server environment that executes it".</li>
+      <li><strong>Flexibility</strong>: some users go straight to the task, others explore randomly; both must work (think undo).</li>
+      <li><strong>Focus</strong>: the interface stays on the user's task at hand.</li>
+      <li><strong>Human interface objects</strong>: a large library of reusable interface objects exists for web and mobile. Use them.</li>
+      <li><strong>Latency reduction</strong>: do not make the user wait for an internal operation; let them proceed as if it were done.</li>
+      <li><strong>Learnability</strong>: minimise learning time, and minimise relearning when the app is revisited.</li>
+      <li><strong>Metaphors</strong>: an interaction metaphor (the shopping cart) is easier to learn and use, if it suits the application and the user.</li>
+      <li><strong>Readability</strong>: information must be readable by young and old.</li>
+      <li><strong>Track state</strong>: where appropriate, store interaction state so a user can log off and pick up where they left off.</li>
+      <li><strong>Visible navigation</strong>: the well-designed interface gives "the illusion that users are in the same place, with the work brought to them".</li>
+    </ul>
+    <p>The accessibility guidelines extend the list: application accessibility, response time, help facilities, error handling, menu and command labeling, and internationalization. The lecture's own example ties these together: an AI-drafted screen shipped a "Continue" button nobody could read, and it was the readability / contrast check that caught it.</p>
+
+    <div class="callout compare"><span class="tag">Compare</span>
+      <p>Consistency appears twice in this lecture: as a design error when it is missing, and as a usability guideline when it is present. Same word, same requirement: fix your conventions (colour palette, controls, labels) and apply them everywhere. When an exam question names a screenshot's problem, "lack of consistency" and "violates the consistency guideline" are the same diagnosis.</p>
+    </div>
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slides 22-25.</p>
+
+    <h2>When AI drafts the interface</h2>
+    <p>The lecture's workflow for W4 is "draft, then refine": AI tools generate first-draft screens from a text prompt (the course uses Figma Make), and then you apply this lecture to the draft. Check it against the typical design errors above. Check the usability guidelines: consistency, feedback (communication), error prevention. Check accessibility: contrast, touch targets, text size. The draft is a starting point; the decisions are still yours.</p>
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slide 26.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A team shows a polished clickable prototype to the client and the client says "great, ship it — it's clearly almost done". The lecture's guidance says the team should:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Refuse: a throwaway prototype is never production-ready, and this is the named "pressure to release" risk.</button>
+        <button class="quiz-option">Agree: if the prototype looks finished, shipping it saves development cost.</button>
+        <button class="quiz-option">Add input validation and error handling to the prototype first, then ship.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">"Pressure to release" is one of the lecture's four prototype risks, with the explicit note that a throwaway prototype is never production-ready. Adding validation before shipping also contradicts the guidance: throwaway prototypes should exclude input validation, defensive coding, and error-handling code.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Users complain they "can't tell where they are" in a multi-step booking flow. Which pair of the lecture's guidelines is most directly violated?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Visible navigation and context sensitivity.</button>
+        <button class="quiz-option">Metaphors and latency reduction.</button>
+        <button class="quiz-option">Efficiency and internationalization.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">"Visible navigation" is the guideline about users knowing where they stand in the application, and "no context sensitivity" is the named design error class covering missing indicators of the current context. The other pairs are real guideline names, but they address different problems.</span></p>
+    </div>
+
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: a paper prototype finds at least as many requirement problems per hour as a high-fidelity mock-up, for any project under six months. Evidence that would change your mind: a defect class that only appears at high fidelity: the lecture names unrealistic performance and detail fixation; find one that low fidelity structurally cannot show.</p>
+    </div>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: the efficiency guideline ("optimise the user's work efficiency, not the developer's") should decide a design argument in favour of the user every time, even when it triples implementation cost. Evidence that would change your mind: a concrete case where developer-side efficiency produced a user-visible benefit that outweighed the cost.</p>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="05-ux-1">
+        <span class="check-text">Say what question a prototype is answering before building it, and pick a fidelity level that fits that question.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-ux-2">
+        <span class="check-text">Put the development sequence in order: use cases, dialog map, paper prototype/wireframe, detailed UI design.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-ux-3">
+        <span class="check-text">List the success factors and match each of the four risks to the factor that guards against it.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-ux-4">
+        <span class="check-text">Name Garrett's five UX elements and diagnose which layer a given user complaint belongs to.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-ux-5">
+        <span class="check-text">Name the six typical design error classes and identify them in a screenshot.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-ux-6">
+        <span class="check-text">Quote the efficiency guideline's distinction (user's efficiency versus developer's or the environment's) and apply it to a design choice.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-ux-7">
+        <span class="check-text">Run the AI-draft checklist: design errors, usability guidelines, accessibility (contrast, touch targets, text size).</span></li>
+    </ul>
+
+    <h2>Flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is a paper prototype?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A cheap, fast, low-tech (low-fidelity) way to explore how a portion of an implemented system might look: hand-drawn sketches; a storyboard is a similar deliverable.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The four prototype risks<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Pressure to release (it looks almost done), distraction by details (users fixate on looks), unrealistic performance (mock-up feels faster), excessive effort (keep it an experiment).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Garrett's five UX elements<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Strategy, scope, structure, skeleton, surface — abstract to concrete.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does a dialog map do?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Illustrates a conceptual page architecture (pages and links); discovers new actions and finds ways to simplify and streamline the user's experience.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The efficiency guideline, exactly<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Optimise the user's work efficiency, not the efficiency of the developer who designs/builds the system or the client-server environment that executes it.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Six typical design errors<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Lack of consistency; too much memorization; no guidance/help; no context sensitivity; poor response; arcane/unfriendly.</span>
+      </span></button>
+    </div>
+
+    <p>Ready to apply this? <a href="practice-05-ux-and-prototyping.html">Practice page 5: UX and prototyping</a> drills fidelity choices, error identification, and prototype planning.</p>
+
+    <p class="source">Source: L4 - UX and Prototyping v1.pdf, slides 2-26 (whole lecture), with the named design-error answers from L4 - UX and Prototyping v1 _Answers.pdf, slides 12-21. Rettig (1994) is the paper-prototyping citation on slide 2; Garret (2010) is the UX-elements citation on slide 10.</p>
+
+    <nav class="pager">
+      <a href="04-class-and-sequence-diagrams.html"><span class="dir">Previous</span><span class="name">Class and sequence diagrams</span></a>
+      <a class="next" href="06-architecture-and-solid.html"><span class="dir">Next</span><span class="name">Architecture and SOLID</span></a>
+    </nav>
+  </main>
+</body>
+</html>

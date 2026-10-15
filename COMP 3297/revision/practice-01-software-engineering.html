@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Software engineering practice</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Software engineering: practice</h1>
+    <p class="lede">Exercises on what software engineering covers, what software costs, how the four process activities run, and what professional conduct demands. Do the work before you open the answer.</p>
+    <p>Background: <a href="01-software-engineering.html">Software engineering</a>.</p>
+
+    <h2>Quiz</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A hospital information system is expected to run for fifteen years. Which cost claim matches the lecture?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Maintenance usually costs more than development, and for long-lived systems it can be several times the development cost.</button>
+        <button class="quiz-option">Development dominates the budget; maintenance is a minor line item.</button>
+        <button class="quiz-option">On a typical PC, hardware costs usually exceed the software costs.</button>
+        <button class="quiz-option">Skipping software engineering methods saves money over the whole life of the system.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture (citing R. L. Glass) states that software costs more to maintain than to develop, and that for systems with a long life, maintenance costs may be several times development costs. It also states that software costs on a PC are often greater than the hardware cost, and that software written without engineering methods ends up more expensive and less reliable than it should be.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">A company sells a dental appointments package to any dental practice that wants to buy it. Under the lecture's definitions, this product is:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A generic product: the lecture lists appointments systems for dentists as a generic example.</button>
+        <button class="quiz-option">A customized product, because each dentist gets their own copy.</button>
+        <button class="quiz-option">A customized product, because it was built to meet the needs of dental practices.</button>
+        <button class="quiz-option">Neither; the distinction only applies to embedded systems.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">This is the page's deliberate trap. "Appointments systems for dentists" is the lecture's own example of a generic product: stand-alone systems marketed and sold to any customer who wishes to buy them. Customized means commissioned by a specific customer to meet their own needs. Selling many copies to a market is generic, no matter how specialised that market is.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">A client offers you a bonus to take over a safety-critical controller this week. The codebase is in a language you have never used. Which professional responsibility issue is at stake?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Competence: engineers should not misrepresent their level of competence or knowingly accept work outside it.</button>
+        <button class="quiz-option">Confidentiality: the client's code is secret.</button>
+        <button class="quiz-option">Intellectual property: the code belongs to the client.</button>
+        <button class="quiz-option">Computer misuse: the controller could be attacked.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The facts are about what you can honestly claim to be able to do. That is competence. The other issues exist in most projects, but the facts given point only at accepting work beyond your skill.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Six months after release, a change in tax law forces the team to rewrite the payroll calculation. Which process activity is this?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Evolution: the software is modified to reflect changing customer and market requirements.</button>
+        <button class="quiz-option">Validation: the software is checked against what the customer requires.</button>
+        <button class="quiz-option">Specification: customers and engineers are defining what to produce.</button>
+        <button class="quiz-option">Development: the software is being designed and programmed.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The trap is reading any post-release work as "validation". Validation is checking; evolution is modifying. A changed law is exactly the "business and social change" pressure the lecture names, and rewriting the calculation to follow it is evolution.</span></p>
+    </div>
+
+    <h2>Guided exercises</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: matching systems to application types</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A consultancy wins three contracts in one week: (a) PayRun: payroll software for a manufacturer, run overnight at month end over a file of timesheets; (b) TankGuard: firmware that switches a heater and chiller on and off to hold an aquarium at 25 degrees; (c) SeatNow: a website where the public picks cinema seats and pays online. For each, name the application type from the lecture's list, and state one consequence for how the team should develop it.</p>
+      <details class="step"><summary>Step 1: find the defining characteristic of each system</summary>
+        <p>Ask what the system spends its time doing. PayRun consumes a batch of input records and produces a batch of outputs, with nobody watching. TankGuard sits next to hardware and reacts to temperature readings by switching devices. SeatNow is used by many people at once over the network, each performing short transactions.</p>
+      </details>
+      <details class="step"><summary>Step 2: match each to the lecture's application types</summary>
+        <p>The lecture's list: stand-alone applications, interactive transaction-based applications, embedded control systems, batch processing systems, entertainment systems, systems for modelling and simulation, data collection systems, systems of systems. Match on the characteristic you found, not on the industry the customer is in.</p>
+      </details>
+      <details class="step"><summary>Step 3: turn the type into a development consequence</summary>
+        <p>Software engineering diversity says methods and tools depend on the application type, the customer's requirements, and the team's background. So the three contracts should not be run with one fixed method. Say what each type puts under pressure.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p><strong>(a) PayRun: batch processing system.</strong> The lecture defines these as systems that process data in large batches. Consequence: correctness of the data transformation and the schedule of the runs matter; there is no interaction design work, and testing can replay whole input files. A method built around interactive prototypes would waste the team's time here.</p>
+        <p><strong>(b) TankGuard: embedded control system.</strong> These control and manage hardware devices. Consequence: dependability and timing dominate; a heater stuck on damages the customer's property, so safety-related behaviour needs the strongest scrutiny, and the team needs embedded background. Test rigs that simulate the tank will matter more than UI mock-ups.</p>
+        <p><strong>(c) SeatNow: interactive transaction-based application.</strong> These execute on a remote computer and are accessed by users from their own PCs. Consequence: interaction design, transaction integrity (two people must not buy the same seat), and load behaviour matter; prototyping and UI work earn their place.</p>
+        <p>Reasoning chain: identify what each system does → map to the application type by that behaviour → read off what the type puts under pressure → conclude that one universal method does not fit all three, which is the lecture's point about software engineering diversity.</p>
+        <p>The trap: the TankGuard contract is sold to aquarium shops, so it is also a generic product. Generic versus customized is a different classification axis (who owns and commissions the product), not an application type. Answering "generic product" to "name the application type" swaps the two axes.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: mapping events to the four process activities</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>SeatSaver is a lecture-hall seat booking app. Assign each event below to one of the four process activities (specification, development, validation, evolution) and say why.</p>
+      <p>Event 1: the team runs workshops with students and the timetabling office to agree what the app must do and the constraints on it.</p>
+      <p>Event 2: programmers design and code the booking engine.</p>
+      <p>Event 3: before handover, the team checks the finished system against what the client wrote into the contract.</p>
+      <p>Event 4: the client sends a bid document to a second supplier, describing broadly what the system should do.</p>
+      <p>Event 5: a year after launch, the university changes its seat-hold policy and the team rewrites the hold logic.</p>
+      <details class="step"><summary>Step 1: take the four definitions and hold them apart</summary>
+        <p>Specification: customers and engineers define the software to be produced and the constraints on its operation. Development: the software is designed and programmed. Validation: the software is checked to ensure it is what the customer requires. Evolution: the software is modified to reflect changing customer and market requirements.</p>
+      </details>
+      <details class="step"><summary>Step 2: classify each event by the verb, not the timing</summary>
+        <p>Defining is specification. Building is development. Checking is validation. Modifying is evolution. Note that an event can belong to specification before any code exists (Event 4), and that the word "check" is not reserved for the testing phase.</p>
+      </details>
+      <details class="step"><summary>Step 3: handle the event that could belong to two activities</summary>
+        <p>Event 5 happens after release, which tempts a "post-release work is maintenance, so evolution" reflex. Confirm it from the definition instead: the software is being modified because an external requirement changed. What would make it validation instead? A check with no modification.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Event 1: specification. Students and the timetabling office are the customers and stakeholders; the team is defining what to produce and its constraints.</p>
+        <p>Event 2: development. Design and programming.</p>
+        <p>Event 3: validation. The check is against the customer's requirements, which is exactly the lecture's wording.</p>
+        <p>Event 4: specification. A bid document is the "basis for a bid for a contract" case of requirements: it describes what the system should do, broadly. Note the dual function of requirements from the following lecture: open to interpretation as a bid, defined in detail as a contract. The activity is still specification.</p>
+        <p>Event 5: evolution. The policy change is business change; the team modifies the software to follow it. The trap: reading all post-release work as "maintenance" and stopping there, or worse, calling it validation. Evolution is the activity named for modification under changing requirements, and for long-lived systems it is where most of the money goes.</p>
+        <p>Reasoning chain: take each definition → match the verb in the event (defining / building / checking / modifying) → confirm the boundary case against the definition rather than the phase calendar.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: product type, ownership, and change decisions</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>Two deals cross your desk. (i) MediSoft sells its clinic appointments package to any practice that pays the licence fee. (ii) The Hong Kong Hospital Authority commissions a one-off ambulance dispatch system for its own fleet. For each: is it a generic or a customized product, who owns the product specification, and who decides on software change? Then answer this: a dental practice buys the MediSoft package next week. Does the package become a customized product for that practice?</p>
+      <details class="step"><summary>Step 1: apply the two definitions</summary>
+        <p>Generic: stand-alone systems marketed and sold to any customer who wishes to buy them. Customized: software commissioned by a specific customer to meet their own needs.</p>
+      </details>
+      <details class="step"><summary>Step 2: follow ownership from the definition</summary>
+        <p>The lecture states it directly: generic products are owned by the software developers; customized products are owned by the customer; decisions on software change are made by the owners.</p>
+      </details>
+      <details class="step"><summary>Step 3: test the boundary case</summary>
+        <p>Ask which definition the fact "a dentist bought it" belongs to. Commissioning is what defines customized. Buying is what defines generic.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(i) MediSoft: generic product. Owned by MediSoft (the developers); MediSoft decides on change, and a single practice has no say in the product's direction.</p>
+        <p>(ii) Ambulance dispatch: customized product. Commissioned by the Hospital Authority for its own needs; owned by the customer; the Hospital Authority decides on change.</p>
+        <p>The dental practice case: no. The package remains generic. This is the trap the lecture sets with its own example list: "appointments systems for dentists" appears among generic products, and a reader in a hurry classifies anything niche as customized. Customized is about who commissioned it and who owns it, not how specialised the market is.</p>
+        <p>Reasoning chain: apply the two definitions to how each product came into being → read ownership and change authority straight from the ownership rule → reject the market-specialisation red herring.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: applying professional responsibility issues</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>You are a contractor at a logistics firm. Name the professional responsibility issue in each fact and explain why.</p>
+      <p>(a) Your manager asks you to sign a statement that the routing module passed a formal safety review. You did not run one, and you are not qualified to.<br>
+      (b) You find that the staff portal exposes employees' home addresses at a public URL.<br>
+      (c) A competitor offers you money for the routing algorithm your client paid you to write.<br>
+      (d) A colleague runs a game server on the office build machine overnight.</p>
+      <details class="step"><summary>Step 1: list the lecture's four issues</summary>
+        <p>Confidentiality (respect the confidentiality of employers and clients whether or not a formal agreement is signed); competence (do not misrepresent your level of competence, do not knowingly accept work outside it); intellectual property rights (be aware of IP law, protect the IP of employers and clients); computer misuse (do not use technical skills to misuse other people's computers).</p>
+      </details>
+      <details class="step"><summary>Step 2: match each fact to exactly one issue</summary>
+        <p>Ask what is being violated in that fact, not what is generally true of the project. A signature you cannot back up is about you and your competence. Exposed employee data is about handling others' information. Selling the algorithm is about who owns the work. Running a game server is about whose computer you are using.</p>
+      </details>
+      <details class="step"><summary>Step 3: handle the fact that looks legal rather than ethical</summary>
+        <p>The lecture is explicit: ethical behaviour is more than upholding the law; it involves following principles that are morally correct. So "is it illegal?" is not the test you apply.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Competence. Signing a review statement you did not perform misrepresents your level of competence, and performing the review yourself would be accepting work outside it. The right conduct is to say so and route the work to someone qualified.</p>
+        <p>(b) Confidentiality. Employees' personal data is information your client holds; the professional duty is to respect that confidentiality and report the exposure through proper channels, not to exploit, copy, or publicise it.</p>
+        <p>(c) Intellectual property rights. The algorithm is the client's IP; you should protect it. Selling it is the opposite.</p>
+        <p>(d) Computer misuse. The lecture's own scale runs from trivial (game playing on an employer's machine) to serious (viruses and malware). A game server on the build machine is on that scale.</p>
+        <p>The trap: fact (a) tempts a "that's fraud, call a lawyer" answer. The lecture's point is that professional responsibility covers conduct the law may never reach, and the four named issues are the categories you are expected to use. The other trap is lumping all four facts into one issue such as confidentiality; match the violated duty, one per fact.</p>
+        <p>Reasoning chain: fix the category list → match the violated duty in each fact → check each match against the lecture's own examples (game playing, IP protection, competence claims) → refuse the "it's just illegal" shortcut.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: mixed (product, process, cost, and conduct in one case)</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This is the first practice page in the pack, so this mixed exercise threads together the four strands of the page rather than earlier pages. Case: PortBook, a berth-scheduling system commissioned by a shipping company for its own terminals, with a five-year expected life. Answer the four tasks.</p>
+      <p>1. Classify the product and name who decides when the scheduling rules change.</p>
+      <p>2. During the project, the team checks the release candidate against the signed contract. During the next two years, harbour regulations change twice and the team rewrites rules both times. Classify these three events by process activity.</p>
+      <p>3. The finance director calls the two rounds of regulatory rewriting "a waste". Using the lecture's cost facts, give the counter-argument.</p>
+      <p>4. A developer wants to paste a clever scheduling routine from a public source into the codebase without checking its licence. Which responsibility issue applies?</p>
+      <details class="step"><summary>Step 1: do the classification tasks first</summary>
+        <p>Commissioned by a specific customer for its own needs → customized, owned by the customer, so the shipping company decides on change. Checking against the contract → validation. Rewriting rules because regulations changed → evolution, twice.</p>
+      </details>
+      <details class="step"><summary>Step 2: build the cost argument from the cost facts</summary>
+        <p>Software costs more to maintain than to develop; for long-lived systems maintenance may be several times development cost. Five years is a long life. Evolution is not waste, it is the normal, dominant cost of a system that survives contact with a changing world.</p>
+      </details>
+      <details class="step"><summary>Step 3: finish with the conduct question</summary>
+        <p>Pasting code without checking its licence touches whose property that code is.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. Customized product; the shipping company owns it and decides on change.</p>
+        <p>2. Release-candidate check against the contract is validation. Both regulatory rewrites are evolution.</p>
+        <p>3. The counter-argument is the lecture's cost fact: maintenance exceeds development cost, and for long-lived systems it can be several times greater. The finance director is measuring against development cost as if it were the whole cost of ownership. Regulatory change is the business and social change the lecture names as a general issue affecting software. A system that cannot evolve is the expensive outcome, because the alternative is replacing it.</p>
+        <p>4. Intellectual property rights. Unlicensed public code pasted into a commercial codebase risks the client's IP position; the duty is to be aware of IP law and to protect the employer's and client's interests.</p>
+        <p>Reasoning chain: definition → classification → cost facts applied to the specific life span → conduct category matched to the fact. Notice that each task uses a different rule from the page; that is what makes it mixed.</p>
+      </details>
+    </section>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position on this claim: "For a three-month app with an expected one-year life, a managed development process is overhead the team cannot afford. Hire two good programmers and ship." Defend or attack it using the lecture's cost and failure material. Evidence that would change your mind: real cost figures showing that process overhead for short-lived products reliably exceeds the cost of the defects and rework it prevents, or the reverse. The lecture's stance is that it is usually cheaper in the long run to use engineering methods than to write programs as if it were a personal project; argue whether the size of the project changes that.</p>
+    </div>
+
+    <p class="source">Source: COMP 3297, L1 - Introduction v1.pdf, slides 3-21 (software engineering, costs, failure, products and specification, process activities, diversity, application types, fundamentals), slides 22-25 (ethics and professional responsibility). All scenarios on this page are fresh; the dentist example is the lecture's own, used to make its trap stick.</p>
+
+    <h2>Recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The four process activities, in order<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Specification (define what to produce and its constraints), development (design and program), validation (check it is what the customer requires), evolution (modify for changing requirements).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Generic vs customized: who owns what?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Generic is marketed to any customer and owned by the developers. Customized is commissioned by a specific customer and owned by the customer. The owners make change decisions.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Four essential attributes of good software<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Maintainability; dependability and security; efficiency; acceptability.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The maintenance cost fact<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Software costs more to maintain than to develop. For long-lived systems, maintenance costs may be several times development costs.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Definition of software engineering<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">An engineering discipline concerned with all aspects of software production, from early system specification through to maintaining the system after it has gone into use, including project management and the tools and methods that support production.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Four professional responsibility issues<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Confidentiality, competence, intellectual property rights, computer misuse.</span>
+      </span></button>
+    </div>
+
+    <nav class="pager">
+      <a class="prev" href="index.html"><span class="dir">Previous</span><span class="name">Revision hub</span></a>
+      <a class="next" href="practice-02-requirements-engineering.html"><span class="dir">Next</span><span class="name">Requirements engineering practice</span></a>
+    </nav>
+  </main>
+</body>
+</html>

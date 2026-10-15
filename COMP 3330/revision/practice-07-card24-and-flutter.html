@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: Card 24 and Flutter</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: Card 24 and Flutter</h1>
+    <p class="lede">The Card 24 case study is where the whole course comes together: rules turned into input validation, validation into state, state into listeners. Then Tutorial 4 opens a second toolkit, Flutter, and asks you to think again about widgets and state. Both halves are drilled here.</p>
+    <p>Background: <a href="07-card24-and-flutter.html">Card 24 and Flutter</a>. The Card 24 UI work is drilled in <a href="practice-04-ui-and-layouts.html">UI and layouts</a>.</p>
+
+    <h2>Quiz: rules, code and Flutter</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">When does the player win a game of Card 24, per the application specification?</p>
+      <div class="options">
+        <button class="quiz-option">Whenever the formula evaluates to 24, even with unused cards</button>
+        <button class="quiz-option" data-correct="true">There is no error in the formula, all four cards are selected exactly once, and the result equals 24</button>
+        <button class="quiz-option">Whenever the formula parses without a ParseException</button>
+        <button class="quiz-option">When the formula uses at least one bracket</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 2 lists three conditions together: no error in the formula, all four cards selected exactly once, and the result equals 24. Any one alone is not a win; the code even checks the value with a tolerance (Tutorial 3) instead of a bare equality.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">What is the evaluation order the game's specification requires?</p>
+      <div class="options">
+        <button class="quiz-option">Left to right only, ignoring brackets</button>
+        <button class="quiz-option">Multiplication and division before brackets</button>
+        <button class="quiz-option" data-correct="true">Brackets first, then multiplication/division, then addition/subtraction</button>
+        <button class="quiz-option">Whatever order the buttons were pressed in</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 2: "the formula should be evaluated in the order of 'bracket items' before 'multiplication/division' before 'addition/subtraction'", with the worked example (1) + (11 - 2) x 6 = 55 evaluated as (1) = 1, (11 - 2) = 9, 9 x 6 = 54, 1 + 54 = 55.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">checkInput computes a double result ca. Which condition does the tutorial use to declare "Correct Answer"?</p>
+      <div class="options">
+        <button class="quiz-option">ca == 24</button>
+        <button class="quiz-option" data-correct="true">abs(ca - 24) &lt; 1e-6</button>
+        <button class="quiz-option">ca.roundToInt() == 24</button>
+        <button class="quiz-option">ca &gt; 23.9</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 3's checkInput: parse and evaluate with JEP, cast the result to Double, then "return abs(ca - 24) &lt; 1e-6". The tolerance exists because the evaluator produces floating-point doubles, where a correct construction can land a hair away from 24.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">In Tutorial 4's Flutter example, what is setState() for?</p>
+      <div class="options">
+        <button class="quiz-option">Compiling Dart to machine code</button>
+        <button class="quiz-option" data-correct="true">Notifying the framework that the state has changed and the UI needs to be rebuilt</button>
+        <button class="quiz-option">Restarting the app after a code change</button>
+        <button class="quiz-option">Declaring a new widget</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 4: "setState() is the method in Flutter used to notify the framework that the state has changed and the UI needs to be rebuilt", and the flow is: button callback → state modified → setState() → build() re-executed → new _display rendered.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q5</span>
+      <p class="quiz-q">Which statement about Flutter and Dart matches the course?</p>
+      <div class="options">
+        <button class="quiz-option">Flutter apps are written in JavaScript and run in a browser engine</button>
+        <button class="quiz-option">Dart must be installed separately from the Flutter SDK</button>
+        <button class="quiz-option" data-correct="true">Dart compiles to native machine code; Flutter does not rely on a browser or JavaScript runtime, and hot reload shows changes almost instantly without losing state</button>
+        <button class="quiz-option">Hot reload discards app state on every code change</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 4: Dart can be compiled into native machine code; Flutter does not rely on a browser or a JavaScript runtime; the Dart SDK is bundled with Flutter; and hot reload lets you update code and see changes almost instantly without losing state. Flutter itself is a UI toolkit from Google with a C++ engine rendering via Skia (Chapter 3).</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 3, 5, 7; COMP3330_Tutorial3.pdf, slides 12-14; Tutorial 4.pdf, Flutter/Dart sections and "Run in VScode" example; COMP3330_Ch03_IDEs.pdf, slides 16-17.</p>
+
+    <h2>Exercise 1: validating button streams</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: applying the input-limitation rules to press sequences</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>The specification's two input rules are: a card or an open bracket "(" may be selected only when it is the first item in the formula or it follows an arithmetic symbol or "("; and a symbol (+, -, x, /) or a close bracket ")" may be selected only when the last previously selected item is a card or ")". The four cards are 13, 5, 2, 1. Classify each press stream as valid or invalid, naming the first violating press and the rule it violates. For valid streams, write the formula and evaluate it.</p>
+      <p>(a) 13, -, 5, x, (, 2, +, 1, )<br>
+         (b) 5, +, +, 1<br>
+         (c) (, ), 2<br>
+         (d) 5, 2 (two card presses in a row)<br>
+         (e) (, 13, -, 5, ), x, 2</p>
+      <details class="step"><summary>Step 1: state the two rules as tests</summary>
+        <p>Before pressing item X: if X is a card or "(", the previous item must be nothing (X is first), a symbol, or "(". If X is a symbol or ")", the previous item must be a card or ")".</p>
+      </details>
+      <details class="step"><summary>Step 2: walk each stream press by press</summary>
+        <p>(a) 13 first; "-" after card 13; 5 after symbol; "x" after card 5; "(" after symbol; 2 after "("; "+" after card 2; 1 after symbol; ")" after card 1. All pass. (b) The second "+" follows "+", a symbol, violating the operator rule (needs card or ")"). (c) ")" follows "(", violating the operator rule. (d) The second card press (2) follows a card, violating the card rule (needs symbol or "("). (e) ")" follows 5, which is a card, so it is allowed; then "x" follows ")", also allowed. All pass.</p>
+      </details>
+      <details class="step"><summary>Step 3: evaluate the valid streams</summary>
+        <p>(a) "13-5x(2+1)": brackets first, (2+1) = 3; multiplication/division next, 5x3 = 15; addition/subtraction last, 13-15 = -2. (e) "(13-5)x2": (13-5) = 8, then 8x2 = 16.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Valid; "13-5x(2+1)" = -2. (b) Invalid at the second "+": an operator may follow only a card or ")". (c) Invalid at ")": same operator rule, since the previous item is "(". (d) Invalid at the 2: a card may follow only a symbol or "(" (or be first). (e) Valid; "(13-5)x2" = 16. Neither valid formula reaches 24, so pressing "=" would show "Wrong Answer". But a wrong answer and an invalid formula are different failures in the spec.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Stream (e) looks suspicious because ")" appears before "x", but the rules allow a symbol after ")". The naive over-strict reading ("a formula must end with a card") forbids it; the stated rules do not. Conversely, stream (d) looks harmless because both presses are legal buttons, but the card rule forbids card-after-card. Judge against the two clauses, not against how the string looks.</p>
+        </div>
+        <div class="callout why"><span class="tag">Why it matters</span>
+          <p>The specification motivates these rules as preventing "non-sense player input" like "()1+/12". Each rule clause is a guard you will implement in the listeners: this is the design step before the code.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 5-6 (evaluation order and input limitations).</p>
+
+    <h2>Exercise 2: evaluating the way the game does</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: order of operations and the floating-point win test</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>Cards dealt: 8, 3, 8, 3. The player builds the formula "8/(3-8/3)" and presses "=". The evaluator computes in double-precision arithmetic and checkInput accepts when abs(ca - 24) &lt; 1e-6. (a) Show the evaluation steps in the spec's order. (b) In double arithmetic the computed value is not exactly 24; it differs from 24 by about 1.1 x 10^-14. Does the player win? (c) Would the player win if the code tested ca == 24 instead? (d) Classify these three computed results as win or lose: 23.9999995, 24.0000009, 23.99999.</p>
+      <details class="step"><summary>Step 1: the spec's evaluation order</summary>
+        <p>Brackets first: 8/3 inside the bracket evaluates first under multiplication/division-before-subtraction, so (3 - 8/3) = (3 - 2.666...) = 0.333...; then the division outside: 8 / 0.333... = 24. The mathematics is exact: 8 / (1/3) = 24.</p>
+      </details>
+      <details class="step"><summary>Step 2: what the doubles actually hold</summary>
+        <p>8/3 cannot be represented exactly in binary floating point, so the intermediate 3 - 8/3 is slightly above 1/3, and the final quotient lands slightly below 24, about 23.99999999999999, roughly 1.1 x 10^-14 short.</p>
+      </details>
+      <details class="step"><summary>Step 3: apply the code's test</summary>
+        <p>abs(ca - 24) is about 1.1 x 10^-14, which is less than 1e-6, so checkInput returns true: "Correct Answer", and the game deals a new hand. An equality test ca == 24 would return false for this perfectly good formula.</p>
+      </details>
+      <details class="step"><summary>Step 4: the three boundary cases</summary>
+        <p>23.9999995: |diff| = 5 x 10^-7 &lt; 10^-6 → win. 24.0000009: |diff| = 9 x 10^-7 &lt; 10^-6 → win. 23.99999: |diff| = 10^-5, not less than 10^-6 → lose.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Inner division 8/3 first (multiplication/division before subtraction), then 3 - that, then 8 divided by it = 24 mathematically. (b) Yes: the player wins: the computed value is within 1e-6 of 24. (c) No: ca == 24 would reject it, which is why the tutorial uses a tolerance. (d) 23.9999995 wins; 24.0000009 wins; 23.99999 loses.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two traps. First, mental arithmetic "it equals 24 exactly, so the double must be 24": the win test exists precisely because the double is not 24. Second, flipping the comparison to ca &lt;= 24 + 1e-6 or rounding first: the spec's acceptance rule is the strict inequality abs(ca - 24) &lt; 1e-6, and 23.99999 shows that a visibly wrong answer can still be a loss even though it is "close".</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slide 5 (evaluation order); COMP3330_Tutorial3.pdf, slides 12-14 (checkInput with JEP and tolerance).</p>
+
+    <h2>Exercise 3: reading the Card 24 code</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: tracing real activity code state by state</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Tutorial 3's code, trimmed to the parts you need:</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>private lateinit var data: Array&lt;Int&gt;   // card values 1..13
+private lateinit var card: Array&lt;Int&gt;   // card identifiers 1..52
+private lateinit var imageCount: Array&lt;Int&gt;
+
+private fun setClear() {
+    var resID: Int
+    expression.text = ""
+    for (i in 0..3) {
+        imageCount[i] = 0
+        resID = resources.getIdentifier("card" + card[i], "drawable", packageName)
+        cards[i].setImageResource(resID)
+        cards[i].isClickable = true
+    }
+}
+
+private fun clickCard(i: Int) {
+    if (imageCount[i] == 0) {
+        val resId = resources.getIdentifier("back_0", "drawable", packageName)
+        cards[i].setImageResource(resId)
+        cards[i].isClickable = false
+        val value = data[i]
+        expression.append(value.toString())
+        imageCount[i]++
+    }
+}</code></pre></div>
+      <p>After pickCard() has dealt data = [4, 5, 9, 10] and card = [4, 5, 9, 10] and called setClear(): (a) what is the state of the four buttons and the expression TextView? (b) The user taps card button 1 twice, then card button 3. What is on screen and what is imageCount? (c) The user presses "Clear". State everything setClear() changes. (d) When "=" is pressed, how does the code know that all four cards were used exactly once?</p>
+      <details class="step"><summary>Step 1: initial state</summary>
+        <p>setClear() empties the expression text, zeroes imageCount, and gives each button its face image "card" + card[i] (card4, card5, card9, card10) with isClickable = true. imageCount = [0, 0, 0, 0].</p>
+      </details>
+      <details class="step"><summary>Step 2: the taps</summary>
+        <p>Tap 1 on button 1: image becomes back_0, isClickable false, expression appends data[1] = "5", imageCount[1] = 1. The second tap on button 1 does nothing: the card is not clickable, and even if it were, clickCard's imageCount[i] == 0 guard fails. Tap on button 3: expression becomes "59" (appends data[3] = 9), imageCount = [0, 1, 0, 1].</p>
+      </details>
+      <details class="step"><summary>Step 3: Clear</summary>
+        <p>expression.text = ""; every imageCount[i] = 0; every button's image reset to its "card" + card[i] face; every button clickable again. The deal itself (data and card arrays) is unchanged; Clear resets the round, not the cards.</p>
+      </details>
+      <details class="step"><summary>Step 4: the all-four-cards check</summary>
+        <p>Each successful clickCard(i) increments imageCount[i] exactly once and disables the button, and the guard makes a second increment impossible. So "used exactly once" is equivalent to imageCount == [1, 1, 1, 1] (or its sum being 4) at "=" time. Tutorial 3 leaves this as Task 5.2 for the student to add.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) All four buttons show their face images and are clickable; the expression TextView is empty; imageCount = [0, 0, 0, 0]. (b) Button 1 shows back_0 and is disabled; button 3 shows back_0 and is disabled; the expression reads "59"; imageCount = [0, 1, 0, 1]. (c) setClear() clears the expression text, zeroes all of imageCount, restores each button's face image, and makes each clickable again. (d) Because clickCard increments imageCount[i] once and disables the button, the check at "=" is imageCount == [1, 1, 1, 1] (or sum == 4).</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Confusing the two arrays: data holds the 1-13 values that go into the expression; card holds the 1-52 identifiers used to build the drawable name "card" + card[i]. A second trap is checking the formula string instead of imageCount: the string does not record which card buttons were pressed (two cards can share the same value, as in the dealt 4 and 4 of a real deal).</p>
+        </div>
+        <div class="callout pitfall"><span class="tag">Pitfall in the tutorial</span>
+          <p>Tutorial 2's initCardImage calls resources.getIdentifier("back_0", "drawable", "hk.hkucs.card24") with a hardcoded package name (its own note says to replace it with your package name), while Tutorial 3's methods pass packageName. If your application's package differs, the hardcoded form silently finds no resource, so prefer packageName.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 16-17 (card images); COMP3330_Tutorial3.pdf, slides 6-11 (pickCard, setClear, clickCard, listeners), 17-18 (Tasks 5.1 and 5.2).</p>
+
+    <h2>Exercise 4: the Flutter state loop</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: reasoning about widgets, state and rebuilds in Flutter</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>Tutorial 4's example app shows the number a user entered, held in a field _display. (a) Put the loop in order: build() re-executed; user clicks the button; button callback triggered; state modified; setState() called; new _display rendered. (b) A student updates _display in the callback but never calls setState(). What does the user see, and why? (c) Name what MaterialApp gives the app and what hot reload gives the developer.</p>
+      <details class="step"><summary>Step 1: order the loop</summary>
+        <p>User clicks the button → button callback triggered → state modified → setState() called → build() re-executed → new _display rendered. This is Tutorial 4's own sequence.</p>
+      </details>
+      <details class="step"><summary>Step 2: the missing setState</summary>
+        <p>setState() is what notifies the framework that the state has changed and the UI needs to be rebuilt. Without it the framework is never told, build() is not re-executed, and the old value stays on screen even though the field changed.</p>
+      </details>
+      <details class="step"><summary>Step 3: MaterialApp and hot reload</summary>
+        <p>MaterialApp is one of the widgets in Flutter's Material component library, providing a Material Design interface and default theme. Hot reload: update code and see changes almost instantly, without losing state.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Click → callback → state modified → setState() → build() re-executed → new _display rendered. (b) The screen keeps showing the old value: the field changed but the framework was not notified, so no rebuild happened. (c) MaterialApp supplies the Material Design interface and default theme; hot reload lets the developer see code changes almost instantly without losing state.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>"Flutter is a JavaScript framework" and "hot reload restarts the app" are both wrong per Tutorial 4: apps are written in Dart (compiled to native machine code, no browser or JS runtime) and hot reload preserves state. If a change requires losing state, that is a restart, not a reload.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: Tutorial 4.pdf, Flutter/Dart overview and "Run in VScode" example (MaterialApp, _display, setState flow).</p>
+
+    <h2>Mixed exercise: hardening Card 24 before submission</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: combining rules, code, lifecycle and layout into one fix list</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>The deadline is close (Tutorial 3's Tasks 5.1 and 5.2 are still open) and this pulls in Chapters 2, 4, 5 and 6. Current state of the Card 24 app: the deal is hardcoded to cards 4, 5, 9, 10; the game does not enforce using all four cards; the layout has a ScrollView wrapping linear rows (Tutorial 2); and the team wants a "High scores" screen showing the winning streak, passed as an Int extra. (1) What must pickCard() do to satisfy the specification's "randomly pick 4 non-duplicate cards from totally 52 poker cards (excluding two jokers)"? (2) Where does the all-four-cards check go, and what exactly does it test (Exercise 3's answer)? (3) In Chapter 2's maturity vocabulary, what stage is this build if the remaining work is those two tasks and testing has been light? (4) Write the intent and extras code to open the high-score screen, and say where its TextView is found. (5) Which single-child rule must the layout keep?</p>
+      <details class="step"><summary>Step 1: the random deal</summary>
+        <p>Values run 1-13 with A/J/Q/K = 1/11/12/13 and the deck has 52 distinct cards. pickCard() must draw four distinct card identifiers from 52 (non-duplicate, as the specification says), set data[i] to each card's value and card[i] to its identifier, then call setClear(). The tutorial's fixed array is a test stub, which is exactly what Task 5.1 asks you to replace.</p>
+      </details>
+      <details class="step"><summary>Step 2: the all-cards check</summary>
+        <p>It goes where "=" is handled, before or alongside checkInput: the specification's win conditions are checked together. The test: imageCount == [1, 1, 1, 1], since each successful clickCard increments one entry exactly once. Failing it means the player loses even if the formula equals 24.</p>
+      </details>
+      <details class="step"><summary>Step 3: maturity</summary>
+        <p>All functionality is present except two known pieces and testing has been light: that matches Beta ("most functionality is now complete and has had at least light testing and bug fixing; major known issues may still be present") rather than Release Candidate ("all functionality is complete and tested").</p>
+      </details>
+      <details class="step"><summary>Step 4: the high-score screen</summary>
+        <p>Explicit intent inside the app (Chapter 6: explicit intents are the usual way to do page switching in one project): Intent(this, HighScoreActivity::class.java) with putExtra("Streak", streak) (Int), and the receiver reads intent.extras and getInt("Streak"). The TextView is found in HighScoreActivity.onCreate after setContentView, via findViewById(R.id....), because its XML declares an @+id for views referenced from code.</p>
+      </details>
+      <details class="step"><summary>Step 5: the layout rule</summary>
+        <p>Keep exactly one child inside the ScrollView (it is a FrameLayout): the outer LinearLayout that contains all the rows.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) Replace the stub with a random draw of 4 non-duplicate identifiers from 52, deriving each value 1-13 (A/J/Q/K = 1/11/12/13) and calling setClear(). (2) In the "=" handler: require imageCount == [1, 1, 1, 1] before accepting checkInput's result. (3) Beta: most functionality complete, light testing done, known issues (the two tasks) outstanding. (4) The intent and extras, Kotlin and Java:</p>
+        <div class="tabs">
+          <section class="tab-panel" data-label="Kotlin">
+            <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>// sender (MainActivity)
+val myIntent = Intent(this, HighScoreActivity::class.java)
+myIntent.putExtra("Streak", streak)   // Int
+startActivity(myIntent)
+
+// receiver (HighScoreActivity.onCreate)
+val bundle: Bundle? = intent.extras
+bundle?.let {
+    bundle.apply {
+        val streak: Int = getInt("Streak")
+        val label = findViewById&lt;TextView&gt;(R.id.highScoreText)
+        label.text = "Streak: $streak"
+    }
+}</code></pre></div>
+          </section>
+          <section class="tab-panel" data-label="Java">
+            <div class="code-block"><span class="lang-label">Java</span><pre><code>// sender (MainActivity)
+Intent myIntent = new Intent(MainActivity.this, HighScoreActivity.class);
+myIntent.putExtra("Streak", streak);   // int
+startActivity(myIntent);
+
+// receiver (HighScoreActivity.onCreate)
+Bundle bundle = getIntent().getExtras();
+if (bundle != null) {
+    int streak = bundle.getInt("Streak");
+    TextView label = (TextView) findViewById(R.id.highScoreText);
+    label.setText("Streak: " + streak);
+}</code></pre></div>
+          </section>
+        </div>
+        <p>The receiver's TextView is found after setContentView via findViewById, because the XML declares an @+id for views referenced from code. (5) One child inside the ScrollView.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Checking "all four cards used" by counting characters in the expression string or by scanning for four distinct values. Two different cards can share a value (a real 52-card deal can produce 4, 4, 4, 4), and brackets and operators change the string length. The state that records card usage is imageCount, and the disable-on-tap behaviour is what makes it exact.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 3-9 (specification), 12-13 (ScrollView); COMP3330_Tutorial3.pdf, slides 6-18; COMP3330_Ch02_Lifecycle.pdf, slide 12; COMP3330_Ch06_Activity_Fragment.pdf, slides 28-38; COMP3330_Ch04_Layout.pdf, slides 16-17.</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>The specification lets the formula use the display symbol "x" for multiplication, while the evaluator (JEP) parses the expression string the buttons build. Take a position on what the multiply button should append into the expression string and what the display TextView should show. Evidence that would change your mind: what a player sees when the formula is echoed back versus what the parser must receive for the order of operations to hold.</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Tutorial 2 hands you a layout template and a library (JEP) instead of building the expression tree yourself ("the implementation requires an Expression Tree, which is quite complicated"). Take a side on whether that is sound teaching or a shortcut that leaves a hole in your understanding. Evidence that would change your mind: which exam skill (rules → validation → state) is actually being trained versus skipped.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Card 24: the deck and the values.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">4 non-duplicate cards from 52 (jokers excluded); values 1-13 where Ace, Jack, Queen, King are 1, 11, 12, 13. Example: (13 - 5) x (1 + 2) = 24.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The two input-limitation rules.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A card or "(" only as the first item, or after a symbol or "(". A symbol (+, -, x, /) or ")" only after a card or ")".</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Evaluation order in the spec.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Brackets, then multiplication/division, then addition/subtraction. Worked: (1) + (11 - 2) x 6 = 1 + 9 x 6 = 55.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Winning a round.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">No error in the formula, all four cards used exactly once, and the result equals 24, checked in code as abs(ca - 24) &lt; 1e-6 on the double result.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">data vs card vs imageCount arrays.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">data: values 1-13 appended to the expression. card: identifiers 1-52 used to name drawables ("card" + card[i]). imageCount: clicks per card button; clickCard increments it once and disables the button, setClear zeroes it.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What happens on Correct vs Wrong Answer?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">checkInput true: "Correct Answer" toast and pickCard() deals a new hand. False (parse/evaluation error or not 24): "Wrong Expression" or "Wrong Answer" toast and setClear() resets the round.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Flutter essentials.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">UI toolkit by Google (2017) for mobile, web, desktop, embedded; C++ engine rendering via Skia; apps in Dart (compiled to native machine code, no browser or JS runtime); hot reload shows changes almost instantly without losing state.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The Flutter state loop.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Button click → callback → state modified → setState() (tells the framework the UI must rebuild) → build() re-executed → new _display rendered. MaterialApp provides the Material Design interface and default theme.</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 3-21; COMP3330_Tutorial3.pdf, slides 3-20; Tutorial 4.pdf (Introduction to Flutter through "Run in Android Studio"); COMP3330_Ch03_IDEs.pdf, slides 16-17.</p>
+
+    <nav class="pager">
+      <a href="practice-06-activities-and-fragments.html"><span class="dir">Previous</span><span class="name">Activities and fragments</span></a>
+      <a class="next" href="index.html"><span class="dir">Next</span><span class="name">Revision hub</span></a>
+    </nav>
+  </main>
+</body>
+</html>

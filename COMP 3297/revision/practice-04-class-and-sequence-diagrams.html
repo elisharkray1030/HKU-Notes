@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Class and sequence diagrams practice</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Class and sequence diagrams: practice</h1>
+    <p class="lede">Notation is graded in this course, so these exercises drill it: multiplicities read in both directions, message styles that say what they mean, and class boxes with visibility and types. The diagrams in the answers use the lecture's notation.</p>
+    <p>Background: <a href="04-class-and-sequence-diagrams.html">Class and sequence diagrams</a>.</p>
+
+    <h2>Quiz</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A class diagram shows an association "books" between Attendee and Ticket, with "1" at the Attendee end and "0..*" at the Ticket end. The "0..*" at the Ticket end means:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">One Attendee may book 0 to many Tickets.</button>
+        <button class="quiz-option">One Ticket may belong to 0 to many Attendees.</button>
+        <button class="quiz-option">There are 0 to many Attendees in the system.</button>
+        <button class="quiz-option">Each Ticket is booked by exactly one Attendee: that is what the "1" says.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The trap is the reading direction. A multiplicity at one end counts instances at that end, for one instance at the other end. So "0..*" next to Ticket says how many Tickets per Attendee; "1" next to Attendee says each Ticket is booked by exactly one Attendee, which is the last option's fact, but not what "0..*" itself means.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">In a sequence diagram, a message drawn as a solid line with an open arrowhead, after which the sender carries on without waiting, is:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">An asynchronous call.</button>
+        <button class="quiz-option">A synchronous call.</button>
+        <button class="quiz-option">A reply message.</button>
+        <button class="quiz-option">A message with incorrect notation: calls always wait.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's three styles: synchronous call is a solid line with a filled arrowhead (the sender must wait for a response to continue); asynchronous call is a solid line with an open arrowhead (the sender does not wait for a return value); reply message is a dashed line with an open arrowhead. Which style fits a given use case is a modelling choice, but the drawing must match the meaning.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">A class diagram shows Patient record with a hollow diamond on its line to Consultation. This relationship is:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Aggregation: a "part of" or "has a" relationship: a patient record is composed of consultations.</button>
+        <button class="quiz-option">Generalization: a patient record is a kind of consultation.</button>
+        <button class="quiz-option">Association only: the diamond is decoration.</button>
+        <button class="quiz-option">Composition, because the diamond is filled in most tools.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture draws aggregation as a hollow diamond at the whole end and reads it as "one object (the whole) is composed of other objects (the parts)". Generalization is the "is-a" relationship and is drawn as a line with a hollow triangle pointing up to the more general class. In standard UML a filled diamond means the stricter composition; the lecture's diagram uses the hollow form, so name what you see.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">A class box contains the line "- viewInfo(PID:int):String". What is it?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A private operation named viewInfo, taking one parameter of type int and returning a String.</button>
+        <button class="quiz-option">A private attribute named viewInfo of type int.</button>
+        <button class="quiz-option">A public operation returning an int called PID.</button>
+        <button class="quiz-option">A private operation returning an int.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Visibility: "+" is public, "-" is private. A line in the operations compartment with parentheses is an operation; "PID:int" inside the parentheses is a parameter with its type; the type after the colon at the end is the return type. The trap is reading "int" as the return type and missing the real one, String, at the far right.</span></p>
+    </div>
+
+    <h2>Guided exercises</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: building a class diagram</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>ConfTicket sells conference tickets. An Attendee books Tickets for Events. Each Ticket is for exactly one Event; an Event offers many Tickets and starts with none sold. A Ticket is either a StandardTicket or a VIPTicket; a VIPTicket adds a workshop seat. Draw the class diagram: associations with multiplicities read correctly in both directions, a generalization for the ticket kinds, and one operation with visibility and types.</p>
+      <details class="step"><summary>Step 1: name the classes and the generalization</summary>
+        <p>Attendee, Event, Ticket, StandardTicket, VIPTicket. "A VIPTicket is a Ticket with an extra" is generalization: an "is-a" relationship, drawn as a line with a hollow triangle pointing up to the more general class.</p>
+      </details>
+      <details class="step"><summary>Step 2: draw the associations and read each end twice</summary>
+        <p>Attendee "books" Ticket. Each Ticket is booked by exactly one Attendee → "1" at the Attendee end. An Attendee may book any number including none → "0..*" at the Ticket end. Event "offers" Ticket: each Ticket is for exactly one Event → "1" at the Event end; an Event starts with none sold and can have many → "0..*" at the Ticket end.</p>
+      </details>
+      <details class="step"><summary>Step 3: fill the class boxes</summary>
+        <p>Name, attributes, operations. Visibility markers: "+" public, "-" private. Attribute form "name: Type"; operation form "name(param: Type): ReturnType".</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 420" role="img" aria-label="Class diagram: Attendee books Ticket; Event offers Ticket; Ticket generalizes to StandardTicket and VIPTicket.">
+            <defs>
+              <marker id="gen" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto">
+                <path d="M1,1 L11,6 L1,11 z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              </marker>
+            </defs>
+            <g stroke="currentColor" fill="none" stroke-width="1.5">
+              <!-- Attendee -->
+              <rect x="30" y="60" width="160" height="110"/>
+              <line x1="30" y1="88" x2="190" y2="88"/>
+              <line x1="30" y1="128" x2="190" y2="128"/>
+              <!-- Ticket -->
+              <rect x="280" y="40" width="170" height="130"/>
+              <line x1="280" y1="68" x2="450" y2="68"/>
+              <line x1="280" y1="112" x2="450" y2="112"/>
+              <!-- Event -->
+              <rect x="530" y="60" width="160" height="110"/>
+              <line x1="530" y1="88" x2="690" y2="88"/>
+              <line x1="530" y1="128" x2="690" y2="128"/>
+              <!-- StandardTicket -->
+              <rect x="180" y="290" width="170" height="70"/>
+              <line x1="180" y1="318" x2="350" y2="318"/>
+              <!-- VIPTicket -->
+              <rect x="410" y="290" width="170" height="70"/>
+              <line x1="410" y1="318" x2="580" y2="318"/>
+              <!-- associations -->
+              <line x1="190" y1="105" x2="280" y2="105"/>
+              <line x1="450" y1="105" x2="530" y2="105"/>
+              <!-- generalization: hollow triangle at Ticket -->
+              <line x1="265" y1="290" x2="330" y2="170" marker-end="url(#gen)"/>
+              <line x1="495" y1="290" x2="395" y2="170" marker-end="url(#gen)"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="13">
+              <g text-anchor="middle" font-size="14">
+                <text x="110" y="80">Attendee</text>
+                <text x="365" y="60">Ticket</text>
+                <text x="610" y="80">Event</text>
+                <text x="265" y="310">StandardTicket</text>
+                <text x="495" y="310">VIPTicket</text>
+              </g>
+              <text x="40" y="110">- name: String</text>
+              <text x="40" y="150">+ book(t: Ticket)</text>
+              <text x="290" y="92">- ticketNo: String</text>
+              <text x="290" y="136">+ cancel(): Boolean</text>
+              <text x="540" y="110">- name: String</text>
+              <text x="540" y="150">+ capacity: int</text>
+              <text x="190" y="342">- seat: String</text>
+              <text x="420" y="342">+ workshopSeat: String</text>
+              <!-- multiplicities -->
+              <text x="200" y="98">1</text>
+              <text x="255" y="98">0..*</text>
+              <text x="505" y="98">0..*</text>
+              <text x="518" y="98"> </text>
+              <text x="462" y="98"> </text>
+              <text x="520" y="118">1</text>
+              <text x="235" y="112">books</text>
+              <text x="470" y="112">offers</text>
+            </g>
+          </svg>
+          <figcaption>ConfTicket class diagram. Hollow triangles point up to the general class; multiplicities sit at the end they count.</figcaption>
+        </figure>
+        <p>Read both ends of each association aloud to check: each Ticket is booked by exactly one Attendee ("1" at the Attendee end), and an Attendee books zero to many Tickets ("0..*" at the Ticket end). Each Ticket is for exactly one Event ("1" at the Event end); an Event offers zero to many Tickets ("0..*" at the Ticket end).</p>
+        <p>The operation "+ cancel(): Boolean" is public, takes no parameters, and returns a Boolean. The attribute "- workshopSeat: String" on VIPTicket is private; the subclass keeps only what is specific to it, because it inherits the Ticket attributes and operations. That inheritance is the point of generalization in the lecture: common characteristics live in one place, so a proposed change does not force you to look at every class.</p>
+        <p>The trap: writing "0..*" at the Attendee end because the Attendee side looks "bigger". Multiplicity placement is not about importance; it counts instances at its own end. Also note the default: a multiplicity left off an association end means "1", so an unannotated diagram is still claiming exact ones everywhere.</p>
+        <p>Reasoning chain: classes and the is-a hierarchy → each association read in both directions → multiplicities at the correct ends → compartments filled with visibility and types → reread every end aloud.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: reading a class diagram in both directions</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>Using the ConfTicket diagram above, answer: (a) How many Events can one Ticket be for? (b) How many Attendees can appear in one "books" link? (c) A colleague leaves both multiplicities off the "offers" association. What is the diagram then claiming? (d) For a cancelled VIPTicket, which class does the cancel() operation come from?</p>
+      <details class="step"><summary>Step 1: read each end against its own class</summary>
+        <p>Multiplicity at the Event end counts Events per Ticket. Multiplicity at the Attendee end counts Attendees per Ticket.</p>
+      </details>
+      <details class="step"><summary>Step 2: apply the default</summary>
+        <p>From the course's own answers deck: the default multiplicity is "1". Blank ends are claims, not gaps.</p>
+      </details>
+      <details class="step"><summary>Step 3: apply inheritance</summary>
+        <p>Subclasses inherit attributes and operations from their superclasses; lower-level classes may add more specific ones.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Exactly one. The "1" sits at the Event end.</p>
+        <p>(b) Exactly one. The "1" sits at the Attendee end: each Ticket is booked by exactly one Attendee.</p>
+        <p>(c) With both ends blank, the diagram claims each Ticket is offered by exactly one Event and each Event offers exactly one Ticket: the default multiplicity is "1". That silently forbids an Event from selling many Tickets, which contradicts the description. Blank is not neutral.</p>
+        <p>(d) Ticket. cancel() is declared on Ticket, and VIPTicket inherits it; VIPTicket adds workshopSeat. The trap is answering "both classes" or "VIPTicket because it is the concrete one". Inherited operations live in the superclass in the diagram.</p>
+        <p>Reasoning chain: end counts its own class → default "1" where the notation is silent → inheritance for operations.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: drawing a sequence diagram from a description</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>RoomBook: "A student requests to book a room. The booking manager processes the request and checks availability with the room registry. If the room is free at that time, a confirmation is returned to the student; otherwise a clash message is returned." Draw the sequence diagram: actor, objects as "name: Class", lifelines, message styles, and the choice drawn with an alt combined fragment.</p>
+      <details class="step"><summary>Step 1: list the participants and their lifelines</summary>
+        <p>The actor: Student (stick figure). The objects: b: BookingManager, r: RoomRegistry. The object box carries "name: Class" because an object is an instance of a class. Each participant gets a vertical dashed lifeline.</p>
+      </details>
+      <details class="step"><summary>Step 2: order the messages and pick the styles</summary>
+        <p>Student calls the manager: "book (roomID, slot)": a synchronous call (solid line, filled arrowhead), because the student waits. The manager calls the registry: "check (roomID, slot)": also synchronous. The registry answers "available": a reply (dashed line, open arrowhead).</p>
+      </details>
+      <details class="step"><summary>Step 3: draw the branch</summary>
+        <p>"If... otherwise" is the alt combined fragment: a frame labeled "alt" in its top-left corner, a dashed separator between the two operands, and each condition in square brackets. One operand runs; that is what alt means.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 430" role="img" aria-label="Sequence diagram: Student calls book on BookingManager, which calls check on RoomRegistry, receives available, then an alt fragment returns either confirmation or clash message to the Student.">
+            <defs>
+              <marker id="sync" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+              </marker>
+              <marker id="open" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+                <path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              </marker>
+            </defs>
+            <!-- actor -->
+            <g stroke="currentColor" fill="none" stroke-width="1.5">
+              <circle cx="70" cy="70" r="13"/>
+              <line x1="70" y1="83" x2="70" y2="118"/>
+              <line x1="52" y1="95" x2="88" y2="95"/>
+              <line x1="70" y1="118" x2="56" y2="142"/>
+              <line x1="70" y1="118" x2="84" y2="142"/>
+              <!-- object boxes -->
+              <rect x="225" y="60" width="150" height="36"/>
+              <rect x="495" y="60" width="150" height="36"/>
+              <!-- lifelines -->
+              <line x1="70" y1="150" x2="70" y2="415" stroke-dasharray="6 5"/>
+              <line x1="300" y1="96" x2="300" y2="415" stroke-dasharray="6 5"/>
+              <line x1="570" y1="96" x2="570" y2="415" stroke-dasharray="6 5"/>
+              <!-- execution occurrences -->
+              <rect x="293" y="142" width="14" height="250" fill="currentColor" stroke="none" opacity="0.75"/>
+              <rect x="563" y="182" width="14" height="60" fill="currentColor" stroke="none" opacity="0.75"/>
+              <!-- messages -->
+              <line x1="78" y1="150" x2="288" y2="150" marker-end="url(#sync)"/>
+              <line x1="307" y1="190" x2="558" y2="190" marker-end="url(#sync)"/>
+              <line x1="558" y1="230" x2="312" y2="230" stroke-dasharray="6 5" marker-end="url(#open)"/>
+              <!-- alt frame -->
+              <rect x="140" y="258" width="520" height="132"/>
+              <line x1="140" y1="324" x2="660" y2="324" stroke-dasharray="6 5"/>
+              <line x1="288" y1="300" x2="86" y2="300" stroke-dasharray="6 5" marker-end="url(#open)"/>
+              <line x1="288" y1="368" x2="86" y2="368" stroke-dasharray="6 5" marker-end="url(#open)"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="13">
+              <text x="70" y="32" text-anchor="middle">Student</text>
+              <text x="300" y="83" text-anchor="middle">b: BookingManager</text>
+              <text x="570" y="83" text-anchor="middle">r: RoomRegistry</text>
+              <text x="180" y="142">book (roomID, slot)</text>
+              <text x="430" y="182">check (roomID, slot)</text>
+              <text x="435" y="222">available</text>
+              <text x="150" y="276">alt</text>
+              <text x="150" y="296">[room free]</text>
+              <text x="150" y="362">[clash]</text>
+              <text x="185" y="292">confirmation</text>
+              <text x="185" y="360">clash message</text>
+            </g>
+          </svg>
+          <figcaption>Sequence diagram for "Book room". Calls are solid with filled arrowheads, replies dashed with open arrowheads, and the alt frame has a dashed separator between operands.</figcaption>
+        </figure>
+        <p>Reading order: top to bottom. The student waits while book() runs; the manager waits while check() runs; the reply lets the manager continue; then exactly one alt operand sends the outcome back.</p>
+        <p>The course's four common sequence-diagram mistakes, worth checking on any diagram you draw or read: incorrect execution occurrence (the activation bar must sit on the lifeline of the object that is executing, covering the time it handles the message); misplaced arrows (a call points at the receiver, a reply points back at the caller); incorrect message order (a receiver cannot answer a message before the call arrives); missing reply messages (a synchronous call that never gets a reply leaves the caller waiting forever on the page).</p>
+        <p>The trap: drawing "available" as a solid call with a filled arrowhead because "it carries data back". The style encodes who waits and what the message is: replies are dashed with open arrowheads. Second trap: putting the two outcome messages in sequence instead of in an alt fragment: that draws a world where the student gets a confirmation and a clash one after the other.</p>
+        <p>Reasoning chain: participants and lifelines → message order from the prose → style chosen by meaning → branch drawn as alt with bracketed conditions.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: deriving a class diagram from a sequence diagram</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>The lecture derives class diagrams from sequence diagrams step by step. Apply it to the "Book room" diagram above: (1) identify the classes, (2) the methods with their types, (3) the attributes with their types, (4) the relationships, (5) the associations with multiplicities. Then draw the class diagram.</p>
+      <details class="step"><summary>Step 1: classes come from the object boxes</summary>
+        <p>Each object "name: Class" names its class. Here: BookingManager and RoomRegistry.</p>
+      </details>
+      <details class="step"><summary>Step 2: methods come from the message labels</summary>
+        <p>A call to an object is an operation on its class, with the message's parameters as operation parameters. Types are inferred from what the data is.</p>
+      </details>
+      <details class="step"><summary>Step 3: attributes from what the objects keep</summary>
+        <p>An object that answers questions about many things stores a collection of them. RoomRegistry answers check() about rooms; BookingManager answers book() about bookings.</p>
+      </details>
+      <details class="step"><summary>Step 4: relationships and multiplicities</summary>
+        <p>Objects that exchange messages are associated. Multiplicities come from the story the diagram tells: how many of each participate.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. Classes: BookingManager, RoomRegistry.</p>
+        <p>2. Methods: BookingManager "- book(roomID:int, slot:int): Boolean" (returns whether the booking was created); RoomRegistry "- check(roomID:int, slot:int): Boolean" (returns availability). The minus signs mark them private to their class in the lecture's own worked answer style; if you prefer these as the classes' public entry points, "+" is defensible; pick one and be consistent.</p>
+        <p>3. Attributes: BookingManager "bookings: List&lt;bookingRef:String&gt;": what it keeps to answer for existing bookings; RoomRegistry "rooms: List&lt;roomID:int&gt;": what it keeps to answer availability.</p>
+        <p>4. Relationship: the manager consults the registry, a plain association.</p>
+        <p>5. Multiplicities: the description shows one booking manager consulting one room registry, so "1" at each end. If the system were built with several booking managers sharing one registry, the registry end would still be "1" and the manager end "0..*". The multiplicities are a claim about the running system, so they must follow the story, not habit.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 680 300" role="img" aria-label="Class diagram derived from the Book room sequence: BookingManager associated with RoomRegistry, each with one method and one attribute.">
+            <g stroke="currentColor" fill="none" stroke-width="1.5">
+              <rect x="40" y="70" width="250" height="120"/>
+              <line x1="40" y1="98" x2="290" y2="98"/>
+              <line x1="40" y1="138" x2="290" y2="138"/>
+              <rect x="410" y="70" width="250" height="120"/>
+              <line x1="410" y1="98" x2="660" y2="98"/>
+              <line x1="410" y1="138" x2="660" y2="138"/>
+              <line x1="290" y1="130" x2="410" y2="130"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="13">
+              <text x="165" y="90" text-anchor="middle" font-size="14">BookingManager</text>
+              <text x="50" y="122">bookings: List&lt;bookingRef:String&gt;</text>
+              <text x="50" y="162">- book(roomID:int, slot:int): Boolean</text>
+              <text x="535" y="90" text-anchor="middle" font-size="14">RoomRegistry</text>
+              <text x="420" y="122">rooms: List&lt;roomID:int&gt;</text>
+              <text x="420" y="162">- check(roomID:int, slot:int): Boolean</text>
+              <text x="300" y="122">1</text>
+              <text x="375" y="122">1</text>
+            </g>
+          </svg>
+          <figcaption>Class diagram derived from the sequence diagram, following the lecture's five steps.</figcaption>
+        </figure>
+        <p>The trap: letting the alt fragment generate a class. "confirmation" and "clash message" are messages, not objects; only object boxes on lifelines become classes. A second trap: copying message names straight through without types: the lecture's worked answer takes the trouble to write "viewInfo(PID:int)", not "viewInfo".</p>
+        <p>Reasoning chain: object boxes → classes; message labels → typed operations; persistent state → attributes; message exchange → association; the story → multiplicities.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: mixed (from requirement to use case to sequence)</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This pulls in <a href="practice-02-requirements-engineering.html">page 2</a> and <a href="practice-03-use-case-modeling.html">page 3</a>. For RoomBook's "Cancel booking" use case (tabulated on page 3: a student may cancel up to one hour before the booking starts; after that the booking stands), do the chain: (1) state what the sequence diagram must show that the tabular description already fixed; (2) draw the sequence diagram (Student, cm: BookingManager, rm: RoomRegistry); (3) name the class-diagram consequence.</p>
+      <details class="step"><summary>Step 1: mine the tabular description for interaction facts</summary>
+        <p>Actors: Student. Stimulus: cancel command naming a booking. Response: confirmation or refusal. Rule: the one-hour window, checked before the outcome. So the diagram needs a request, a check, and a branch on the check's result.</p>
+      </details>
+      <details class="step"><summary>Step 2: draw the same shape as Exercise 3</summary>
+        <p>Request (sync call), check (sync call), check result (reply), then alt on the result. The outcome messages are replies back to the student.</p>
+      </details>
+      <details class="step"><summary>Step 3: translate back to structure</summary>
+        <p>New message names imply new operations; a stored booking implies state.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. The description fixes: who acts (Student), what starts it (cancel command naming a booking), the guard rule (one hour), and the two outcomes (confirmation with the room released, or refusal). What it leaves to the diagram is the order: the rule must be evaluated before either outcome is sent.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 430" role="img" aria-label="Sequence diagram for Cancel booking: Student calls cancel on BookingManager, which calls check on RoomRegistry and receives startsIn, then an alt fragment returns cancelled or refused.">
+            <defs>
+              <marker id="sync2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+              </marker>
+              <marker id="open2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+                <path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              </marker>
+            </defs>
+            <g stroke="currentColor" fill="none" stroke-width="1.5">
+              <circle cx="70" cy="70" r="13"/>
+              <line x1="70" y1="83" x2="70" y2="118"/>
+              <line x1="52" y1="95" x2="88" y2="95"/>
+              <line x1="70" y1="118" x2="56" y2="142"/>
+              <line x1="70" y1="118" x2="84" y2="142"/>
+              <rect x="225" y="60" width="150" height="36"/>
+              <rect x="495" y="60" width="150" height="36"/>
+              <line x1="70" y1="150" x2="70" y2="415" stroke-dasharray="6 5"/>
+              <line x1="300" y1="96" x2="300" y2="415" stroke-dasharray="6 5"/>
+              <line x1="570" y1="96" x2="570" y2="415" stroke-dasharray="6 5"/>
+              <rect x="293" y="142" width="14" height="250" fill="currentColor" stroke="none" opacity="0.75"/>
+              <rect x="563" y="182" width="14" height="60" fill="currentColor" stroke="none" opacity="0.75"/>
+              <line x1="78" y1="150" x2="288" y2="150" marker-end="url(#sync2)"/>
+              <line x1="307" y1="190" x2="558" y2="190" marker-end="url(#sync2)"/>
+              <line x1="558" y1="230" x2="312" y2="230" stroke-dasharray="6 5" marker-end="url(#open2)"/>
+              <rect x="140" y="258" width="520" height="132"/>
+              <line x1="140" y1="324" x2="660" y2="324" stroke-dasharray="6 5"/>
+              <line x1="288" y1="300" x2="86" y2="300" stroke-dasharray="6 5" marker-end="url(#open2)"/>
+              <line x1="288" y1="368" x2="86" y2="368" stroke-dasharray="6 5" marker-end="url(#open2)"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="13">
+              <text x="70" y="32" text-anchor="middle">Student</text>
+              <text x="300" y="83" text-anchor="middle">cm: BookingManager</text>
+              <text x="570" y="83" text-anchor="middle">rm: RoomRegistry</text>
+              <text x="180" y="142">cancel (bookingID)</text>
+              <text x="425" y="182">check (bookingID)</text>
+              <text x="430" y="222">startsIn (hours:int)</text>
+              <text x="150" y="276">alt</text>
+              <text x="150" y="296">[hours &gt;= 1]</text>
+              <text x="150" y="362">[hours &lt; 1]</text>
+              <text x="185" y="292">cancelled</text>
+              <text x="185" y="360">refused</text>
+            </g>
+          </svg>
+          <figcaption>Sequence diagram for "Cancel booking". The one-hour rule is evaluated before either outcome is sent.</figcaption>
+        </figure>
+        <p>For clarity the diagram elides one call that a fuller model would show: after "cancelled", the manager tells the registry to release the room, and the registry replies. The page 3 table says the room becomes available immediately, so a diagram for a design review should carry that call.</p>
+        <p>3. Class-diagram consequences: BookingManager gains "- cancel(bookingID:int): Boolean"; RoomRegistry gains "- startsIn(bookingID:int): int" (or whatever shape the system uses to answer about timing) and a release operation. The Booking objects (bookings the manager keeps in its list) now carry a state (booked, cancelled) and a start time, because the rule reads it. Structure follows interaction; that is why the lecture derives class diagrams from sequence diagrams.</p>
+        <p>The trap: hard-coding the one-hour rule as an alt condition on the actor's side, as if the student decides. The check belongs to the system's objects; the actor only supplies the command. Second trap: modelling "refused" as a silent nothing: the description demands a response in both branches.</p>
+        <p>Reasoning chain: extract interaction facts from the table → draw request, check, reply, alt → read the diagram back against the table → translate messages into operations and state.</p>
+      </details>
+    </section>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position: "Deriving class diagrams from sequence diagrams, the way the lecture teaches, is backwards. Structure first, then interactions, or the class diagram just parrots whatever scenarios you happened to draw." Defend or attack. Evidence that would change your mind: project data showing one order consistently catches more modelling errors, or a case where a scenario-derived class diagram missed a structure that any domain-first approach would have found. The lecture's order exists because models communicate; argue whether that justifies it.</p>
+    </div>
+
+    <p class="source">Source: COMP 3297, L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 23-38 (sequence diagrams, message styles, alt fragments, common mistakes), slides 41-68 (classes and instances, class notation and visibility, multiplicity and association names, deriving class diagrams step by step, generalization, aggregation). Notation in the diagrams above was checked against the lecture slides: message labels in the form "name (params)", objects as "name: Class" boxes over dashed lifelines, calls solid with filled arrowheads, replies dashed with open arrowheads, the alt frame with a dashed operand separator.</p>
+
+    <h2>Recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Three message styles in a sequence diagram<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Synchronous call: solid line, filled arrowhead, sender waits. Asynchronous call: solid line, open arrowhead, sender does not wait. Reply: dashed line, open arrowhead.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How to read a multiplicity<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">The multiplicity at one end counts instances at that end per one instance at the other end. A blank end means the default, "1".</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Generalization vs aggregation, in one line each<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Generalization: "is-a", line with a hollow triangle pointing up to the more general class. Aggregation: "part of" / "has a", hollow diamond at the whole end.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Visibility markers and type positions<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">"+" public, "-" private. Attribute: "name: Type". Operation: "name(param: Type): ReturnType". The return type is the one after the last colon.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What an alt combined fragment means<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A choice: exactly one of the contained operands runs. Frame labeled "alt" top-left, conditions in square brackets, operands separated by a dashed line.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five steps: sequence diagram to class diagram<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Identify classes (from object boxes), methods with types (from messages), attributes with types (from what objects keep), relationships (who talks to whom), then associations and multiplicities.</span>
+      </span></button>
+    </div>
+
+    <nav class="pager">
+      <a class="prev" href="practice-03-use-case-modeling.html"><span class="dir">Previous</span><span class="name">Use case modeling practice</span></a>
+      <a class="next" href="practice-05-ux-and-prototyping.html"><span class="dir">Next</span><span class="name">UX and prototyping practice</span></a>
+    </nav>
+  </main>
+</body>
+</html>

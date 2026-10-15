@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: app lifecycle</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: app lifecycle</h1>
+    <p class="lede">Two lifecycles sit under this topic: the one your project lives through (Chapter 2) and the one your activity lives through on the phone (Chapter 6, at story depth here). This page drills both, because exam questions mix them on purpose.</p>
+    <p>Background: <a href="02-app-lifecycle.html">App lifecycle</a>.</p>
+
+    <h2>Quiz: phases, maturity and distribution</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">Which is the correct order of the 5 major phases of the mobile app development lifecycle?</p>
+      <div class="options">
+        <button class="quiz-option">Design, Inception, Deployment, Development, Testing</button>
+        <button class="quiz-option" data-correct="true">Inception, Design, Development, Stabilization / Testing, Deployment</button>
+        <button class="quiz-option">Inception, Development, Design, Deployment, Stabilization</button>
+        <button class="quiz-option">Development, Design, Inception, Stabilization, Deployment</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 2 lists the phases exactly so: Inception, Design, Development, Stabilization / Testing, Deployment. Design (UX then UI) precedes development, and stabilization is a phase of its own, not an afterthought of deployment.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Your build has most functionality complete and lightly tested and bug-fixed, but you know of a few major issues. Which stage is it?</p>
+      <div class="options">
+        <button class="quiz-option">Prototype</button>
+        <button class="quiz-option">Alpha</button>
+        <button class="quiz-option" data-correct="true">Beta</button>
+        <button class="quiz-option">Release candidate</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's definitions: Prototype = proof of concept, only core or partial functionality working, major bugs present. Alpha = core functionality generally code-complete but not fully tested, major bugs still present. Beta = most functionality complete with at least light testing and bug fixing; major known issues may still be present. Release candidate = everything complete and tested. "Lightly tested and bug-fixed" is the Beta marker.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">Which statement about Android application signing matches the lecture?</p>
+      <div class="options">
+        <button class="quiz-option">Every Android app must be signed by a recognised certificate authority before release</button>
+        <button class="quiz-option" data-correct="true">All Android apps must be signed; most developers self-sign with their own certificate protected by a private key, and certificates mainly differentiate developers and applications</button>
+        <button class="quiz-option">Signing is optional unless the app uses the camera</button>
+        <button class="quiz-option">Android devices are locked to one approved store, so signing is the store's job</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 2: all Android applications must be signed before distribution; developers sign with their own certificate protected by a private key; a development certificate can be signed by a recognised CA but most developers self-sign; the main purpose of certificates is to differentiate between different developers and applications. Devices are not locked to a single store.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Activity A starts Activity B. Which statement is correct?</p>
+      <div class="options">
+        <button class="quiz-option">A.onStop() runs before B.onCreate()</button>
+        <button class="quiz-option" data-correct="true">A.onPause() runs first, then B's onCreate(), onStart(), onResume() in sequence, and A.onStop() only if A is no longer visible</button>
+        <button class="quiz-option">B.onResume() runs before A.onPause()</button>
+        <button class="quiz-option">Both activities are in the foreground at the same time</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 6's coordination example: A.onPause() executes, then B.onCreate(), onStart(), onResume() in sequence (B has user focus), and if A is no longer visible its onStop() executes. Only one activity can be in the foreground at any time, though A may stay visible without focus.</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 2, 12, 15; COMP3330_Ch06_Activity_Fragment.pdf, slides 5, 8.</p>
+
+    <h2>Exercise 1: which maturity stage is this build?</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: classifying prototype / alpha / beta / release candidate</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A team shows you their shuttle-tracking app. The tracking screen works end to end but only that screen exists; two other planned features are not built at all, and the app crashes when the network drops. Later the same week, they show a build where every planned feature is implemented, none of it has been tested beyond compiling, and the crash is still there. Classify each build against Chapter 2's four maturity stages, and say which single phrase in the definitions decided each call.</p>
+      <details class="step"><summary>Step 1: compare build 1 against the definitions</summary>
+        <p>Build 1 has one working part and major bugs, with other parts missing. "Prototype: the app is still in proof-of-concept phase and only core functionality, or specific parts of the application are working. Major bugs are present." One screen working out of several is "specific parts". So build 1 is a prototype.</p>
+      </details>
+      <details class="step"><summary>Step 2: compare build 2 against the definitions</summary>
+        <p>Build 2 has all features implemented but untested, with major bugs remaining. "Alpha: core functionality is generally code-complete (built, but not fully tested). Major bugs are still present, outlying functionality may still not be present." Everything being built but untested is exactly "code-complete, not fully tested". So build 2 is alpha.</p>
+      </details>
+      <details class="step"><summary>Step 3: rule out beta and release candidate</summary>
+        <p>Beta requires "at least light testing and bug fixing", and build 2 has no testing at all, so it cannot be beta. Release candidate requires all functionality complete and tested: plainly not.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Build 1: <strong>prototype</strong>, decided by "only core functionality, or specific parts of the application are working" plus major bugs present. Build 2: <strong>alpha</strong>, decided by "code-complete (built, but not fully tested)" with major bugs still present. Beta is excluded because no testing or bug fixing has happened yet; release candidate is excluded twice over.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>The naive move is to call build 1 "alpha" because it has real working functionality, and build 2 "beta" because it has all the features. The lecture separates the stages by testing and bug fixing, not by feature count: feature completeness only distinguishes alpha from the outlying-functionality-missing case within alpha; the jump to beta is marked by light testing and bug fixing having happened.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slide 12 (prototype, alpha, beta, release candidate).</p>
+
+    <h2>Exercise 2: asking the inception questions</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: mapping product facts onto the inception framework</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>An HKU department wants "RoomFinder": it shows live room occupancy so students can find free classrooms. There are three rival timetable apps already, but none shows live occupancy; the university already runs a central room-booking system the app can read; students will use it while walking between buildings; and the phone's GPS could suggest the nearest free room. Map each fact to the correct inception question from Chapter 2 (competitive advantage, infrastructure integration, value, form / mobility), then name the two artefacts the lecture says help design functionality.</p>
+      <details class="step"><summary>Step 1: label the facts</summary>
+        <p>Three rival apps exist → competitive advantage ("are there similar apps? if so, how does this application differentiate?"). Central booking system already runs → infrastructure integration ("for apps distributed in an enterprise, what existing infrastructure will it integrate with or extend?"). Live occupancy solves the student's actual problem → value ("what value does this app bring users? how will they use it?"). GPS suggesting the nearest free room while walking → form / mobility ("how can I add value using mobile technologies such as location awareness, the camera, etc.?").</p>
+      </details>
+      <details class="step"><summary>Step 2: write the differentiation statement</summary>
+        <p>Live occupancy is the differentiator against timetable-only rivals. That is the answer to competitive advantage, not a repeat of "value".</p>
+      </details>
+      <details class="step"><summary>Step 3: the two artefacts</summary>
+        <p>Chapter 2 says that to help design the functionality it is useful to define actors (roles within the application, often users) and use cases (actions or intents). For RoomFinder: actors include the student and the room-booking system; a use case is "locate a free room near me".</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Competitive advantage: three rivals exist; differentiate with live occupancy data. Infrastructure integration: the existing central room-booking system. Value: students find free rooms without walking floors; used between buildings. Form / mobility: GPS to suggest the nearest free room. Artefacts: actors and use cases (student, booking system; "locate a free room near me").</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>It is easy to file GPS under "value" because it sounds valuable. The lecture puts mobile-technology questions (location awareness, camera) under Form / Mobility; Value is about what the app brings users and how they use it, whatever the technology. The exam expects the fact filed under the question the lecture names.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 3-4 (inception).</p>
+
+    <h2>Exercise 3: a distribution plan that survives scrutiny</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: choosing deployment routes per platform</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>A company is shipping an internal logistics app. On iOS it must reach 40 company-owned test devices now, and it will never appear on the App Store. On Android, the same build must be installable from the company's own website, not just Google Play. Write the deployment plan per platform using Chapter 2's named options, and state what signing is required on each side.</p>
+      <details class="step"><summary>Step 1: iOS options</summary>
+        <p>Chapter 2 names three: Ad-Hoc Deployment (development and testing, a limited number of properly provisioned devices), In-House Deployment (internal distribution of corporate applications not available publicly via the App Store), and the Apple App Store. "Never on the App Store" and "corporate" point to In-House; the 40 test devices today could be served by Ad-Hoc, but the enduring requirement is In-House. State both and pick In-House for the product, Ad-Hoc for the current test phase.</p>
+      </details>
+      <details class="step"><summary>Step 2: Android options</summary>
+        <p>Chapter 2: Android takes an open approach; devices are not locked to a single approved store, anyone may create an app store, and most Android phones allow installs from third-party stores. Installing from the company website is therefore allowed. The requirement that stands is signing: all Android applications must be signed before distribution, with the developer's own certificate protected by a private key.</p>
+      </details>
+      <details class="step"><summary>Step 3: certificates</summary>
+        <p>iOS has named certificate types (iPhone Developer for development runs, iPhone Distribution for testing on designated devices or store submission). Android: most developers self-sign; a CA signature is possible but not required. The purpose of certificates is to differentiate developers and applications.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>iOS: Ad-Hoc Deployment for the current 40 provisioned test devices; In-House Deployment for the corporate product, since it is internal and will never be on the App Store; sign with the iOS Distribution certificate type for device distribution. Android: distribute the signed APK from the company site (Android permits third-party distribution); sign with your own certificate protected by a private key; self-signing is normal. Certificates exist to tell developers and applications apart.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two traps. First, "Android needs a certificate from a recognised authority": the lecture says a development certificate can be signed by a recognised CA but most developers self-sign, so a CA is not required. Second, answering "Ad-Hoc" alone for iOS: ad-hoc is for development and testing; the permanent internal distribution answer the lecture gives is In-House.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 13-15 (distribution, certificates).</p>
+
+    <h2>Exercise 4: the activity lifecycle at story depth</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: predicting callback order when one activity starts another</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A note app has Activity A (the list of notes) and Activity B (the editor). A holds an unsaved draft in memory that must be written to the database before B can run, because B reloads everything from the database. The user taps a note in A and B opens full screen. Write the callback sequence from the tap until B has focus, name the callback where the draft write belongs, and say what is different if the phone shows A and B side by side so A stays visible.</p>
+      <details class="step"><summary>Step 1: name what the user did and what the system does</summary>
+        <p>Starting B is an activity switch. Chapter 6's coordination example: A.onPause() executes first, then B.onCreate(), onStart(), onResume() in sequence, and then A.onStop() if A is no longer visible.</p>
+      </details>
+      <details class="step"><summary>Step 2: place the draft write</summary>
+        <p>The write must happen before B runs, and onPause() is the only callback of A's that is guaranteed to run before B's creation. The lecture states the conclusion directly: "if A needs to write to a DB before B starts, use onPause() instead of onStop()".</p>
+      </details>
+      <details class="step"><summary>Step 3: handle the side-by-side case</summary>
+        <p>The lecture notes an activity can be visible but not in focus when the screen shows multiple activities. If A stays visible, its onStop() does not run; the sequence stops after A.onPause() and B's three callbacks. The draft write is safe either way, because it lives in onPause().</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Sequence: A.onPause() → B.onCreate() → B.onStart() → B.onResume() (B has focus) → A.onStop() only if A is no longer visible. The draft write goes in A.onPause(). Side by side: A is visible without focus, so A.onStop() does not fire, but the write already happened in onPause().</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>The naive order puts A.onStop() before B.onCreate(), because "A must be finished before B starts". Wrong: A only loses focus first (onPause), B comes up completely, and A stops afterwards if it ended up invisible. If you moved the write to onStop(), B could load stale data in the side-by-side case where onStop() never runs.</p>
+        </div>
+        <div class="callout tip"><span class="tag">Tip</span>
+          <p>Full callback ordering, state saving and intent routing are drilled in <a href="practice-06-activities-and-fragments.html">Activities and fragments</a>. Here the exam wants the story: one foreground activity, pause before the next is created, stop when invisible.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 5-8 (activity concept and coordination). Treated at story depth here; details belong to Chapter 6.</p>
+
+    <h2>Mixed exercise: from idea to store</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: running a scenario through inception, maturity and distribution</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This one pulls in Chapter 1 (mHealth, constraints) and Chapter 2 together. A team builds "MediMinder" for elderly users: medication reminders with a one-tap "taken" button. Current state: the reminder screen works, the "taken" button crashes, and the settings screen is not built. The team wants to hand the build to 20 elderly volunteers next week, and afterwards publish to everyone. (1) Name the maturity stage. (2) Which Chapter 2 inception question did they most likely skip if volunteers abandon the app, and which Chapter 1 constraint explains the abandonment? (3) Give the iOS and Android distribution routes for the volunteer phase and the public phase. (4) If the reminder must still fire when the user has left the app's screen, which single-activity rule from Chapter 6 tells you the reminder cannot live in an activity's visible layer?</p>
+      <details class="step"><summary>Step 1: maturity</summary>
+        <p>One feature works, one crashes, one is missing: "only core functionality, or specific parts of the application are working. Major bugs are present." That is a prototype.</p>
+      </details>
+      <details class="step"><summary>Step 2: the skipped question and the constraint</summary>
+        <p>Elderly volunteers abandoning the app points at Value (how will they use it?) or at Analysis &amp; Planning's target-audience question ("what are their implicit needs?"). Chapter 1's Constraint 3 explains the behaviour: mobile users drop off in distracted, non-work settings and "even if they intend to return later, users often forget and never come back, deleting the app after weeks without use".</p>
+      </details>
+      <details class="step"><summary>Step 3: distribution</summary>
+        <p>Volunteer phase: iOS Ad-Hoc Deployment (limited number of properly provisioned devices, for development and testing); Android signed APK installed directly (Android recognises signed APK files by default, Tutorial 1). Public phase: Apple App Store and Google Play; Android still requires signing with your own certificate.</p>
+      </details>
+      <details class="step"><summary>Step 4: where the reminder lives</summary>
+        <p>Chapter 6: only one activity can be in the foreground at any time, and an activity is a page in the foreground. A reminder that fires while the user is elsewhere therefore cannot be an activity's foreground job; the chapter's component list names the service as the no-user-interface, background component (music, download are its examples).</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) Prototype: partial functionality, major bug present. (2) Value / target audience (Analysis &amp; Planning) was skipped; Constraint 3 (distractions, users who drop off forget to return) explains the abandonment. (3) Volunteers: iOS Ad-Hoc, Android signed APK sideload; public: Apple App Store and Google Play, Android signed with the developer's own certificate. (4) Because only one activity is in the foreground at a time and activities are foreground pages, a reminder firing elsewhere belongs to a background component: the service, per the Chapter 6 component list.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Part (4) tempts an invented answer ("use a broadcast receiver") or a vague one ("use the lifecycle"). Stay inside the course's vocabulary: the four application components are Activity, Service, Content provider, Broadcast receiver, and the one described as no user interface / background is the Service. Receivers are for system-wide events such as low battery.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 42-43; COMP3330_Ch02_Lifecycle.pdf, slides 3-4, 12-15; COMP3330_Tutorial1.pdf, slide 8; COMP3330_Ch06_Activity_Fragment.pdf, slides 3, 5.</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position: Chapter 2 says stabilization should start "very early within the development process so that corrections can occur before they become costly". Argue whether a student team on a 10-week deadline should test from week 1 or converge testing into the last 2 weeks. Evidence that would change your mind: a concrete project fact (team size, codebase risk, demo date) that flips the choice.</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Chapter 2 claims release is "just the first step in developing a continuous evolution", with developers shipping the minimum and then listening to reviews. Take a side on whether a first release should include every planned feature or the smallest shippable core. Evidence that would change your mind: a category of app where the other policy clearly wins.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The 5 major phases of the mobile app development lifecycle.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Inception, Design, Development, Stabilization / Testing, Deployment.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Prototype vs alpha vs beta vs release candidate.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Prototype: proof of concept, only core or partial functionality working, major bugs. Alpha: core code-complete but not fully tested, major bugs remain. Beta: most functionality complete with light testing and bug fixing, major known issues may remain. Release candidate: everything complete and tested.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">UX design vs UI design in the Design phase.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">UX is black-and-white mockups or wireframes, done without worrying about final UI; UI adds colours and graphics. Both must respect each platform's guidelines so the app "feels at home".</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What must be true before an Android app is distributed?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">It must be signed: developers sign with their own certificate protected by a private key; most self-sign. Certificates differentiate developers and applications.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Three iOS distribution options in the lecture.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Ad-Hoc (development and testing on a limited number of provisioned devices), In-House (internal corporate apps not on the App Store), Apple App Store.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Callback order when A starts B.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A.onPause() → B.onCreate() → B.onStart() → B.onResume() → A.onStop() if A is no longer visible. Write to a DB in onPause(), not onStop().</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does "background" mean for an activity?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">It has lost focus to another activity; only one activity is in the foreground at any time. It may still be visible without focus (multi-activity screens), in which case onStop() has not run.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Four application components (Chapter 6 list).<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Activity (UI / foreground), Service (no UI / background, e.g. music, download), Content provider (data manager), Broadcast receiver (system-wide events such as low battery).</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 2-16; COMP3330_Ch06_Activity_Fragment.pdf, slides 3-8 (activity story); COMP3330_Ch01_Introduction.pdf, slides 40-44 (constraints).</p>
+
+    <nav class="pager">
+      <a href="practice-01-mobile-app-fundamentals.html"><span class="dir">Previous</span><span class="name">Mobile app fundamentals</span></a>
+      <a class="next" href="practice-03-ide-and-tooling.html"><span class="dir">Next</span><span class="name">IDE and tooling</span></a>
+    </nav>
+  </main>
+</body>
+</html>

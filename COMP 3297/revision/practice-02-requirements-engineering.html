@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Requirements engineering practice</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Requirements engineering: practice</h1>
+    <p class="lede">Exercises on elicitation, classification, specification, validation, and change. The skill being trained throughout: reading a requirement the way a developer and a customer would each read it, and noticing when those readings differ.</p>
+    <p>Background: <a href="02-requirements-engineering.html">Requirements engineering</a>.</p>
+
+    <h2>Quiz</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A requirements engineer spends three weeks observing how ward clerks actually handle patient admissions. What can this method NOT do?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Identify new features: observation is effective for understanding existing processes, but it cannot discover new ones.</button>
+        <button class="quiz-option">Reveal social and organisational factors that shape the work.</button>
+        <button class="quiz-option">Show work that the clerks themselves find hard to explain.</button>
+        <button class="quiz-option">Avoid forcing the clerks to articulate their own process.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's three strengths of ethnography are exactly the three wrong options: people do not have to explain their work, social and organisational factors can be observed, and it suits knowledge so familiar that stakeholders cannot articulate it. The stated limit is that it cannot identify new features, because nobody in the room is imagining a different process.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">"WashDay shall return the list of free machines within two seconds, measured at 200 concurrent users." This is best classified as:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A non-functional requirement: a timing constraint on a service, stated so it can be measured.</button>
+        <button class="quiz-option">A functional requirement, because it describes what the system does when asked.</button>
+        <button class="quiz-option">A goal, because response time is a quality aspiration.</button>
+        <button class="quiz-option">A domain requirement, because it constrains the app to the campus network.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The trap is the word "return": the sentence does describe a service, so a quick reading calls it functional. But the requirement's substance is a constraint on how the service behaves (timing, load), which is the lecture's definition of a non-functional requirement. It is verifiable: two seconds is a measure, not an aspiration. A goal would be "the app should feel fast".</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">A review finds this pair in the SRS: "R14: The system shall support at most 50 concurrent bookings." "R31: The system shall allow 200 concurrent bookings." Which validation check has failed?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Consistency: the two requirements conflict.</button>
+        <button class="quiz-option">Completeness: a facility the customer needs is missing.</button>
+        <button class="quiz-option">Realism: 200 concurrent bookings cannot be implemented with the budget.</button>
+        <button class="quiz-option">Validity: the system would not support the customer's real needs.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Consistency means no conflicts or contradictions in the descriptions of system facilities. Two different concurrency ceilings contradict each other directly. Nothing in the facts tells you the customer's needs (validity), the budget (realism), or what is missing (completeness).</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Which of these is a verifiable non-functional requirement rather than a goal?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">After four hours of training, staff shall make no more than two errors per hour of system use.</button>
+        <button class="quiz-option">The system should be easy for new staff to learn.</button>
+        <button class="quiz-option">The system shall provide a pleasant user experience.</button>
+        <button class="quiz-option">The system should recover gracefully from failure.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">A verifiable requirement uses a measure that can be objectively tested: hours of training, errors per hour. The others are goals: they convey user intention ("ease of use", "recover from failure") but no test can settle them. The lecture's move is exactly this: take a usability goal and rewrite it with training time and error rate.</span></p>
+    </div>
+
+    <h2>Guided exercises</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: classifying and repairing raw requirement statements</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>WashDay is a campus laundry booking app. Classify each raw statement from the client meeting as functional requirement, non-functional requirement, goal, or broken (amalgamated or ambiguous). Then rewrite the broken ones.</p>
+      <p>S1: "The system shall let students book a machine and pay, and it should be fast."<br>
+      S2: "All booking transactions shall be logged to satisfy university audit standard UHS-11."<br>
+      S3: "A student shall be able to search free machines for all wash rooms."<br>
+      S4: "The app shall be easy to use."<br>
+      S5: "Each student shall be uniquely identified by their 8-digit university number."</p>
+      <details class="step"><summary>Step 1: test each sentence for one requirement per sentence</summary>
+        <p>The guidelines say several different requirements expressed together is amalgamation. S1 packs a booking function, a payment function, and a speed aspiration into one sentence. Everything else stands alone.</p>
+      </details>
+      <details class="step"><summary>Step 2: run the functional / non-functional test</summary>
+        <p>Functional: statements of services, reactions to inputs, behaviour in situations, including what the system should not do. Non-functional: constraints on those services or on the system as a whole: timing, standards, process constraints. S2 constrains the system to a standard rather than adding a visible service; S5 states an identification rule; S1's clauses are services; S4 says nothing testable.</p>
+      </details>
+      <details class="step"><summary>Step 3: run the ambiguity test on S3</summary>
+        <p>Read S3 twice, as a developer might: search all wash rooms at once, or choose a wash room and then search within it? Both readings build different screens. When two developers could build two different things, the requirement is imprecise.</p>
+      </details>
+      <details class="step"><summary>Step 4: rewrite with the standard format</summary>
+        <p>"The [feature or function] shall/should [do something based on user inputs and provide corresponding outputs]." Use shall for mandatory, should for desirable, and attach the rationale where it helps.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>S1: broken (amalgamation), and its speed clause is a goal. Rewrite: "The system shall allow a student to book an available machine for a chosen time slot (rationale: booking is the core task)." "The system shall allow a student to pay for a booking through the campus e-payment service (rationale: the university does not handle cash)." "The system should respond to booking actions quickly" is still only a goal; if speed matters, write "The system shall confirm a completed booking within two seconds of submission."</p>
+        <p>S2: non-functional requirement. It is an external requirement: a constraint imposed by the environment (the university's audit standard), with the rationale already attached. Good practice in the lecture's own style.</p>
+        <p>S3: functional but ambiguous. This is the page's deliberate trap, the same class of defect as the lecture's "search the appointment lists for all clinics" example, which can mean search across all clinics at once or choose a clinic then search. Rewrite to kill one reading: "The system shall let a student choose a wash room and then list its free machines" or "The system shall list free machines across all wash rooms in a single result." Pick one; do not leave both alive.</p>
+        <p>S4: goal. It states a general user intention. Follow the lecture's pattern: goal "easy to use" becomes "staff shall be able to use all functions after four hours of training, and experienced users shall average no more than two errors per hour." For a student app the same shape works: name the training, name the error measure.</p>
+        <p>S5: functional requirement. A rule about the service (identification), stated precisely and testable, matching the lecture's own "8-digit employee number" example.</p>
+        <p>Reasoning chain: amalgamation test → functional vs non-functional by what is being constrained → ambiguity test by trying to build the thing twice → rewrite in standard format with shall/should discipline and rationale.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: critiquing and rewriting an SRS excerpt</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>LibraryReserve handles book reservations. A first draft of the requirements says:</p>
+      <p>"Users will be able to reserve books which is obviously necessary and the backend should hydrate the reservation cache and admins can blacklist people and everything must be totally secure and fast."</p>
+      <p>Name every writing guideline this excerpt breaks, then rewrite it as two clean requirements, one mandatory and one desirable.</p>
+      <details class="step"><summary>Step 1: list the guidelines from the lecture</summary>
+        <p>Invent a standard format and use it for all requirements. Use language consistently: shall for mandatory, should for desirable. Use text highlighting for key parts. Avoid computer jargon. Include an explanation (rationale) of why a requirement is necessary. One requirement per sentence (no amalgamation), precise wording (no imprecision).</p>
+      </details>
+      <details class="step"><summary>Step 2: walk the excerpt against the list</summary>
+        <p>"Users will be able to": no standard format, and "users" is not a defined role. "which is obviously necessary": asserted, not explained; a rationale states why, it does not claim obviousness. "backend should hydrate the reservation cache": jargon, and a should where the feature is mandatory; it is also an internal design decision rather than a service statement. "admins can blacklist people": second requirement glued on (amalgamation). "totally secure and fast": unverifiable goals, and two of them in one clause.</p>
+      </details>
+      <details class="step"><summary>Step 3: rewrite with roles, shall/should, and measures</summary>
+        <p>Choose the mandatory core and one desirable. Name the role, use shall for the mandatory one, and either measure the quality or admit it is a goal.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Guidelines broken: standard format (every clause has a different shape); consistent language (should on what is mandatory, "can" on what is mandatory); no rationale except "obviously"; jargon ("backend", "hydrate the reservation cache"); amalgamation (reserve, blacklist, quality demands in one sentence); imprecision and unverifiability ("totally secure and fast"); unnamed actor ("users").</p>
+        <p>Rewrite, mandatory: "The system shall let a member reserve one available copy of a titled book for a future date (rationale: reservations are the service the library commissioned; without them members cannot plan borrowing)." Rewritten, desirable: "The system should let a librarian block a member who has three or more overdue reservations (rationale: protects stock from members who hoard reservations)." If the speed matters as a constraint rather than a wish, it becomes its own sentence with a measure: "The system shall confirm a reservation within two seconds."</p>
+        <p>The trap: "everything must be totally secure and fast" looks like a strong requirement because it is emphatic. Emphasis is not verifiability. It is the weakest line in the excerpt, and the lesson is the lecture's point that imprecise non-functional requirements are hard to verify.</p>
+        <p>Reasoning chain: fix the guideline list → map each defect to exactly one guideline → rewrite with role + shall + rationale, keeping one requirement per sentence.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: choosing requirements discovery methods</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>For a new patient queue system at a clinic, pick the best discovery method for each situation and justify it: (a) you need the official policy on how long a patient may wait before escalation; (b) you need to understand why receptionists keep a private paper list beside the screen; (c) you have a rough screen sketch and need the receptionists to react to it; (d) someone claims a two-day observation study will reveal the features the new system needs.</p>
+      <details class="step"><summary>Step 1: recall the method list and what each is good for</summary>
+        <p>Interviews (closed: pre-determined question list; open: issues explored with the stakeholder); ethnography (observation of real work); prototyping (working with stakeholders on a model to provoke discussion). Plus the problems: domain language, and knowledge too familiar to articulate.</p>
+      </details>
+      <details class="step"><summary>Step 2: match each situation to the method's strength</summary>
+        <p>Policy is documented and official → closed interview follows the list. Why people deviate is social and organisational → observation. A sketch provokes reactions → prototype-assisted interview. New features from observation → check the method's stated limit.</p>
+      </details>
+      <details class="step"><summary>Step 3: judge claim (d) against the lecture's limit</summary>
+        <p>Observation shows what people do. It cannot show what they would want from a system that does not exist yet.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Closed interview. A pre-determined list of questions suits policy that should have fixed answers, and the answers are checkable against documents.</p>
+        <p>(b) Ethnography. The private paper list is a workaround the receptionists may not think to mention and may not be able to explain, which is the lecture's case for observation. Social and organisational factors show up in behaviour.</p>
+        <p>(c) Interview with a prototype as the prompt. The lecture's effective-interviewing advice includes working together on a prototype system to get discussion going. A sketch gives the stakeholder something concrete to disagree with.</p>
+        <p>(d) Wrong. This is the trap: observation is so obviously good at revealing real work that it gets promoted to a requirements oracle. The lecture caps it: effective for understanding existing processes, but it cannot identify new features. Combine it with interviews or prototypes for the new-feature question.</p>
+        <p>Reasoning chain: list methods with their strengths → match by what the situation demands (facts, behaviour, reaction, invention) → apply the stated limit to the overclaim.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: validation checks and change impact</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>MediQueue is mid-project. Its SRS has requirements R7 ("The system shall display the waiting list to reception in clinic order"), R8 ("Reception shall be able to move a patient to any position in the waiting list"), and R22 ("The system shall preserve arrival order under all circumstances"). A change request arrives: support for telehealth appointments, where patients never arrive physically. (1) Which validation check is already failing in the current SRS? (2) Run each of the five checks briefly against the SRS as it stands after the change request. (3) Should the change be accepted, and what does requirements management demand before you answer?</p>
+      <details class="step"><summary>Step 1: look for conflicts first</summary>
+        <p>Read R7, R8, R22 together. R8 lets a human reorder the list; R22 forbids any order but arrival order. Both are mandatory, and they contradict.</p>
+      </details>
+      <details class="step"><summary>Step 2: run the five checks</summary>
+        <p>Validity (does it support the customer's real needs?), consistency (conflicts?), completeness (all facilities present?), realism (implementable with the budget and technology?), verifiability (can each be checked?). With telehealth in scope, ask each check again: the change widens the world the SRS must describe.</p>
+      </details>
+      <details class="step"><summary>Step 3: apply requirements management before deciding</summary>
+        <p>Keep track of individual requirements and maintain links between dependent requirements so the impact of change can be assessed. Establish a formal change process. What depends on "arrival order"?</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. Consistency is already failing. R8 and R22 contradict each other: if reception may move a patient, arrival order cannot be preserved under all circumstances. Note the trap: R22's "under all circumstances" sounds like a dependability guarantee, a strength. It is what makes the conflict.</p>
+        <p>2. After the change request: validity: unresolved, because telehealth patients have no arrival event, so the current system as written does not support a real need the customer now has. Consistency: still failing (R8 vs R22), and telehealth makes it worse. Completeness: failing: nothing describes telehealth booking, what "position" means for a patient who is not present, or what reception sees. Realism: plausible (a queue display and reordering are ordinary work), though the telehealth design is uncosted. Verifiability: R8 and R22 are testable in form, but until the conflict is resolved the tests contradict; telehealth clauses do not yet exist to test.</p>
+        <p>3. Not yet. Requirements management demands that you track individual requirements and maintain links between dependent requirements so impact can be assessed, and that change proposals go through a formal process. So: map what depends on R22 (the display order in R7, any report or screen keyed to arrival order, tests written against it), resolve the R8/R22 conflict with the customer first (probably: arrival order is the default, manual reordering is an authorised exception with a log), then cost the telehealth clauses and assess them with the same five checks before accepting.</p>
+        <p>Reasoning chain: conflict detection by reading requirements together → five checks run on the changed scope, not the old one → impact assessed through requirement links → decision deferred until the conflicts and gaps are on the record.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: mixed (from interview to requirement to change decision)</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This exercise pulls in page 1: the specification activity, the validation/evolution distinction, and the cost of change. In an interview for the same MediQueue system, the clinic manager says: "I want the queue to be fair, and the government's new waiting-time rule kicks in next quarter, and honestly the nurses just want something that works."</p>
+      <p>1. Which of the four process activities are you performing right now, and which one will the government rule force later?</p>
+      <p>2. Rewrite "I want the queue to be fair" as a verifiable requirement.</p>
+      <p>3. Name the elicitation problem this quote demonstrates, and how you would fix it.</p>
+      <p>4. The manager says change requests are "just churn". Using the cost facts from page 1, argue why funding early precision is cheaper.</p>
+      <details class="step"><summary>Step 1: place the moment in the process</summary>
+        <p>You are defining what to produce and its constraints: this is specification. The government rule later forces evolution, modification under changing external requirements.</p>
+      </details>
+      <details class="step"><summary>Step 2: turn the goal into a test</summary>
+        <p>"Fair" is a goal. The lecture's rewrite pattern: name the measure. Fairness here is order and exception handling, measurable against a rule.</p>
+      </details>
+      <details class="step"><summary>Step 3: diagnose the interview</summary>
+        <p>Three different things in one breath: a goal, a constraint with a date, and a stakeholder's frustration expressed in their own terms.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. Specification now; evolution later when the rule forces the software to change.</p>
+        <p>2. "The system shall order the waiting list by check-in timestamp and shall record a reason code whenever a nurse manually reorders a patient (rationale: fairness means arrival order by default with auditable exceptions)." Verifiable: timestamps and reason codes can both be checked.</p>
+        <p>3. The quote mixes requirements in the stakeholder's own terms and hides a hard constraint inside casual speech. The lecture's problems of elicitation fit: stakeholders express requirements in their own terms, and they do not always know what they really want. Fix: separate the strands, confirm each back in writing, and ask specifically for the government rule's text rather than a paraphrase.</p>
+        <p>4. The cost facts: software costs more to maintain than to develop, and error costs rise through the project life cycle. Precision in the specification stage is the cheapest place to remove ambiguity; the same ambiguity found in evolution work arrives as rework across everything built on top of it. "Churn" is the visible part of change; the invisible part is rework caused by requirements that were never nailed down.</p>
+        <p>Reasoning chain: identify the activity → convert goal to measure → classify elicitation problems → argue cost with the page-1 facts.</p>
+      </details>
+    </section>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position on this: "One requirements document cannot honestly serve both as a bid, which must be open to interpretation, and as a contract, which must be defined in detail. Write two documents." Defend or attack. Evidence that would change your mind: case data showing that a single document, used as both, causes no measurable disputes, or that splitting it causes drift between what was bid and what was built. The lecture presents the dual function as a fact of life; argue whether the right answer is two documents or one document with staged depth.</p>
+    </div>
+
+    <p class="source">Source: COMP 3297, L2 - Requirements Engineering v1.pdf, slides 3-14 (requirements, stakeholders, elicitation and discovery), slides 15-22 (user stories, scenarios, specification, natural-language guidelines), slides 25-32 (functional and non-functional requirements, goals and verifiability), slides 34-37 (validation checks, requirements management). The ambiguity pattern in Exercise 1 follows the lecture's "search the appointment lists" example, adapted to a new domain.</p>
+
+    <h2>Recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">User requirements vs system requirements<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">User requirements: natural language plus diagrams, for customers. System requirements: a structured document with detailed descriptions of functions, services, and operational constraints; may include technical information.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Functional vs non-functional<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Functional: services, reactions to inputs, behaviour in situations. Non-functional: constraints on those services or on the system as a whole: timing, standards, process constraints; often more critical than functional ones.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Goal vs verifiable non-functional requirement<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A goal states a general user intention ("easy to use"). A verifiable requirement uses a measure that can be objectively tested (training hours, errors per hour).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five validation checks<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Validity, consistency, completeness, realism, verifiability.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What ethnography cannot do<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">It cannot identify new features. It is effective for understanding existing processes, including work people cannot articulate.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">shall vs should in a requirements document<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Shall = mandatory, the system must support it. Should = desirable, not essential. Use a standard format, one requirement per sentence, avoid jargon, attach a rationale.</span>
+      </span></button>
+    </div>
+
+    <nav class="pager">
+      <a class="prev" href="practice-01-software-engineering.html"><span class="dir">Previous</span><span class="name">Software engineering practice</span></a>
+      <a class="next" href="practice-03-use-case-modeling.html"><span class="dir">Next</span><span class="name">Use case modeling practice</span></a>
+    </nav>
+  </main>
+</body>
+</html>

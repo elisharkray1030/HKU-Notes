@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: IDE and tooling</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: IDE and tooling</h1>
+    <p class="lede">Chapter 3 is a decision surface: which tool for which job, and what each setting in Android Studio actually promises. These exercises train the choices and the setup flow you will be asked to justify.</p>
+    <p>Background: <a href="03-ide-and-tooling.html">IDE and tooling</a>.</p>
+
+    <h2>Quiz: tools and settings</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">What is an Android Virtual Device (AVD)?</p>
+      <div class="options">
+        <button class="quiz-option">A physical test handset that Google lends to developers</button>
+        <button class="quiz-option" data-correct="true">A configuration that defines the characteristics of an Android device you want to simulate in the Android Emulator</button>
+        <button class="quiz-option">The APK file that the emulator runs</button>
+        <button class="quiz-option">A Gradle task that compiles your app for a specific phone model</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 1: an AVD is a configuration that defines the characteristics of an Android phone, tablet, Android Wear or Android TV device that you want to simulate in the Android Emulator; the AVD Manager (Tools &gt; Device Manager) creates and manages them. It is a device description, not a file or a task.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">You want the largest possible audience to install your app. Which module setting decides the floor?</p>
+      <div class="options">
+        <button class="quiz-option">Compile Sdk Version</button>
+        <button class="quiz-option">Build Tools Version</button>
+        <button class="quiz-option" data-correct="true">Min Sdk Version: your user needs that SDK version or above to install and run your app</button>
+        <button class="quiz-option">Target Sdk Version</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Tutorial 1's module settings: Compile SDK is used for compilation; Build Tools Version is used for building the APK; Min SDK is the version your user needs or above to install and run; Target SDK is the version your app is targeted at, with optimal performance when the user is on that version. Only Min SDK sets the floor.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">A team wants one codebase for a 3D game with a physics engine, written in C#. Which tool does the lecture point to?</p>
+      <div class="options">
+        <button class="quiz-option">React Native</button>
+        <button class="quiz-option">Apache Cordova</button>
+        <button class="quiz-option">MIT App Inventor</button>
+        <button class="quiz-option" data-correct="true">Unity / Tuanjie</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 3: Unity / Tuanjie is a popular cross-platform game engine and IDE whose programming language is C#; Unreal is the C++ alternative; React Native is JavaScript; Cordova is HTML5/CSS3/JavaScript. The physics engine requirement points at a game engine, and C# points at Unity.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Which statement about MIT App Inventor matches Chapter 3A?</p>
+      <div class="options">
+        <button class="quiz-option">It is the required tool for this course's Android programming</button>
+        <button class="quiz-option">It compiles C++ through JNI to reach device hardware</button>
+        <button class="quiz-option" data-correct="true">It is a graphical, web-based tool where you drag-and-drop components and assemble blocks; only correctly shaped blocks combine</button>
+        <button class="quiz-option">It only runs on macOS, like Xcode</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 3A: App Inventor is an open-source web application maintained by MIT, with a drag-and-drop graphical interface similar to Scratch; its block editor only lets correct blocks combine. The slides state it exists to show a research direction and "you are not supposed to use App Inventor in this course".</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q5</span>
+      <p class="quiz-q">Which pair of statements from the opening of Chapter 3 is correct?</p>
+      <div class="options">
+        <button class="quiz-option">You can write programs directly on a phone; SDKs are never needed</button>
+        <button class="quiz-option" data-correct="true">You cannot write programs on a phone (a tablet may work); an IDE normally has a source editor, compiler and/or interpreter and debugger; an SDK for a certain model is sometimes required</button>
+        <button class="quiz-option">An IDE is only a text editor; compilation happens on the phone</button>
+        <button class="quiz-option">Every mobile platform requires the same SDK</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 3, slide 2: "You cannot write programs on a phone. But you may do so on a tablet"; you need an IDE on a computer, normally with source editor, compiler and/or interpreter and debugger; and an SDK for a certain model is sometimes required (the lecture's example is Nokia S60).</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 2-3, 14-26; COMP3330_Ch03A_App_Inventor.pdf, slides 3, 5, 15; COMP3330_Tutorial1.pdf, slides 4, 7.</p>
+
+    <h2>Exercise 1: setting the SDK versions</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: reasoning about compile, build tools, min and target SDK</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>You are configuring the "app" module of a new project. You want to compile against the newest SDK your installation has, build the APK with a fixed build-tools version, let any phone with Android 8.0 (API 26) or above install the app, and tell the system your app is written for API 34 behaviour. Assign each wish to exactly one of the four settings Tutorial 1 names, then answer: a user on API 30 installs the app. Which setting do they satisfy, and which one tells the system how your app expects to behave on their phone?</p>
+      <details class="step"><summary>Step 1: match wishes to settings</summary>
+        <p>Compile SDK Version = the SDK version used for compilation. Build Tools Version = the version of build tools used for building the APK. Min SDK Version = the version your user needs or above to install and run. Target SDK Version = the version your app is targeted at, with optimal performance when the user runs that version.</p>
+      </details>
+      <details class="step"><summary>Step 2: apply to the API 30 user</summary>
+        <p>API 30 is above API 26, so the user satisfies Min SDK and can install. Their phone runs your app under the compatibility behaviour of your Target SDK (34), which is the "targeted at" statement. Compile SDK never faces the user; it is a build-time choice.</p>
+      </details>
+      <details class="step"><summary>Step 3: rule out the tempting misreading</summary>
+        <p>Nothing here caps the user at API 34. Min SDK is a floor; the lecture defines no ceiling setting among these four.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Compile newest available → Compile Sdk Version. Fixed build-tools version → Build Tools Version. Floor at API 26 → Min Sdk Version. Written for API 34 behaviour → Target Sdk Version. The API 30 user satisfies Min Sdk (30 ≥ 26) and installs fine; the system runs the app as targeted at API 34. Compile Sdk is purely a build-time choice and never affects who can install.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>"Target Sdk Version = the highest version my app supports" is the misreading to avoid. The lecture's wording is that your app is targeted at that version and performs optimally when the user is on it: a behaviour promise, not a compatibility ceiling. The floor is set only by Min Sdk.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial1.pdf, slide 7 (module configuration).</p>
+
+    <h2>Exercise 2: picking the tool</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: mapping project constraints onto the tool list</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Five briefs. For each, name the tool or IDE from Chapter 3 that the lecture's own descriptions support, and state the deciding fact. (a) A primary-school coding workshop where children assemble programs graphically. (b) A news outlet with an HTML/CSS/JS web team that wants one app wrapping its existing site across platforms. (c) A studio shipping a 2D game to mobile, scripting in JavaScript or TypeScript. (d) A team wanting native-grade rendering with its own engine (C++, Skia) and a language built for fast UI iteration. (e) The course's own Android programming assignments.</p>
+      <details class="step"><summary>Step 1: read the tool descriptions for keywords</summary>
+        <p>App Inventor: graphical, drag-and-drop, blocks, widely used by primary and junior secondary students in Hong Kong. Cordova: standard web technologies HTML5, CSS3, JavaScript; applications execute within wrappers targeted to each platform with API bindings to device capabilities. Cocos: open-source 2D and 3D graphics engine, scripts in JavaScript and TypeScript. Flutter: open-source SDK from Google (May 2017), engine written mainly in C++, rendering via Skia, apps written in Dart. Android Studio: the course IDE, Java / Kotlin.</p>
+      </details>
+      <details class="step"><summary>Step 2: assign</summary>
+        <p>(a) App Inventor. (b) Cordova. (c) Cocos (Cocos Creator; Cocos2d-x is its related older framework). (d) Flutter. (e) Android Studio with Kotlin.</p>
+      </details>
+      <details class="step"><summary>Step 3: check the negatives</summary>
+        <p>React Native is also cross-platform and JavaScript-based, so (b) is not free of competitors; the deciding fact for Cordova is the "wraps web views" execution model matching an existing web site, while React Native builds "a real mobile app ... indistinguishable from an app built using Objective-C / Swift / Java / Kotlin" from JavaScript components. If the brief emphasised reusing web pages as-is, Cordova; if it emphasised native look and feel from JS, React Native.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) MIT App Inventor: graphical drag-and-drop blocks, aimed at beginners and widely used in Hong Kong schools. (b) Apache Cordova: HTML5/CSS3/JavaScript inside per-platform wrappers, ideal for wrapping web content. (c) Cocos: open-source 2D/3D engine scripting in JavaScript and TypeScript. (d) Flutter: Google's SDK, C++ engine with Skia rendering, Dart language. (e) Android Studio: the course tool, Kotlin (and Java).</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Flutter is not a JavaScript tool. Its apps are written in Dart, and Tutorial 4 is explicit that Flutter does not rely on a browser or a JavaScript runtime. Also note the engine detail: the Skia rendering and C++ engine are why Flutter can control every pixel; that is a rendering claim, not a language claim.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 5, 14-27; COMP3330_Ch03A_App_Inventor.pdf, slide 3;
+    Tutorial 4.pdf (Flutter: Dart, no browser or JavaScript runtime, control every pixel).</p>
+
+    <h2>Exercise 3: the App Inventor flow, in order</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: sequencing a graphical-tool workflow and its deployment steps</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>Chapter 3A's tutorial builds a button-and-label app in App Inventor. Put these steps in the order the slides give them, and say what each named pane does: (1) Build "Android App (.apk)" from the Build menu; (2) drag a Button from Palette to Viewer and set FontSize 20, Height 50 pixels, Width "Fill parent", Text "Click Me!"; (3) log in at ai2.appinventor.mit.edu with a Google account and create a New Project; (4) in Blocks, drag Button1's click block and snap "set Label1.Text to" plus a text block reading "Hello"; (5) drag a Label into the Viewer and set FontSize 20; (6) install on the phone after enabling installation of apps from outside the Play Store for this one installation. Also: what guarantees you cannot wire nonsense in the Blocks editor?</p>
+      <details class="step"><summary>Step 1: order by the slides</summary>
+        <p>Account and New Project first (3), then Button with properties (2), then Label (5), then Blocks programming (4), then save, then Build (1), then phone installation (6).</p>
+      </details>
+      <details class="step"><summary>Step 2: the four panes</summary>
+        <p>Palette: materials for making your application. Viewer: how your application looks on the phone screen. Components: all components in the project, including hidden ones. Properties: the properties of the selected component.</p>
+      </details>
+      <details class="step"><summary>Step 3: the nonsense-prevention rule</summary>
+        <p>The slides say "only correct blocks can be properly combined": block shapes constrain what snaps where, so a malformed sequence cannot be assembled in the first place.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Order: (3) project creation → (2) Button + properties → (5) Label + FontSize → (4) Blocks wiring → (1) Build APK → (6) phone install with the allow-unknown-sources step. Panes: Palette (materials), Viewer (phone-screen preview), Components (all components incl. hidden), Properties (of the selected component). Nonsense is prevented by the blocks' shapes: only correct blocks combine.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two details people skip. The phone blocks the installation by default; you must enable "allow apps outside Play Store to be installed" and choose to allow only this installation. And the APK can arrive by USB transfer or by scanning a QR code. The exam likes the deployment tail of the workflow, not just the designer steps.</p>
+        </div>
+        <div class="callout exam"><span class="tag">Exam</span>
+          <p>Chapter 3A opens by saying you are not supposed to use App Inventor in this course. Expect conceptual questions (what a visual programming language is, why it helps beginners, how the tool is structured), not code from it.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch03A_App_Inventor.pdf, slides 2-19.</p>
+
+    <h2>Exercise 4: the Android Studio setup flow</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: reconstructing the hands-on setup from Tutorial 1</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A classmate is setting up for the course on a Windows laptop with an old Samsung phone. Using Tutorial 1 only, list the steps to go from nothing to a running "Empty Views Activity" app on their own phone, including the two places Android Studio is configured (project creation and module settings), how the emulator is prepared, and the phone-side switch that is often forgotten. Where does Gradle sit in this flow according to the course?</p>
+      <details class="step"><summary>Step 1: install and create</summary>
+        <p>Install Android Studio (the all-in-one developer tool with Android SDK Tools, Platform-tools, the latest platform, and the latest system image for the emulator). Launch it, start a new project, choose "Empty Views Activity" for Phone and Tablet, type application and package names, choose language Kotlin, select Minimum SDK (the tutorial's example is API 26).</p>
+      </details>
+      <details class="step"><summary>Step 2: emulator or device</summary>
+        <p>For the emulator: open AVD Manager (Tools &gt; Device Manager or its toolbar icon), choose "Add a new device → Create Virtual Device"; different virtual devices have different CPU and memory requirements on your computer. For the real phone: connect by USB, run the app, and pick the phone as a target after turning on "Developer options" on the phone (the tutorial gives Samsung's route as an example). Android recognises signed APK files by default, so tapping a signed APK on the phone installs it.</p>
+      </details>
+      <details class="step"><summary>Step 3: module settings and Gradle</summary>
+        <p>Right-click "app" → "Open Module Settings" for Compile SDK, Build Tools, Min SDK, Target SDK. The course's Gradle statement is narrow: Gradle is the build tool that packages the APK (and can package a CMake-built native library into the APK). So Gradle is what turns your project into the APK you install; the module settings tell it which SDK and build tools to use.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Install Android Studio → new project ("Empty Views Activity", Kotlin, Min SDK e.g. API 26) → create an AVD via Tools &gt; Device Manager (mind CPU/RAM cost) or enable Developer options on the phone and connect via USB → set module SDK versions via "Open Module Settings" on "app" → run; Gradle builds the APK from the project using those settings. The forgotten switch is Developer options on the phone; without it the phone will not appear as a run target.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>"You need to install the Android SDK yourself, piece by piece" understates Tutorial 1: Android Studio is described as all-in-one, bundling SDK Tools, Platform-tools, the latest platform and the emulator system image. You may still need to install SDKs for other platforms, especially when opening other people's projects; that is the exception, not the rule.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial1.pdf, slides 3-8, 12-13; COMP3330_Ch00_CourseInfo.pdf, slide 3 (Gradle packaging the APK with native libraries).</p>
+
+    <h2>Mixed exercise: a toolchain for a class project</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: combining app types, distribution and tooling into one decision</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>Pull in Chapter 1 and Chapter 2 for this one. A group project team has web developers only and starts with Apache Cordova, wrapping their course-review site. Their grading demo needs the app on three demonstrators' phones, and one marker asks why the app "isn't really native". (1) Answer the marker using Chapter 1's and Chapter 3's wording: what is Cordova technically, and what does it sacrifice? (2) What is the shortest route to getting the APK onto the three phones, per Tutorial 1 and Chapter 2? (3) The team later wants camera-based AR features with fine pixel control. Name one tool from Chapter 3 that answers the marker's complaint and say what the team must learn.</p>
+      <details class="step"><summary>Step 1: answer the marker</summary>
+        <p>Chapter 1 hybrid: the bulk is built with cross-compatible web technologies, with some native code for device functionality; they "wrap web views within native code". Chapter 3 Cordova: standard web technologies, applications execute within wrappers targeted to each platform with standards-compliant API bindings for device capabilities. What it sacrifices: it is not composed of the platform's native UI building blocks (React Native's contrast claim is that native-built apps are what real native looks like).</p>
+      </details>
+      <details class="step"><summary>Step 2: distribute the APK</summary>
+        <p>Build the signed APK; Android recognises signed APK files by default, so clicking the file on each phone installs it; transfer by USB or any file channel. The catch (Tutorial 1 / Chapter 3A): each phone must allow installation of apps from outside the Play Store. Chapter 2: all Android apps must be signed before distribution; self-signing with your own certificate is normal.</p>
+      </details>
+      <details class="step"><summary>Step 3: the upgrade path</summary>
+        <p>AR with fine pixel control points at Flutter ("control every pixel" is Tutorial 4's own phrase, with Skia rendering and a C++ engine) or at a game engine (Cocos / Unity) for the 3D side. The team must learn Dart for Flutter, or C# for Unity, or JS/TS for Cocos. The language is the tool's, not theirs.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) Cordova is a hybrid approach: HTML5/CSS3/JavaScript executed inside per-platform native wrappers with API bindings to device capabilities; it gives up building the UI from the platform's native building blocks, which is what the marker means by "real native". (2) Build the signed APK (signing mandatory), transfer it (USB works), let each phone allow installs from outside the Play Store, tap to install. (3) Flutter (Dart) for pixel-level control, or a game engine (Cocos in JS/TS, Unity in C#) if the AR needs physics/rendering pipelines; in each case the team leaves web languages behind.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Do not answer "cross-platform means hybrid". The lecture treats them as different families: hybrid is web code in native wrappers (Cordova-style), while Flutter and React Native build real native apps from non-web code. Conflating them loses the marker's point.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slide 49; COMP3330_Ch03_IDEs.pdf, slides 15-19; COMP3330_Tutorial1.pdf, slide 8; COMP3330_Ch02_Lifecycle.pdf, slide 15; Tutorial 4.pdf (Flutter pixel control).</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position: for a one-semester course project with a mixed-skill team, Android Studio and Kotlin is the right toolchain even though cross-platform tools exist. Evidence that would change your mind: a project requirement where a Chapter 3 alternative clearly wins (name the tool and the deciding fact from the lecture).</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Chapter 3A pitches visual programming as a research direction for teaching children, yet the course forbids using it. Take a side: is blocks-based programming a legitimate on-ramp or a dead end for serious app work? Evidence that would change your mind: what a Chapter 3A "advanced application" screenshot would need to show to move you.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does an IDE normally contain?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Source editor, compiler and/or interpreter, and debugger; you run it on a computer and transfer the app to the phone. An SDK for a certain model is sometimes required.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">AVD and AVD Manager.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">An AVD is a configuration defining the characteristics of a device simulated in the Android Emulator. The AVD Manager (Tools &gt; Device Manager) creates and manages AVDs; virtual devices differ in CPU and memory demands.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The four module SDK settings.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Compile Sdk (compilation version), Build Tools (APK building), Min Sdk (version users need or above), Target Sdk (version the app is targeted at; optimal performance there).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Cross-platform tools and their languages.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">React Native: JavaScript. Flutter: Dart (C++ engine, Skia). Cordova: HTML5/CSS3/JavaScript in per-platform wrappers. Cocos: JavaScript/TypeScript. Unity/Tuanjie: C#. Unreal: C++.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">App Inventor's four working-area components.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Palette (materials), Viewer (phone-screen preview), Components (all components including hidden), Properties (of the selected component).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Getting an App Inventor APK onto a phone.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Build menu → Android App (.apk); transfer by USB or scan the QR code; the phone blocks installs from outside the Play Store by default, so enable that and allow only this installation.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Testing on a real device: the two prerequisites.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">USB connection with the phone appearing as a run target, and Developer options turned on the phone. Android recognises signed APKs by default, so tapping one installs it.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is Gradle's role in this course's words?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">The build tool that packages your project into the APK (and can package a CMake-built C/C++ native library into it, called from Java/Kotlin via JNI).</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch03_IDEs.pdf, slides 2-29; COMP3330_Ch03A_App_Inventor.pdf, slides 2-22; COMP3330_Tutorial1.pdf, slides 3-20; COMP3330_Ch00_CourseInfo.pdf, slide 3.</p>
+
+    <nav class="pager">
+      <a href="practice-02-app-lifecycle.html"><span class="dir">Previous</span><span class="name">App lifecycle</span></a>
+      <a class="next" href="practice-04-ui-and-layouts.html"><span class="dir">Next</span><span class="name">UI and layouts</span></a>
+    </nav>
+  </main>
+</body>
+</html>

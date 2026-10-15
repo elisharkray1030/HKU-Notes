@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision: Mobile app fundamentals</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Mobile app fundamentals</h1>
+    <p class="lede">What actually separates an app from a web page, why phones force design
+    compromises, and how the app business works. Everything later in the course assumes this
+    picture, and the exam expects you to reason from it, not recite it.</p>
+
+    <h2>Start with the right mental model</h2>
+    <p>A <strong>mobile app</strong> is a program you install once and that then lives on the
+    device. A web app is a mobile version of a site that loads inside a browser like Safari or
+    Chrome on every visit. That single difference explains almost every other distinction the
+    lecture draws.</p>
+    <p>Because the app is already on the device, the pictures and code are already there too.
+    The lecture's own example: transmitting a sunny weather icon costs about 2.9 KB, but
+    transmitting the word "sunny" costs 5 bytes. A browser re-downloads the icon every time; an
+    app sends only the text. And the lecture notes you can compress even further: there are only
+    39 possible weather icons, so each one can be named in 6 bits (since 2<sup>5</sup> = 32 is
+    too few but 2<sup>6</sup> = 64 covers them).</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 520 220" role="img" aria-label="Browser versus app data flow">
+        <rect x="10" y="20" width="220" height="80" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="120" y="45" text-anchor="middle" font-size="14" fill="currentColor">Browser visit</text>
+        <text x="120" y="70" text-anchor="middle" font-size="12" fill="currentColor">server sends text + images</text>
+        <text x="120" y="90" text-anchor="middle" font-size="12" fill="currentColor">every single time</text>
+        <rect x="290" y="20" width="220" height="80" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="400" y="45" text-anchor="middle" font-size="14" fill="currentColor">Installed app</text>
+        <text x="400" y="70" text-anchor="middle" font-size="12" fill="currentColor">images ship with the app;</text>
+        <text x="400" y="90" text-anchor="middle" font-size="12" fill="currentColor">server sends text / short codes</text>
+        <line x1="230" y1="60" x2="290" y2="60" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="260" y="125" text-anchor="middle" font-size="12" fill="currentColor">vs.</text>
+        <rect x="60" y="150" width="400" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="260" y="172" text-anchor="middle" font-size="12" fill="currentColor">Cost per update: 2.9 KB icon vs. 5 bytes "sunny" vs. 6 bits for an icon code</text>
+        <text x="260" y="190" text-anchor="middle" font-size="12" fill="currentColor">(2.9 KB is about 600 times 5 bytes)</text>
+      </svg>
+      <figcaption>Why the same information costs far less over the wire once it ships inside an app.</figcaption>
+    </figure>
+    <p>The same reasoning covers everything else the lecture lists as an advantage of apps:
+    <strong>personalization</strong> (based on interests, location, usage behaviour),
+    <strong>notifications</strong> (push and in-app), access to <strong>device features</strong>
+    (camera, contact list, GPS, phone calls, accelerometer, compass), <strong>offline</strong>
+    working, and freedom in interaction design (tap, swipe, drag, pinch, hold). A cited 2024
+    article claims mobile users spend 88% of their time in apps and 12% on mobile websites, and
+    that apps feel faster than websites.</p>
+    <div class="callout why"><span class="tag">Why it matters</span>
+      <p>"Convenient" here has a technical meaning: no URL typing, a UI sized for the screen, and
+      a small download. When an exam asks why apps beat browsers, answer with mechanism, not
+      adjectives.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 23-30.</p>
+
+    <h2>The platforms under your app</h2>
+    <p><strong>Android</strong> is a software platform and operating system for mobile devices,
+    built on the Linux kernel (Linux handles device drivers, memory management, process
+    management, and networking). It was developed by the <strong>Open Handset Alliance (OHA)</strong>,
+    a consortium of 80+ technology and mobile companies led by Google, established in 2007
+    (Google, Intel, Samsung, Sony, HTC, Qualcomm, T-Mobile and friends).</p>
+    <p>Two runtimes matter. <strong>Dalvik</strong> was the original managed runtime, using
+    interpretation and trace-based JIT compilation. <strong>ART (Android Runtime)</strong> arrived
+    as a preview in Android 4.4 (KitKat) and fully replaced Dalvik in Android 5.0 (Lollipop). ART
+    compiles whole apps to native machine code at installation (ahead-of-time compilation), which
+    improves execution efficiency, lowers power use, and gives faster execution, better memory
+    allocation and garbage collection, and more accurate profiling.</p>
+    <p>Security is enforced at the <strong>process</strong> level: Android is a multi-process
+    system where each application (and parts of the system) runs in its own process, protected by
+    standard Linux user and group IDs assigned to applications. A finer-grained
+    <strong>permission</strong> mechanism restricts what a process may do, plus per-URI
+    permissions for ad-hoc access to specific data. Official languages: Java and Kotlin; C/C++
+    runs as a native library packaged into the APK by Gradle (built with CMake) and called through
+    the Java Native Interface (JNI).</p>
+    <p><strong>iOS</strong> (iPhone OS before June 2010) is Apple's mobile OS, released with the
+    first iPhone on 29 June 2007, used on iPhone, iPad, iPod touch, Apple Watch and Apple TV.
+    Languages: Objective-C ("most common" on the slides) and Swift; C/C++ possible but not
+    supported. <strong>HarmonyOS</strong> (Huawei, first released 10 September 2019) is a
+    distributed OS that is <em>not</em> Android-based: its ArkCompiler compiles code directly to
+    native machine instructions, and HUAWEI AppGallery is its app distribution platform.</p>
+    <p>Then there is the Android-derived crowd: Samsung One UI, Vivo OriginOS, OPPO ColorOS,
+    Xiaomi HyperOS, OnePlus OxygenOS and Honor MagicOS are all Android-based vendor skins with
+    their own ecosystem features. Historical platforms in the lecture: BlackBerry OS (QNX-based
+    BlackBerry 10 in 2013; the 2015 Priv was Android-based), Symbian (C++ native, mostly Nokia,
+    final release Nokia Belle Feature Pack 2 in October 2012), Windows Mobile (2000-2013) and
+    Windows Phone (2010-2015), and KaiOS for keypad phones with HTML5-based apps.</p>
+    <p>Market share (August 2026, StatCounter): worldwide Android 67.61%, iOS 32.36%. China:
+    Android 71.34%, iOS 28.58%. United States: iOS 60.68%, Android 39.29%. Read that as the
+    reason "which platform?" is a real business question and not a coin flip: the answer flips by
+    market.</p>
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>Be able to say why Dalvik lost and ART won (AOT at install beats JIT traces for battery
+      and startup), and why Android's process-level security exists (apps are isolated by Linux
+      user/group IDs before permissions even apply).</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 3-21.</p>
+
+    <h2>The constraints that shape every mobile design</h2>
+    <p>Four constraints come up again and again whenever the lecture discusses why an app looks
+    or behaves the way it does.</p>
+    <ol>
+      <li><strong>Client-side storage.</strong> App data sits on the device rather than on a
+      server. Installing your app costs the user storage, and when storage runs out the user
+      decides between your app and a family video. The lecture's blunt summary: on mobile,
+      frequency of use matters more than perceived utility.</li>
+      <li><strong>Small screens and clunky controls.</strong> Nielsen is quoted: reading through
+      a peephole roughly doubles the difficulty of understanding. Controls and keyboards are
+      awkward; 56% of users in a cited study abandoned sign-up because registration took too
+      long.</li>
+      <li><strong>Distraction.</strong> Phones are used in non-work settings, users drop off far
+      more easily than on the web, and often never return, deleting the app after weeks unused.
+      You need a strategy for bringing users back.</li>
+      <li><strong>Hard updates.</strong> Shipping a tiny change takes around 7 days of Apple
+      review on average, users must download updates manually, and a bad change cannot be fixed
+      instantly. Release management is therefore a first-class concern.</li>
+    </ol>
+    <p>The lecture's conclusion is worth remembering as a stance: constraints can be catalysts.
+    Small screens, limited storage, distraction and app stores force teams to build tighter
+    products.</p>
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 40-44.</p>
+
+    <h2>Eight UX principles, compressed</h2>
+    <p>The lecture gives eight principles of mobile user experience design. Learn them as
+    decisions, not slogans.</p>
+    <ol>
+      <li><strong>Remove clutter.</strong> Allocate the user's attention; one primary action per
+      screen. Many single-action screens beat one overloaded screen.</li>
+      <li><strong>Intuitive navigation.</strong> Good navigation is invisible and consistent,
+      and always communicates where the user is right now.</li>
+      <li><strong>Consistent experience across devices.</strong> No dramatic difference between
+      phone, tablet and desktop versions of the same app.</li>
+      <li><strong>Finger-friendly tap targets.</strong> Not less than 7-10 mm, with clear visual
+      feedback.</li>
+      <li><strong>Legible content.</strong> Text at least 11 points at typical viewing distance;
+      breathing room; standard fonts (Helvetica Neue for iOS, Roboto for Android).</li>
+      <li><strong>Visible elements.</strong> Colour and contrast carry meaning, and matter most
+      for low-vision users. W3C contrast ratios: at least 4.5:1 for small text, 3:1 for large
+      text (14 pt bold or 18 pt regular and up), computed as (L1 + 0.05) / (L2 + 0.05) where L1 is
+      the lighter and L2 the darker relative luminance.</li>
+      <li><strong>Design for hand position.</strong> Hoober's research: about 49% of users operate
+      one-handed. Put top-level menus and frequent controls in one-thumb comfort zones.</li>
+      <li><strong>Minimize typing.</strong> Short forms, autocomplete, personalised defaults.</li>
+    </ol>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: for an HKU society events app, Principle 1 (one primary action per
+      screen) should win whenever it conflicts with the desire to show a full timetable on one
+      screen. Defend your answer with the constraints section above. Evidence that would change
+      your mind: usage data showing users abandon the flow when screens multiply.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 32-38.</p>
+
+    <h2>Types of mobile apps</h2>
+    <p><strong>By category</strong> the lecture lists game, weather, social networking,
+    navigation/map, music, news, entertainment, sports, banking, shopping, dining, search, digital
+    books and more.</p>
+    <p><strong>By nature</strong> there are three, and the exam loves this distinction:</p>
+    <ul>
+      <li><strong>Native apps</strong> are what "app" usually means: downloaded from the App Store
+      or Google Play, sitting among the device's applications, launched by tapping an icon.</li>
+      <li><strong>Web apps</strong> are the mobile version of a site, loaded in a mobile browser.
+      Nothing to install, no storage cost. Ideal when you mainly want content or functionality on
+      mobile and a real app is a bad fit or too expensive (the lecture's example:
+      http://www.cs.hku.hk/).</li>
+      <li><strong>Hybrid apps</strong> are built mostly with cross-compatible web technologies
+      (HTML5, CSS, JavaScript) plus some native code for device functionality and a more refined
+      user experience. They wrap "web views" inside native code. The payoff: only a portion of
+      native code must be rewritten per platform.</li>
+    </ul>
+    <p><strong>By business model</strong>: free apps with in-app purchases, paid apps without
+    in-app purchases, paid apps with in-app purchases. Chapter 3 adds the build-technology view
+    (React Native, Flutter, Cordova, game engines): that is the next page's neighbour, so keep
+    "how it is built" (native / web / hybrid / cross-platform) separate from "how it earns" (the
+    three business models).</p>
+    <div class="callout compare"><span class="tag">Compare</span>
+      <p>Web app: no install, browser-bound, re-downloads assets. Hybrid: installed, web code
+      inside native wrappers, device access through API bindings. Native: installed, one platform's
+      language and SDK only. Cross-platform toolkits (page 3) aim at native results from one
+      codebase.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 46-51.</p>
+
+    <h2>Where the lecture says apps are heading</h2>
+    <p>Trends covered in Chapter 1: the <strong>sharing economy</strong> (Airbnb as a broker
+    taking percentage service fees from both sides of each booking; Uber matching riders to the
+    nearest driver and computing the fare, with the legality of the model challenged by
+    governments and taxi companies; UberEATS on top); <strong>Web3 / decentralised apps</strong>
+    using smart contracts and blockchain data, many monetising through NFT sales (Web3 games sell
+    in-game assets as NFTs); <strong>AI</strong> (chatbots); <strong>VR and AR</strong> (Pokémon
+    Go is the worked example: about $1.2 billion revenue and 752 million downloads per the cited
+    reports); <strong>instant apps</strong> (run part of a native Android app without installing,
+    taking no storage, supported by Android Studio from version 3.0); and <strong>mHealth</strong>
+    (real-time and flexible service, more patients served; key feature requirements: time
+    efficiency, user-friendly, simple, plus fun elements to sustain long-term use).</p>
+    <p>mHealth for the elderly is the lecture's open challenge: Hong Kong is ageing, the elderly
+    are least likely to adopt new technology (only about two-thirds of adults aged 65+ own a
+    smartphone), and the question is how to get them to pick up and keep using these apps.</p>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: the elderly mHealth adoption problem is a design problem (principles 1,
+      4, 5, 8 above) rather than a marketing problem. Evidence that would change your mind: a
+      study showing well-rated, simple apps still fail to retain elderly users once distribution
+      effort stops.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 53-66.</p>
+
+    <h2>Check yourself</h2>
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A weather app and its website show the same forecast. Why does the app
+      transfer so much less data per update?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">The images ship inside the app; the server sends only text or short icon codes.</button>
+        <button class="quiz-option">The app compresses every response with gzip, while the browser cannot.</button>
+        <button class="quiz-option">Apps are allowed to use a faster mobile network protocol.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's argument is about what crosses the wire: components like images are stored in the app, only essential text is downloaded (2.9 KB icon vs. 5 bytes "sunny", and 6 bits for an icon code).</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Which statement matches the lecture's definition of a hybrid app?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Most of the app is HTML5/CSS/JavaScript, with some native code for device access, wrapped in web views.</button>
+        <button class="quiz-option">The app is written twice, once natively per platform, sharing only designs.</button>
+        <button class="quiz-option">The app is a web page saved to the home screen with no native code at all.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">That is the "By Nature" definition: web technologies plus a portion of native code, so only that portion is rewritten per platform. The third option describes a web app.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">According to the lecture, what replaced Dalvik as Android's runtime?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">ART, which compiles whole apps to native code at installation time (AOT).</button>
+        <button class="quiz-option">The V8 JavaScript engine, embedded since Android 5.0.</button>
+        <button class="quiz-option">Dalvik was never replaced; ART is an optional preview on new devices.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">ART previewed in Android 4.4 (KitKat) and fully replaced Dalvik in Android 5.0 (Lollipop), trading interpretation plus JIT traces for AOT compilation at install.</span></p>
+    </div>
+
+    <h2>Recap flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Name the four UX constraints of mobile apps.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Client-side storage; small screens and clunky controls; distraction-prone environments; hard updates (store review plus manual user downloads).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Native vs. web vs. hybrid app: one line each.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Native: installed, platform's own language and SDK. Web: loads in a mobile browser, no install. Hybrid: installed, HTML5/CSS/JS plus some native code wrapped in web views.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is ART, and why did it beat Dalvik?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Android Runtime: AOT-compiles apps to native machine code at install, improving speed and battery over Dalvik's interpretation plus trace-based JIT. Full replacement from Android 5.0.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">W3C contrast ratios the lecture cites for text.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">At least 4.5:1 for small text, 3:1 for large text (14 pt bold / 18 pt regular and up), ratio = (L1 + 0.05) / (L2 + 0.05).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Minimum tap target size, and how many users are one-thumb users?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Not less than 7-10 mm; about 49% rely on one thumb (Hoober).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Three business models for apps in the lecture.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Free with in-app purchases; paid without in-app purchases; paid with in-app purchases.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How does Android isolate apps from each other?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Each app runs in its own Linux process with its own user/group IDs; a permission mechanism adds finer-grained restrictions, plus per-URI permissions.</span>
+      </span></button>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="01-fund-1">
+          <span class="check-text">Explain, in data-cost terms, why an installed weather app downloads less than the same site in a browser.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-fund-2">
+          <span class="check-text">Give the three app natures and say what runs inside a hybrid app's web view.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-fund-3">
+          <span class="check-text">List the four UX constraints and name one design decision each one forces.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-fund-4">
+          <span class="check-text">Recall the numbers: 7-10 mm targets, 11 pt text, 4.5:1 / 3:1 contrast, 49% one-thumb.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-fund-5">
+          <span class="check-text">State what Dalvik did, what ART does instead, and when the switch happened.</span></li>
+    </ul>
+
+    <div class="callout tip"><span class="tag">Practise this</span>
+      <p><a href="practice-01-mobile-app-fundamentals.html">Practice set 1: mobile app fundamentals</a>
+     : fresh scenarios on app natures, constraints and design trade-offs, with full worked answers.</p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 2-66 (chapter read in full).</p>
+
+    <nav class="pager">
+      <a class="prev" href="index.html">&larr; Revision hub</a>
+      <a class="next" href="02-app-lifecycle.html">Next: the app lifecycle &rarr;</a>
+    </nav>
+  </main>
+</body>
+</html>

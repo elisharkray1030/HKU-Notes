@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Requirements engineering</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Requirements engineering</h1>
+    <p class="lede">How a system's services and constraints get established, written down, checked, and changed. This is where projects are won or quietly lost: the lecture's own claim is that requirement errors are expensive enough that validation deserves real effort.</p>
+
+    <h2>The mental model: a spiral, not a phase</h2>
+    <p>Requirements engineering (RE) is "the process of establishing the services that a customer requires from a system and the constraints under which it operates and is developed". The output, <strong>system requirements</strong>, are descriptions of those services and constraints.</p>
+    <p>The lecture's picture of the process is a spiral. There are four generic activities (elicitation and analysis, specification, validation, and change management) and in practice they are interleaved and repeated. You elicit, you write, you check, you learn something new, and you go round again. Treating requirements as a phase you finish is the first mistake the course warns against.</p>
+    <p>Two levels of requirement run in parallel, written for different readers:</p>
+    <ul>
+      <li><strong>User requirements</strong>: statements in natural language plus diagrams of the services and operational constraints. Written mainly for customers.</li>
+      <li><strong>System requirements</strong>: a structured document with detailed descriptions of functions, services, and operational constraints. More technical; this is where the detail lives.</li>
+    </ul>
+    <p>And requirements may serve a <strong>dual function</strong>, which creates a real tension: as the basis for a bid for a contract they must be open to interpretation (you are pitching), but as the basis for the contract itself they must be defined in detail (you are committing). The same words cannot be both. Good requirement sets manage this by keeping user requirements loose and readable while the system requirements pin down the details.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="The requirements engineering process as a repeating spiral">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a4a4a"></path>
+          </marker>
+        </defs>
+        <rect x="40" y="30" width="230" height="56" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="155" y="53" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">Elicitation and analysis</text>
+        <text x="155" y="73" text-anchor="middle" font-size="11.5" fill="#4a4a4a">talk to stakeholders, cluster, resolve conflicts</text>
+
+        <rect x="370" y="30" width="230" height="56" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="485" y="53" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">Specification</text>
+        <text x="485" y="73" text-anchor="middle" font-size="11.5" fill="#4a4a4a">write user and system requirements down</text>
+
+        <rect x="370" y="200" width="230" height="56" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="485" y="223" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">Validation</text>
+        <text x="485" y="243" text-anchor="middle" font-size="11.5" fill="#4a4a4a">check the document describes the wanted system</text>
+
+        <rect x="40" y="200" width="230" height="56" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="155" y="223" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">Change management</text>
+        <text x="155" y="243" text-anchor="middle" font-size="11.5" fill="#4a4a4a">track, assess impact, decide on changes</text>
+
+        <line x1="270" y1="58" x2="365" y2="58" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+        <line x1="485" y1="86" x2="485" y2="195" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+        <line x1="365" y1="228" x2="275" y2="228" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow2)"></line>
+        <path d="M 155 200 L 155 120 Q 155 100 200 100 L 320 100" fill="none" stroke="#4a4a4a" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow2)"></path>
+        <text x="236" y="140" text-anchor="middle" font-size="11.5" fill="#4a4a4a">and round again: new stakeholders, changed business</text>
+      </svg>
+      <figcaption>The requirements engineering activities cycle. The lecture presents this as a spiral: the processes are interleaved and the whole thing repeats. Drawing after L2 slides 6 and 9.</figcaption>
+    </figure>
+
+    <p>Who are you talking to while this spins? <strong>Stakeholders</strong>: any person or organisation who affects or is affected by the system and so has a legitimate interest. The lecture's types: end users, system managers, system owners, and external stakeholders (regulators, for instance). Requirements work is a negotiation among these groups, not a monologue.</p>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 2-7.</p>
+
+    <h2>Elicitation and discovery</h2>
+    <p>Elicitation is technical staff working with customers and stakeholders to find out about the application domain, the services required, performance, hardware constraints, and neighbouring systems. The lecture's four stages: (1) interact with stakeholders to discover and understand their requirements; (2) organise the unstructured collection into coherent clusters; (3) prioritise requirements and resolve conflicts; (4) document them and feed them into the next round of the spiral.</p>
+    <p>Five problems make this harder than it sounds:</p>
+    <ul>
+      <li>Stakeholders do not know what they really want.</li>
+      <li>Stakeholders express requirements in their own terms.</li>
+      <li>Different stakeholders may have conflicting requirements.</li>
+      <li>Organisational and political factors may influence the requirements.</li>
+      <li>Requirements change during analysis itself: new stakeholders emerge, the business environment moves.</li>
+    </ul>
+    <p><strong>Requirements discovery</strong> is the gathering and distilling part: information about required and existing systems, filtered into user and system requirements. Two methods carry most of the lecture's weight:</p>
+    <ul>
+      <li><strong>Interviews</strong>, formal or informal. Closed interviews run a predetermined question list; open interviews explore issues with the stakeholder. Effective interviewing means being open-minded, avoiding preconceived ideas, and prompting with a springboard question, a requirements proposal, or a prototype worked on together.</li>
+      <li><strong>Ethnography / observation</strong>: spending considerable time observing how people actually work. People do not have to explain their work, so social and organisational factors of real importance become visible. The lecture's sharp boundary: ethnography is effective for understanding existing processes but <em>cannot identify new features</em>. Observation shows you what is; it cannot show you what should be invented.</li>
+    </ul>
+    <p>Interviews have their own limits: specialists describe their work in domain language the requirements engineer may not understand, and domain knowledge so familiar it goes unspoken, exactly what interviews miss and observation catches.</p>
+
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>"Which discovery method would you use for X?" questions are really asking what X needs. Understanding an existing, messy, partly tacit process: ethnography. Finding out what a client wants from a system that does not exist yet: interviews (with a prototype to prompt them). Knowing the lecture's one hard claim (observation cannot discover new features) wins the point.</p>
+    </div>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 8-14.</p>
+
+    <h2>User stories and scenarios</h2>
+    <p>Because abstract requirement statements are hard to check, the course leans on concrete descriptions. A <strong>user story</strong> is a real-life example of how the system can be used. A <strong>scenario</strong> is a structured form of that story: a description of how the system may be used for a particular task. The reason both work: stakeholders can relate to a practical situation and comment on it directly.</p>
+    <p>The lecture's worked example is the KidsTakePics photo-sharing system (iLearn classroom context, Sommerville's Jack-the-teacher story). The scenario for uploading photos has five named parts, and you should know their shape:</p>
+    <ul>
+      <li><strong>Initial assumption</strong>: what must already be true: users have photos on a tablet or laptop and are logged on.</li>
+      <li><strong>Normal</strong>: the expected flow: choose upload, select photos and project, optional keywords, names generated from username plus filename, email to the moderator on completion.</li>
+      <li><strong>What can go wrong</strong>: no moderator for the project (email the school administrator, warn users of delay); duplicate photo names (ask: re-upload and overwrite, rename with a numbered suffix, or cancel).</li>
+      <li><strong>Other activities</strong>: the moderator may approve photos live as they are uploaded.</li>
+      <li><strong>System state on completion</strong>: user logged on, photos uploaded with status "awaiting moderation", visible to moderator and uploader.</li>
+    </ul>
+    <p>The project's own W2 format makes the same idea contractual: "As a &lt;role&gt;, I want &lt;goal&gt;, so that &lt;benefit&gt;", plus <strong>acceptance criteria</strong> that can be tested; the lecture's MealMate example: "Given the time is before 10:30, when I choose a dish, then my order is saved." A precise story with acceptance criteria doubles as a high-quality prompt for AI tools; a weak story makes the AI fill gaps with guesses.</p>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 15-18, 38-39.</p>
+
+    <h2>Specification: writing it down</h2>
+    <p><strong>Requirements specification</strong> is writing the user and system requirements into a requirements document. User requirements must be understandable by non-technical customers; system requirements carry the detail and may be technical; and since the document may become part of the development contract, it should be as complete as possible. The <strong>software requirements document</strong>, the SRS, is "the official statement of what is required of the system developers" and includes both levels. The lecture's example is the Mentcare system requirements.</p>
+    <p>Four ways to write system requirements, each with a cost:</p>
+    <ul>
+      <li><strong>Natural language</strong>: numbered sentences, one requirement each. Expressive, intuitive, universal; customers can actually read it.</li>
+      <li><strong>Structured natural language</strong>: a standard form or template; each field covers one aspect of the requirement.</li>
+      <li><strong>Graphical notations</strong>: models with text annotations; UML use case and sequence diagrams are the lecture's named examples (see <a href="03-use-case-modeling.html">page 3</a> and <a href="04-class-and-sequence-diagrams.html">page 4</a>).</li>
+      <li><strong>Mathematical specifications</strong>: finite-state machines, sets; unambiguous, but most customers cannot check them and are reluctant to accept them as a contract.</li>
+    </ul>
+    <h3>Natural language done properly</h3>
+    <p>The insulin-pump examples show the house style: "3.2 The system shall measure the blood sugar and deliver insulin, if required, every 10 minutes." followed by a bracketed <em>rationale</em>: why 10 minutes (blood sugar changes slowly; less frequent measurement risks high sugar levels). The guidelines: invent a standard format and use it everywhere; use language consistently ("shall" for mandatory requirements the system must support, "should" for desirable ones); highlight key parts; avoid computer jargon; include the rationale.</p>
+    <p>Natural language has three named failure modes: <strong>lack of clarity</strong> (precision is hard without making the document unreadable), <strong>requirements confusion</strong> (functional and non-functional requirements get mixed up), and <strong>requirements amalgamation</strong> (several requirements crammed into one sentence).</p>
+
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>"The system shall be user-friendly and fast" fails three ways at once: it is non-functional but written like a service (confusion), it is unmeasurable so it cannot be verified, and it hides at least two requirements (amalgamation). The course's fix is always the same: attach a metric or cut the claim.</p>
+    </div>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 19-24.</p>
+
+    <h2>Functional versus non-functional</h2>
+    <p><strong>Functional requirements</strong> are statements of the services the system should provide, how it should react to particular inputs, and how it should behave in particular situations, including what it should <em>not</em> do. They depend on the software type, the expected users, and where the software is used. Mentcare examples: "A user shall be able to search the appointment lists for all clinics"; "The system shall generate each day, for each clinic, a list of patients who are expected to attend appointments"; "Each staff member using the system shall be uniquely identified by his or her 8-digit employee number".</p>
+    <p><strong>Non-functional requirements</strong> are constraints on the services or functions: timing constraints, constraints on the development process, standards. They often apply to the system as a whole rather than to individual features. Three kinds in the Mentcare examples: <em>product</em> (availability: clinics covered Mon-Fri 08:30-17:30, downtime no more than five seconds in any one day), <em>organisational</em> (users authenticate with their health authority identity card), <em>external</em> (implement patient privacy provisions per HStan-03-2006-priv). Process requirements also count: mandating a particular IDE, language, or method.</p>
+    <p>Two claims to remember. Non-functional requirements "may be more critical than functional requirements. If these are not met, the system may be useless." And they shape the architecture rather than single components (meeting performance requirements may force you to minimise communication between components) and they spawn related functional requirements (the services needed to satisfy them).</p>
+    <h3>The precision problem</h3>
+    <p>Imprecise functional requirements are read differently by users and developers: "search the appointment lists for all clinics" might mean search one patient name across all clinics at once, or pick a clinic then search within it. Two different products. And requirements should in principle be <strong>complete</strong> (all required facilities described) and <strong>consistent</strong> (no contradictions), which in practice they rarely are.</p>
+    <p>Non-functional requirements are where imprecision bites hardest, and the lecture's answer is measurement:</p>
+    <table>
+      <thead>
+        <tr><th>Property</th><th>Measure</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Speed</td><td>processed transactions/second; user/event response time; screen refresh time</td></tr>
+        <tr><td>Size</td><td>Mbytes; number of ROM chips</td></tr>
+        <tr><td>Ease of use</td><td>training time; number of help frames</td></tr>
+        <tr><td>Reliability</td><td>mean time to failure; probability of unavailability; rate of failure occurrence</td></tr>
+        <tr><td>Availability</td><td>probability of unavailability</td></tr>
+        <tr><td>Robustness</td><td>time to restart after failure; percentage of events causing failure; probability of data corruption on failure</td></tr>
+        <tr><td>Portability</td><td>number of target systems</td></tr>
+      </tbody>
+    </table>
+    <h3>Goals versus verifiable requirements</h3>
+    <p>A <strong>goal</strong> is a general intention: "ease of use", "rapid user response", "errors are minimised". Goals help developers understand intent, but they cannot be checked. A <strong>verifiable non-functional requirement</strong> uses a measure that can be objectively tested. The lecture's worked rewrite:</p>
+    <ul>
+      <li>Goal: "The system should be easy to use by medical staff and organised so that user errors are minimised."</li>
+      <li>Verifiable: "Medical staff shall be able to use all the system functions after four hours of training. After this training, the average number of errors made by experienced users shall not exceed two per hour of system use."</li>
+    </ul>
+    <p>Same intent. The second version has a number in it, so it can be tested and argued about in court.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">"Users of the Mentcare system shall authenticate themselves using their health authority identity card." This is best classified as:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">An organisational non-functional requirement.</button>
+        <button class="quiz-option">A functional requirement, because authentication is a system service.</button>
+        <button class="quiz-option">A domain requirement, because identity cards belong to the medical domain.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture lists this exact sentence as an organisational non-functional requirement: it constrains how the system's services are delivered (through a particular organisational mechanism) rather than defining a service itself. Authentication does involve a service, which is what makes "functional" a plausible trap — the constraint is the point.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Your team wants to understand how nurses actually hand over a patient's care at shift change, including the informal notes they never mention in interviews. Which discovery method does the lecture recommend, and what can it not do?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Ethnography: it reveals real work and tacit social factors, but it cannot identify new features.</button>
+        <button class="quiz-option">Ethnography: it reveals real work and is also the best way to invent new features.</button>
+        <button class="quiz-option">Closed interviews: a fixed question list captures tacit knowledge reliably.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Observing work uncovers what people do but would never think to explain: that is ethnography's strength. The lecture's boundary is explicit: it is effective for understanding existing processes but cannot identify new features. Closed interviews are the weaker tool for tacit knowledge precisely because it goes unspoken.</span></p>
+    </div>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 25-33.</p>
+
+    <h2>Validation</h2>
+    <p><strong>Requirements validation</strong> demonstrates that the requirements define the system the customer really wants. Requirement errors are expensive to fix later, so this gets real effort. Five checks:</p>
+    <ul>
+      <li><strong>Validity</strong>: does the system provide the functions that best support the customer's needs?</li>
+      <li><strong>Consistency</strong>: are there conflicts among requirements?</li>
+      <li><strong>Completeness</strong>: are all functions the customer requires included?</li>
+      <li><strong>Realism</strong>: can the requirements be implemented with the available budget and technology?</li>
+      <li><strong>Verifiability</strong>: can the requirements be checked, realistically tested?</li>
+    </ul>
+    <p>Three techniques: <strong>requirements reviews</strong> (systematic manual analysis; client and contractor both involved; formal with completed documents, or informal), <strong>prototyping</strong> (an executable model to check requirements: see <a href="05-ux-and-prototyping.html">page 5</a>), and <strong>test-case generation</strong> (writing tests for requirements exposes untestable ones).</p>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 34-35.</p>
+
+    <h2>Requirements change</h2>
+    <p><strong>Requirements management</strong> is managing changing requirements during RE and development, and after the system is in use. Business, organisational, and technical change keep producing new requirements. The lecture's operational demands: keep track of individual requirements, maintain links between dependent requirements so the impact of a change can be assessed, and establish a formal process for change proposals linked to system requirements. Project tracking tools (the lecture names Jira for SCRUM) help. The last thing to know is the decision problem itself: deciding whether a requirements change should be accepted is a judgment about cost, impact, and value, not a rubber stamp.</p>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 36-37.</p>
+
+    <h2>When a model drafts the requirements</h2>
+    <p>The lecture's supplementary section is blunt about AI-drafted requirements, and it maps onto the defects you have just learned. Check for: <strong>hallucinated features</strong> (plausible functions the client never asked for), <strong>untestable acceptance criteria</strong> ("user-friendly", "fast", "secure" with no measure, the goals-versus-verified problem), <strong>ambiguity</strong> (one story, several readings: would two developers build the same thing?), and <strong>missing cases</strong> (errors, limits, empty states — AI drafts the happy path first, exactly the "what can go wrong" section of a scenario). The golden rule: AI drafts, engineers decide; never forward an unread requirement.</p>
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 38-40.</p>
+
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: a client insists that "the app shall be fast" is a requirement they are willing to sign a contract against, and refuses to give a number because "we know fast when we see it". Should the team proceed, or stop the project until a metric is agreed? Evidence that would change your mind: a worked example where the goal form of a requirement still led to an accepted system, or one where the unmeasurable clause triggered a dispute.</p>
+    </div>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: for a hospital system, ethnography is worth more of the schedule than interviews. Evidence that would change your mind: the discovery budget spent per validated requirement found by each method on your own project: if interviews are cheaper per accepted requirement, the position fails.</p>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="02-re-1">
+        <span class="check-text">Describe the RE spiral and say why the four activities are interleaved rather than sequential.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-re-2">
+        <span class="check-text">Name the five elicitation problems and match each to a discovery method or technique that mitigates it.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-re-3">
+        <span class="check-text">Write the five parts of a scenario (initial assumption, normal, what can go wrong, other activities, state on completion) for a fresh example.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-re-4">
+        <span class="check-text">Distinguish user requirements from system requirements and explain the bid-versus-contract tension.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-re-5">
+        <span class="check-text">Classify a sentence as functional, non-functional (product/organisational/external), or domain, and justify it in one line.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-re-6">
+        <span class="check-text">Turn a goal like "easy to use" into a verifiable requirement with a metric, and name the five validation checks.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-re-7">
+        <span class="check-text">Explain why requirements management needs links between dependent requirements.</span></li>
+    </ul>
+
+    <h2>Flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is a requirement, in the lecture's definition?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Requirements engineering establishes the services a customer requires from a system and the constraints under which it operates and is developed. System requirements are the descriptions generated by that process.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Functional or non-functional?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Functional: statements of services, reactions to inputs, behaviour in situations (including what the system must not do). Non-functional: constraints on services (timing, process, standards) often applying to the system as a whole.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The one hard limit of ethnography<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">It is effective for understanding existing processes and tacit social factors, but it cannot identify new features.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five validation checks<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Validity, consistency, completeness, realism, verifiability.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Three problems with natural-language requirements<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Lack of clarity, requirements confusion (functional and non-functional mixed), requirements amalgamation (several requirements in one sentence).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">"shall" versus "should" in requirements<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">"Shall" marks mandatory requirements the system must support; "should" marks desirable requirements that are not essential.</span>
+      </span></button>
+    </div>
+
+    <p>Ready to apply this? <a href="practice-02-requirements-engineering.html">Practice page 2: requirements engineering</a> drills classification, scenario writing, and turning goals into verifiable requirements.</p>
+
+    <p class="source">Source: L2 - Requirements Engineering v1.pdf, slides 2-39 (whole lecture). Mentcare and insulin-pump examples are the lecture's own; the user-story format on slide 38 is credited there to agile practice (XP user stories, L10).</p>
+
+    <nav class="pager">
+      <a href="01-software-engineering.html"><span class="dir">Previous</span><span class="name">Software engineering foundations</span></a>
+      <a class="next" href="03-use-case-modeling.html"><span class="dir">Next</span><span class="name">Use case modeling</span></a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Architecture and SOLID practice</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Architecture and SOLID: practice</h1>
+    <p class="lede">Exercises on architectural decisions and their trade-offs, choosing among the lecture's patterns, and spotting then fixing SOLID violations. The skill being trained: reading a requirement or a piece of code and naming the structural consequence.</p>
+    <p>Background: <a href="06-architecture-and-solid.html">Architecture and SOLID</a>.</p>
+
+    <h2>Quiz</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">Which pair of system characteristics pulls the architecture in opposite directions?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Performance and maintainability: performance wants localised critical operations and large rather than fine-grain components; maintainability wants fine-grain, replaceable components.</button>
+        <button class="quiz-option">Security and safety: both want critical code isolated.</button>
+        <button class="quiz-option">Availability and safety: both want redundancy.</button>
+        <button class="quiz-option">No pair conflicts; all five can be maximised together.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's guidance states both sides: performance: localise critical operations and minimise communications, use large rather than fine-grain components; maintainability: use fine-grain, replaceable components. Large-and-local versus fine-and-replaceable is a direct clash, and the lecture's open-floor question asks exactly for such conflicts. The benchmark slides (single level vs nested levels) show the same tension in code.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">All data in a system is managed in one central store, and components do not interact directly, only through that store. Which pattern is this, and which disadvantage comes with it?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Repository: the store is a single point of failure.</button>
+        <button class="quiz-option">Repository: clean separation between layers is often difficult.</button>
+        <button class="quiz-option">Layered architecture: performance may suffer from multiple levels of interpretation.</button>
+        <button class="quiz-option">MVC: the pattern involves additional code and code complexity.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The description is the repository pattern's own definition. Its stated disadvantages: the repository is a single point of failure, there may be inefficiencies in organising all communication through it, and distributing it across several computers may be difficult. The "clean separation" disadvantage belongs to layered architecture; "additional code" belongs to MVC.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">A Worker interface declares work() and eat(). RobotWorker implements work() but its eat() is a no-op marked "not applicable". Which SOLID principle does this violate?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Interface Segregation: clients should not depend on methods they do not use; this is a polluted interface.</button>
+        <button class="quiz-option">Single Responsibility: the interface does two things.</button>
+        <button class="quiz-option">Liskov Substitution: RobotWorker cannot behave like a Worker.</button>
+        <button class="quiz-option">Open/Closed: adding a new worker type changes the interface.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">This is the page's deliberate trap. The lecture's own example is this Worker case, and it files it under ISP with the labels "polluted interface" and "smell of needless complexity". It looks like SRP because "two responsibilities" is the phrase that comes to mind, but the harm is clients depending on methods they do not use. The lecture's fix splits the interface into Workable and Feedable, so ManWorker implements both and RobotWorker implements only Workable.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Which is a stated disadvantage of the MVC pattern?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">It involves additional code and code complexity.</button>
+        <button class="quiz-option">The data cannot change independently of its representation.</button>
+        <button class="quiz-option">It cannot be used when future interaction requirements are unknown.</button>
+        <button class="quiz-option">It is a single point of failure.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">MVC's advantage is the reverse of the wrong option: it allows the data to change independently of its representation and vice versa. It is used precisely when multiple ways to view and interact with the data exist or future interaction requirements are unknown. The cost is extra code and complexity. "Single point of failure" is the repository's.</span></p>
+    </div>
+
+    <h2>Guided exercises</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: reading quality attributes as architectural pressure</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>CityCare controls infusion pumps on hospital wards. Its requirements: it must never deliver the wrong dose; it must run around the clock; nurses must be able to roll out updated drug libraries without a developer; responses to pump alarms must be within 100 ms. For each requirement, name the architectural guidance the lecture gives, and state where the guidance conflicts.</p>
+      <details class="step"><summary>Step 1: map each requirement to a characteristic</summary>
+        <p>Wrong dose: safety. Around the clock: availability. Drug libraries without a developer: maintainability. 100 ms alarms: performance.</p>
+      </details>
+      <details class="step"><summary>Step 2: pull the lecture's guidance for each</summary>
+        <p>Safety: localise safety-critical features in a small number of sub-systems. Availability: include redundant components and mechanisms for fault tolerance. Maintainability: use fine-grain, replaceable components. Performance: localise critical operations and minimise communications; use large rather than fine-grain components.</p>
+      </details>
+      <details class="step"><summary>Step 3: find the conflict and decide</summary>
+        <p>Large-and-local versus fine-and-replaceable. For this system, which requirement loses first?</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Wrong dose: safety: localise the dosing logic in a small number of sub-systems, so it can be scrutinised and verified as a unit. Around the clock: availability: redundant components and fault tolerance, so a failed pump or server does not stop care. Drug libraries: maintainability: fine-grain, replaceable components, so the library can be swapped without touching dosing. 100 ms alarms: performance: localise the critical operation (the alarm path) and minimise communications.</p>
+        <p>The conflict is the lecture's own: performance asks for large, localised components with few messages; maintainability asks for fine-grain, replaceable ones. More replaceable pieces means more communication between them, which is exactly what the performance guidance warns against. The safety and availability guidance pulls toward isolating and duplicating the dosing sub-system, which also raises the cost of the frequent changes maintainability is protecting.</p>
+        <p>Decision for this system: safety and the 100 ms alarm path win. Keep the dosing and alarm components large, localised, and redundant; spend the maintainability budget where changes are actually frequent: the drug library, as a data pack or a replaceable component behind a fixed interface. The point of naming the trade-off is that somebody chooses which characteristic bends; the lecture's question is whether you can achieve all five at once, and the honest answer for this system is no.</p>
+        <p>Reasoning chain: requirement → characteristic → lecture's guidance → conflict named → explicit choice with the reason.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: choosing an architectural pattern</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Pick the pattern from the lecture for each scenario and name one disadvantage you accept with it. (a) A photo editor where plugins (export tools, filters, colour pickers) must all react whenever the image data changes. (b) A fitness product whose activity data must be shown on a phone app, a web dashboard, and a watch, with more views expected later. (c) A university portal being extended on top of its existing systems, with one team per layer of functionality and access controlled at several levels.</p>
+      <details class="step"><summary>Step 1: match each scenario to a "when used" clause</summary>
+        <p>Repository: large volumes of information stored for a long time, or data-driven systems where the inclusion of data triggers an action or tool. MVC: multiple ways to view and interact with the data, future interaction requirements unknown. Layered: building new facilities on top of existing systems, one team per layer, multi-level security.</p>
+      </details>
+      <details class="step"><summary>Step 2: name the disadvantage that clause drags in</summary>
+        <p>Each pattern's disadvantage is stated in the same slide as its use. Do not stop at naming the pattern.</p>
+      </details>
+      <details class="step"><summary>Step 3: check the trap scenario</summary>
+        <p>Scenario (a) is data-driven: tools triggered by data. That is repository territory even though "editor" sounds interactive.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Repository. The image data is the central store, and its changes trigger the tools, matching the lecture's "data-driven systems where the inclusion of data triggers an action or tool", like its IDE example. Accepted disadvantages: the repository is a single point of failure; routing all communication through it may be inefficient; distributing it may be difficult.</p>
+        <p>(b) MVC. Multiple views of the same data with unknown future interaction, which is the lecture's "when used" almost word for word. Accepted disadvantage: additional code and code complexity. The advantage you buy: the data changes independently of its representation and vice versa.</p>
+        <p>(c) Layered architecture. New facilities on existing systems, one team per layer, multi-level security (the security guidance even says to use a layered architecture with critical assets in the inner layers). Accepted disadvantages: clean separation between layers is often difficult; a high-level layer may have to interact directly with lower-level layers; performance may suffer from multiple levels of interpretation of each service request.</p>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 260" role="img" aria-label="Box and line diagram of a repository architecture: three components connected only through a central repository.">
+            <defs>
+              <marker id="flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+                <path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              </marker>
+            </defs>
+            <g stroke="currentColor" fill="none" stroke-width="1.5">
+              <rect x="40" y="30" width="170" height="50"/>
+              <rect x="40" y="105" width="170" height="50"/>
+              <rect x="40" y="180" width="170" height="50"/>
+              <rect x="470" y="105" width="180" height="50"/>
+              <line x1="210" y1="55" x2="470" y2="118" marker-end="url(#flow)"/>
+              <line x1="210" y1="130" x2="465" y2="130" marker-end="url(#flow)"/>
+              <line x1="210" y1="205" x2="470" y2="145" marker-end="url(#flow)"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="13" text-anchor="middle">
+              <text x="125" y="60">Component A</text>
+              <text x="125" y="135">Component B</text>
+              <text x="125" y="210">Component C</text>
+              <text x="560" y="135">Repository</text>
+              <text x="330" y="100">data or control flow</text>
+            </g>
+          </svg>
+          <figcaption>Box and line notation as the lecture describes it: a box is a component, an arrow is the flow of data or control signals. Components interact only through the repository.</figcaption>
+        </figure>
+        <p>The trap: case (a). "Editor" suggests interactivity and pushes you to MVC. The deciding fact is what triggers the work: data change triggers every tool. Also note the lecture's rule about patterns: a pattern should include when it is and when it is NOT useful, so always state the disadvantage you are accepting.</p>
+        <p>Reasoning chain: scenario facts → the pattern's "when used" clause → the matching disadvantage → boundary case checked against the trigger.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: spotting and refactoring SOLID violations</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>Two fragments from a reporting module. Name the violated principle in each and show the fix in the lecture's style.</p>
+      <div class="code-block"><span class="lang-label">Java</span><pre><code>public class ReportManager {
+    public String format(String data) { /* build the report text */ }
+    public void saveToFile(String report) { /* write to disk */ }
+    public void emailToClient(String report) { /* send via SMTP */ }
+}</code></pre></div>
+      <div class="code-block"><span class="lang-label">Java</span><pre><code>public enum ReportType { PDF, CSV }
+
+public class ReportExporter {
+    public ReportType type;
+    public void export(String report) {
+        if (type == ReportType.PDF) {
+            // build a PDF
+        } else {
+            // build a CSV
+        }
+    }
+}</code></pre></div>
+      <details class="step"><summary>Step 1: count the reasons to change in ReportManager</summary>
+        <p>Formatting changes when the report layout changes. Saving changes when storage changes. Emailing changes when the mail service changes. Three responsibilities, three reasons to change.</p>
+      </details>
+      <details class="step"><summary>Step 2: find the extension trap in ReportExporter</summary>
+        <p>Adding a new type means adding a branch here. The lecture's payment example is this shape: adding a new payment method means hunting for every switch statement and adding the new case to each.</p>
+      </details>
+      <details class="step"><summary>Step 3: apply the fixes and the lecture's caution</summary>
+        <p>SRP: separate the responsibilities and compose. OCP: make the changeable parts subclasses behind a fixed interface.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>ReportManager violates SRP: "a class should have only one reason to change." Three responsibilities, so the class is a smell of rigidity, like the lecture's Modem interface, which mixed connection management (dial, hangup) with data communication (send, recv). Fix, in the lecture's shape: split and compose.</p>
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>public interface DataChannel {
+    void send(char c);
+    char recv();
+}
+
+public interface Connection {
+    void dial(String pno);
+    void hangup();
+}</code></pre></div>
+        <p>For ReportManager the same move gives ReportFormatter, ReportStore, and MailSender, with ReportManager kept as a thin composer if anything still needs to coordinate them. The lecture's summary states the general shape: if class A has two responsibilities, create B and C to handle each in isolation, then compose A out of B and C.</p>
+        <p>ReportExporter violates OCP: "software entities should be open for extension, but closed for modification." Adding XLSX means modifying export(); a change of that kind should be achieved by adding new code, not by changing old code that already works. Fix: put the parts likely to change into implementations and define the interface around the parts that are unlikely to change.</p>
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>public abstract class ReportFormat {
+    public abstract void export(String report);
+}
+
+public class PdfFormat extends ReportFormat {
+    public void export(String report) { /* build a PDF */ }
+}
+
+public class CsvFormat extends ReportFormat {
+    public void export(String report) { /* build a CSV */ }
+}</code></pre></div>
+        <p>Now XLSX is one new class. The switch is gone; the working export code is untouched.</p>
+        <p>Two traps. First: "closed for modification" does not mean the class is frozen forever. It means further changes of that kind arrive as new code. Second: the lecture's caution on SRP: if the application is not changing in ways that create the two responsibilities, splitting is needless complexity. Ask how many responsibilities the class has and whether those responsibilities actually change; both matter.</p>
+        <p>Reasoning chain: reasons to change → SRP check → split and compose; extension scenarios → OCP check → hierarchy behind a fixed interface; both checked against the lecture's cautions.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: naming the principle from a symptom</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Name the principle involved in each case. (a) A Penguin object is passed where callers expect a flying Bird, and code that calls fly() crashes. (b) A PdfReporter is forced to implement csvExport() and exportToXml() that it cannot meaningfully support. (c) A high-level DataHandler constructs its own FilesystemStorage, so every storage change ripples upward. (d) A reviewer objects that a variable holding a Java String violates "no variable should hold a reference to a concrete class". Is the reviewer right?</p>
+      <details class="step"><summary>Step 1: match symptoms to the five statements</summary>
+        <p>SRP: one reason to change. OCP: open for extension, closed for modification. LSP: subtypes substitutable for base types. ISP: clients not depending on methods they do not use. DIP: high-level and low-level both depend on abstractions.</p>
+      </details>
+      <details class="step"><summary>Step 2: check (a) and (b) against the harm</summary>
+        <p>(a) is about substituting subtypes. (b) is about methods the client does not use.</p>
+      </details>
+      <details class="step"><summary>Step 3: check (c) and the reviewer's claim in (d)</summary>
+        <p>(c) is dependency direction. (d) asks about the lecture's own "any exception?" question.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) LSP: subtypes must be substitutable for their base types; any functionality expected from the base type should be fulfilled by the subtype. A penguin cannot fulfil fly(). The lecture's fix moves flying into a CanFly interface that Eagle has and Penguin does not, keeping Bird for what all birds share.</p>
+        <p>(b) ISP: many specialised interfaces are better than one universal; clients should not depend on methods they do not use. The universal export interface is polluted, and the PdfReporter's stub methods are the lecture's "smell of needless complexity". Split into small interfaces, one per real capability.</p>
+        <p>(c) DIP: high-level modules should not depend on low-level modules; both should depend on abstractions. The DataHandler's dependency is transitive: it is sensitive to changes all the way down, which is the lecture's stated problem. Fix: an abstract Storage interface, with FilesystemStorage as one detail that depends on it, and the storage injected into DataHandler. The lecture's test list: no variable holds a pointer to a concrete class, no class derives from a concrete class, no method overrides an implemented method of its base classes.</p>
+        <p>(d) The reviewer is wrong, and the lecture pre-empts the objection with its own "any exception? e.g. Java String". Stable, harmless value classes like String are the accepted exception; the rule targets references to concrete classes whose changes would ripple. This is the trap: treating a principle as a mechanical lint rule instead of a statement about change.</p>
+        <p>Reasoning chain: symptom → which statement it violates → the lecture's own fix shape → exceptions checked rather than assumed away.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: mixed (from requirement to architecture to class structure)</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This pulls in <a href="practice-01-software-engineering.html">page 1</a> (cost of change) and <a href="practice-02-requirements-engineering.html">page 2</a> (requirements). MediQueue must handle 10,000 concurrent users on results day, keep all patient data in one auditable store, and stay maintainable over a five-year life. (1) Which of the lecture's eight architectural design decisions is answered by this statement: "We will structure the system as one service per business area, each behind the same interface"? (2) The auditable-store requirement pushes which pattern, and what disadvantage is accepted? (3) In one service, class ExportService switches over an exportType field to produce PDFs and CSVs. Name the violation and the fix shape. (4) Using the page 1 cost facts, argue why the interface decision in (1) pays for itself.</p>
+      <details class="step"><summary>Step 1: know the eight decisions</summary>
+        <p>Generic architecture as template? Distribution across cores or processors? Patterns or styles? Fundamental approach to structuring the system? Decomposition into sub-components? Control strategy for component operation? Organisation best for delivering non-functional requirements? Documentation of the architecture?</p>
+      </details>
+      <details class="step"><summary>Step 2: route (2) and (3) through the same chain as Exercises 2 and 3</summary>
+        <p>Requirement → pattern and its disadvantage; code symptom → principle and fix.</p>
+      </details>
+      <details class="step"><summary>Step 3: make the cost argument</summary>
+        <p>Software costs more to maintain than to develop; long lives multiply that. Architecture refactoring is expensive because it affects many components.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. Decision 4: "What will be the fundamental approach used to structure the system?" The statement picks service-per-business-area behind a shared interface as the structuring approach. It is not yet the pattern (decision 3), the decomposition (decision 5), or the non-functional organisation (decision 7), though it will inform each of them.</p>
+        <p>2. Repository. All data in a central store, components interacting only through it, fits the auditable-store requirement and the pattern's "when used" (large volumes of information kept for a long time). Accepted disadvantages: the repository is a single point of failure (for a patient system, that is the one to take seriously), and organising all communication through it may be inefficient. The availability guidance answers the first: redundant components and fault tolerance around the store.</p>
+        <p>3. OCP violation: adding a format means modifying ExportService. Fix shape: a ReportFormat abstraction with PdfFormat and CsvFormat implementations, so a new format is new code. The lesson to carry into the service structure: each service's format variation lives behind its own interface, so the change cost stays local.</p>
+        <p>4. Page 1's cost fact: software costs more to maintain than to develop, and for long-lived systems maintenance may be several times development cost. MediQueue lives five years, and L5a adds that refactoring the architecture later is expensive because it affects so many components. A fixed interface per service keeps each year's changes inside one service instead of rippling across the system. That is money spent once at design time against rework spent every year, the same argument the lecture makes for designing the overall architecture early even in agile processes.</p>
+        <p>Reasoning chain: decision list matched to the statement → requirement to pattern with its disadvantage → code to principle with its fix → cost facts applied to the specific life span.</p>
+      </details>
+    </section>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position: "For a small team shipping one product, layered architecture is overhead: clean separation is hard to achieve anyway and every service request pays an interpretation cost. Ship a simpler structure and refactor if you survive." Defend or attack. Evidence that would change your mind: project histories showing what the later refactor actually cost versus the day-to-day cost of the layering; the lecture warns that architectural refactoring is expensive precisely because it touches so many components.</p>
+    </div>
+
+    <p class="source">Source: COMP 3297, L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 3-12 (architectural design, abstractions, representations, the eight design decisions, reuse, characteristics and their guidance), slides 14-15 (performance vs maintainability benchmark), slides 17-21 (patterns: MVC, layered, repository, client-server), slides 23-43 (SRP, OCP, LSP, ISP, DIP with the course's examples and the SOLID summary). The eight design decisions were transcribed from the slide's numbered diagram; all diagrams on this page are fresh scenarios in the lecture's box-and-line notation.</p>
+
+    <h2>Recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five characteristics and their architectural guidance<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Performance: localise critical operations, minimise communications, large rather than fine-grain components. Security: layered, critical assets in inner layers. Safety: localise safety-critical features in few sub-systems. Availability: redundancy and fault tolerance. Maintainability: fine-grain, replaceable components.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The standing trade-off<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Performance (large, local, few messages) against maintainability (fine-grain, replaceable, more messages). The lecture's benchmark shows it in code: single level vs nested levels.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">MVC, layered, repository: when used<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">MVC: multiple views and interactions of the same data, future interaction unknown; costs extra code and complexity. Layered: new facilities on existing systems, team per layer, multi-level security; hard to separate cleanly, may cost performance. Repository: large volumes of stored data, data-driven triggers; single point of failure.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">SOLID in five lines<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">SRP: one reason to change per class. OCP: open for extension, closed for modification. LSP: subtypes substitutable for base types. ISP: clients depend only on methods they use. DIP: high-level and low-level both depend on abstractions; details depend on abstractions.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The SRP caution<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">If the application is not changing in ways that create the two responsibilities, separating them is needless complexity. Count responsibilities and expected change.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The DIP test list and its exception<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">No variable holds a reference to a concrete class; no class derives from a concrete class; no method overrides an implemented method of its base classes. Exception: stable value classes such as Java String.</span>
+      </span></button>
+    </div>
+
+    <nav class="pager">
+      <a class="prev" href="practice-05-ux-and-prototyping.html"><span class="dir">Previous</span><span class="name">UX and prototyping practice</span></a>
+      <a class="next" href="index.html"><span class="dir">Next</span><span class="name">Revision hub</span></a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision: Activities and fragments</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Activities and fragments</h1>
+    <p class="lede">Chapter 6 is where Android stops being XML and starts being a system that
+    calls your code. The three ideas to own: the activity lifecycle and its ordering rules, the
+    intent as a message between components, and the fragment as reusable screen furniture with a
+    back stack behind it.</p>
+
+    <h2>What an activity is</h2>
+    <p>The lecture's simple understanding: <strong>an activity is a page in the foreground</strong>
+   : the unit of UI the user is looking at. "Only one activity can be in the foreground at any
+    time." A full application can also contain three other component types:</p>
+    <ul>
+      <li><strong>Activity</strong>: user interface / foreground (buttons, lists).</li>
+      <li><strong>Service</strong>: no user interface / background (music, download).</li>
+      <li><strong>Content provider</strong>: data manager (files, database).</li>
+      <li><strong>Broadcast receiver</strong>: responsible for system-wide events (shut down,
+      low battery, download complete).</li>
+    </ul>
+    <p>The worked example on the slide: your app displays something; the user taps a button; the
+    <em>camera</em> activity (another app) captures; the result feeds an email compose activity;
+    send. Activities cross app boundaries, which is why intents exist.</p>
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 3-5.</p>
+
+    <h2>The activity lifecycle</h2>
+    <p>Android manages app life cycles: different callback functions are invoked at different
+    stages. The six callbacks, in order, with the lecture's one-line meaning each:</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 330" role="img" aria-label="Activity lifecycle callbacks">
+        <rect x="40" y="20" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="115" y="40" text-anchor="middle" font-size="13" fill="currentColor">onCreate()</text>
+        <text x="115" y="57" text-anchor="middle" font-size="11" fill="currentColor">enter memory</text>
+        <rect x="40" y="94" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="115" y="114" text-anchor="middle" font-size="13" fill="currentColor">onStart()</text>
+        <text x="115" y="131" text-anchor="middle" font-size="11" fill="currentColor">become visible</text>
+        <rect x="40" y="168" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="115" y="188" text-anchor="middle" font-size="13" fill="currentColor">onResume()</text>
+        <text x="115" y="205" text-anchor="middle" font-size="11" fill="currentColor">get focus / foreground</text>
+        <rect x="40" y="242" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="115" y="262" text-anchor="middle" font-size="13" fill="currentColor">onPause()</text>
+        <text x="115" y="279" text-anchor="middle" font-size="11" fill="currentColor">lose focus / foreground</text>
+        <line x1="115" y1="64" x2="115" y2="92" stroke="currentColor" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="115" y1="138" x2="115" y2="166" stroke="currentColor" stroke-width="2" marker-end="url(#arr6)"/>
+        <line x1="115" y1="212" x2="115" y2="240" stroke="currentColor" stroke-width="2" marker-end="url(#arr6)"/>
+        <rect x="380" y="20" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="455" y="40" text-anchor="middle" font-size="13" fill="currentColor">onStop()</text>
+        <text x="455" y="57" text-anchor="middle" font-size="11" fill="currentColor">become invisible</text>
+        <rect x="380" y="120" width="150" height="44" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="455" y="140" text-anchor="middle" font-size="13" fill="currentColor">onDestroy()</text>
+        <text x="455" y="157" text-anchor="middle" font-size="11" fill="currentColor">leave memory</text>
+        <line x1="455" y1="64" x2="455" y2="118" stroke="currentColor" stroke-width="2" marker-end="url(#arr6)"/>
+        <path d="M 190 264 C 300 264 340 220 378 150" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#arr6)"/>
+        <text x="310" y="240" text-anchor="middle" font-size="11" fill="currentColor">stopped activity may also</text>
+        <text x="310" y="255" text-anchor="middle" font-size="11" fill="currentColor">restart: onStart / onResume</text>
+        <text x="310" y="305" text-anchor="middle" font-size="11" fill="currentColor">onCreate and onDestroy bracket the memory life; onStart/onStop bracket visibility; onResume/onPause bracket focus.</text>
+        <defs>
+          <marker id="arr6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>The six callbacks of Chapter 6, slide 7. Notice three paired questions: in
+      memory? visible? focused?: each pair brackets one of those states.</figcaption>
+    </figure>
+    <p>The slide's own note explains why focus is separate from visibility: "an activity can be
+    visible but not in focus if the phone screen can display multiple activities at the same
+    time." So visible-but-not-focused is a real state, and onPause (lose focus) can fire while the
+    activity is still on screen.</p>
+
+    <h3>Ordering when one activity starts another</h3>
+    <p>Activity A starts Activity B. The lecture's exact sequence:</p>
+    <ol>
+      <li>A's <code>onPause()</code> executes.</li>
+      <li>B's <code>onCreate()</code>, <code>onStart()</code>, and <code>onResume()</code>
+      execute in sequence. (B now has user focus.)</li>
+      <li>If A is no longer visible on screen, its <code>onStop()</code> executes.</li>
+    </ol>
+    <p>And the exam's favourite consequence, stated on the same slide: <strong>if A needs to write
+    to a DB before B starts, use <code>onPause()</code>, not <code>onStop()</code></strong>, because onPause is the
+    last callback guaranteed to run before B is up.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 170" role="img" aria-label="Callback ordering when A starts B">
+        <rect x="15" y="30" width="110" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="70" y="55" text-anchor="middle" font-size="12" fill="currentColor">A.onPause()</text>
+        <rect x="150" y="30" width="200" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="250" y="55" text-anchor="middle" font-size="12" fill="currentColor">B.onCreate() onStart() onResume()</text>
+        <rect x="375" y="30" width="150" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="450" y="55" text-anchor="middle" font-size="12" fill="currentColor">A.onStop() (if hidden)</text>
+        <line x1="125" y1="50" x2="148" y2="50" stroke="currentColor" stroke-width="2" marker-end="url(#arr6b)"/>
+        <line x1="350" y1="50" x2="373" y2="50" stroke="currentColor" stroke-width="2" marker-end="url(#arr6b)"/>
+        <text x="310" y="110" text-anchor="middle" font-size="12" fill="currentColor">time runs left to right: memorise this order as a sentence: "pause A, build B, then stop A"</text>
+        <defs>
+          <marker id="arr6b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>The coordination rule from Chapter 6, slide 8. If B is a translucent or
+      multi-window style overlay, A stays visible and its onStop never fires: but onPause still
+      did.</figcaption>
+    </figure>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: onPause is the only callback a developer should ever use for saving
+      state, and onStop/onDestroy are for freeing resources only. Evidence that would change your
+      mind: the ordering rule itself: onPause runs before B is up, but if your save is slow,
+      doing it in onPause delays B's appearance, so a lazy save in onStop plus defensive saves
+      elsewhere might be better.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 6-8.</p>
+
+    <h2>Intents: messages between components</h2>
+    <p>Android intents can be imagined as messages between activities (also services and
+    receivers). An Intent object carries an <strong>action</strong> (e.g. "start movie", "get
+    photo") and <strong>data</strong> (e.g. movie title). Two verbs: <code>startActivity</code>
+    fires the intent and forgets it; <code>startActivityForResult</code> fires it and expects a
+    call-back intent with data (the slide's example: ask the camera app for a photo, receive the
+    photo).</p>
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>The slides print "Deprecated" over the startActivityForResult flow. The durable truth:
+      startActivityForResult was deprecated in favour of the Activity Result APIs
+      (registerForActivityResult). The idea in the exam is unchanged: call a component and get an
+      intent back: only the API spelling moved on.</p>
+    </div>
+
+    <h3>Explicit vs. implicit</h3>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>// Explicit: names the component to switch to (within your app)
+val intent = Intent(this, FooActivity::class.java)
+startActivity(intent)
+
+// Implicit: names only the action; the system picks the component
+val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+startActivity(intent)</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>// Explicit
+Intent intent = new Intent(this, FooActivity.class);
+startActivity(intent);
+
+// Implicit
+Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+startActivity(intent);</code></pre></div>
+      </section>
+    </div>
+    <p><strong>Explicit intents</strong> are used within the application itself, one activity
+    switching to another. <strong>Implicit intents</strong> do not directly specify the Android
+    component to call: they specify only the action to be performed, and the system picks the
+    component. In practice: explicit intents do your page switching; implicit intents reach
+    outside (open a URL, capture a photo).</p>
+
+    <h3>Intent filters</h3>
+    <p>For implicit intents only. Android determines the best activity, service or receivers by
+    comparing the contents of the Intent object to <strong>intent filters</strong>: structures
+    associated with components that can potentially receive intents. Filters advertise a
+    component's capabilities and delimit the intents it can handle. The rule that trips people
+    up: <strong>a component without any intent filters can receive only explicit intents</strong>;
+    a component with filters can receive both explicit and implicit.</p>
+    <div class="code-block"><span class="lang-label">XML (AndroidManifest.xml)</span><pre><code>&lt;activity android:name="hkucs.sample.Activity2"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="android.intent.action.VIEW" /&gt;
+        &lt;action android:name="hkucs.myintentfilter" /&gt;
+        &lt;category android:name="android.intent.category.DEFAULT" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;</code></pre></div>
+    <p>Matching in the lecture's walkthrough: <code>val i = Intent("hkucs.myintentfilter",
+    Uri.parse("http://www.hku.hk"))</code> then <code>startActivity(i)</code>: the system looks
+    for an intent filter advertising the action "hkucs.myintentfilter" (the slide says "intent
+    filter named", but the string is the action inside the intent) and invokes Activity2, which
+    contains this
+    filter. The launched activity collects the URL with <code>intent.data</code> (Java:
+    <code>getIntent().getData()</code>), holding it in a proper data structure
+    (<code>val url: Uri? = intent.data</code>) and using it anywhere, e.g.
+    <code>label.text = url.toString()</code>.</p>
+    <p>The full example manifest shows the two filter shapes you must recognise:</p>
+    <ul>
+      <li>The launcher activity's filter: <code>action "android.intent.action.MAIN"</code> with
+      <code>category "android.intent.category.LAUNCHER"</code>. An activity having this intent
+      filter becomes the first activity, loaded when the app starts.</li>
+      <li>CustomActivity's filter: actions VIEW and "hkucs.intentfilter.LAUNCH", category
+      DEFAULT, and <code>&lt;data android:scheme="http" /&gt;</code> constraining the data to
+      http URLs. So the button sending the LAUNCH action reaches CustomActivity while the plain
+      ACTION_VIEW button reaches the browser.</li>
+    </ul>
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>Filter-matching questions are step-by-step: does the intent carry an action the filter
+      lists? a category the filter declares? data matching the filter's scheme? One mismatch and
+      the component is not a candidate. The custom action "hkucs.intentfilter.LAUNCH" only matches
+      because the filter advertises that exact string.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 10-27.</p>
+
+    <h2>Explicit intents in practice: switching pages</h2>
+    <p>The lecture's key steps: create a new layout for the new activity; define the new activity
+    in the manifest file; in the calling activity, create a new Intent instance and start it; in
+    the called activity, create another Intent instance to return. The code: the caller does
+    <code>Intent(this, MainActivity2::class.java)</code> plus
+    <code>startActivity(myIntent)</code>; the manifest lists both activities, with only the first
+    carrying the MAIN/LAUNCHER filter.</p>
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>Look closely at the "return" step in the sample code: MainActivity2's button creates
+      <code>Intent(this, MainActivity::class.java)</code> and calls startActivity: that starts a
+      <em>new instance</em> of MainActivity on top, it does not go back. Real back navigation in
+      Android is the system Back button popping the stack of activities (the same back-stack idea
+      the fragment section below makes explicit). If a question asks what that button actually
+      does, the honest answer is "starts MainActivity again", not "returns".</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 28-35.</p>
+
+    <h2>Extras and Bundles</h2>
+    <p>To pass data with an intent, attach <strong>extras</strong>: key-value pairs carried inside
+    the intent and read out as a <strong>Bundle</strong>. Sender and receiver:</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>// Sender
+val myIntent = Intent(this, MainActivity2::class.java)
+myIntent.putExtra("ID", 6999)
+startActivity(myIntent)
+
+// Receiver
+val bundle: Bundle? = intent.extras
+bundle?.let {
+    bundle.apply {
+        val id: Int? = getInt("ID")   // 6999; use the getter matching the type put
+    }
+}</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>// Sender
+Intent myIntent = new Intent(this, MainActivity2.class);
+myIntent.putExtra("ID", 6999);
+startActivity(myIntent);
+
+// Receiver
+Bundle bundle = getIntent().getExtras();
+if (bundle != null) {
+    int id = bundle.getInt("ID");   // 6999
+}</code></pre></div>
+      </section>
+    </div>
+    <p>Typed getters exist for the common cases: <code>getString("ID")</code>,
+    <code>getInt("ID")</code> if the ID is an integer, <code>getLong("ID")</code> for a long.
+    Arrays and objects pass too: <code>putExtra("IntArrayList", arrayListOf(1,2,3))</code> and
+    <code>getIntArrayList("IntArrayList")</code>; <code>getStringArrayList</code> likewise; and a
+    <code>Calendar</code> goes over as
+    <code>getSerializable("Calendar")</code>.</p>
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>The receiver slide on the printout shows <code>getString("ID")</code> with the comment
+      "id = 6999" for an int that was put with putExtra("ID", 6999): and the same slide then
+      says "Can use getInt("ID") if ID is an integer". The getter must match the type that was
+      put; getInt("ID") is the correct pairing here. Exam answer: match getters to
+      putters.</p>
+    </div>
+    <p><strong>Serialization</strong>, from the lecture's definition: the conversion of an object
+    to a series of bytes so it can be saved to persistent storage, streamed across a communication
+    link, or moved between virtual machines. The byte stream can then be deserialized: converted
+    into a replica of the original object. That is how objects like Calendar can travel inside a
+    Bundle.</p>
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 37-40.</p>
+
+    <h2>Fragments</h2>
+    <p>A <strong>Fragment</strong> represents a behavior or a portion of user interface in a
+    FragmentActivity. You can combine multiple fragments in a single activity to build a
+    multi-pane UI, and reuse a fragment in multiple activities. The lecture's analogy: a fragment
+    is like a modular section of an activity, a "sub-activity", with its own lifecycle, its own
+    input events, that you can add or remove while the activity is running.</p>
+    <h3>Fragment callbacks you implement</h3>
+    <ul>
+      <li><code>onCreate()</code>: called when creating the fragment; initialize essential
+      components you want to retain when the fragment is paused or stopped and then resumed.</li>
+      <li><code>onCreateView()</code>: called when it is time for the fragment to draw its user
+      interface for the first time. This is where the layout is inflated.</li>
+      <li><code>onPause()</code>: the first indication that the user is leaving the fragment.</li>
+    </ul>
+    <h3>Basic steps</h3>
+    <ol>
+      <li>Modify the layout to include one or more regions for the fragments.</li>
+      <li>For each fragment: create a layout; create a class extending Fragment and implement the
+      essential methods.</li>
+      <li>In the main activity, at the place you want the fragment, run a fragment transaction.</li>
+      <li>To put the fragment on the back stack, call <code>addToBackStack</code> as part of the
+      transaction.</li>
+    </ol>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>val manager: FragmentManager = supportFragmentManager
+val ft: FragmentTransaction = manager.beginTransaction()
+if (addToBackStack) {
+    ft.addToBackStack(tag)                 // remember this transaction for Back
+}
+if (fragment != null) {
+    ft.replace(R.id.frame_container, fragment, tag)  // region id, fragment, tag
+}
+ft.commitAllowingStateLoss()</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>FragmentManager manager = getSupportFragmentManager();
+FragmentTransaction ft = manager.beginTransaction();
+ft.replace(R.id.frame_container, new FragmentOne(), "one"); // region id, fragment, tag
+ft.addToBackStack("one");
+ft.commitAllowingStateLoss();</code></pre></div>
+      </section>
+    </div>
+    <p>Read a transaction as a staged edit: <code>beginTransaction()</code> opens it,
+    <code>replace(containerId, fragment, tag)</code> describes swapping the fragment into a
+    region of the activity's layout, <code>addToBackStack(tag)</code> records it so the Back
+    button can reverse it (returning to whatever fragment was showing before), and
+    <code>commitAllowingStateLoss()</code> applies it. The lecture's complete example wires two
+    text areas: tapping "Fragment 1" runs <code>addFragment(FragmentOne(), false, "one")</code>
+    and "Fragment 2" runs the same for FragmentTwo, both replacing into
+    <code>R.id.frame_container</code>: a FrameLayout region in activity_main.xml.</p>
+    <p>The fragment class itself is small. Its one real job is onCreateView: inflate the layout
+    and return it.</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class FragmentOne : Fragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_fragment_one, container, false)
+    }
+}</code></pre></div>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 220" role="img" aria-label="Fragments living inside an activity region">
+        <rect x="60" y="20" width="500" height="180" rx="10" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="310" y="45" text-anchor="middle" font-size="13" fill="currentColor">Activity (activity_main.xml)</text>
+        <rect x="90" y="60" width="440" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="310" y="80" text-anchor="middle" font-size="11" fill="currentColor">title bar area (TextViews fr1 / fr2)</text>
+        <rect x="90" y="105" width="440" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/>
+        <text x="310" y="130" text-anchor="middle" font-size="11" fill="currentColor">R.id.frame_container (FrameLayout region)</text>
+        <rect x="130" y="140" width="180" height="34" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="220" y="162" text-anchor="middle" font-size="11" fill="currentColor">FragmentOne (replaced in)</text>
+        <text x="430" y="162" text-anchor="middle" font-size="11" fill="currentColor">or FragmentTwo: one at a time</text>
+      </svg>
+      <figcaption>replace() swaps the fragment occupying a layout region; addToBackStack(tag)
+      records the swap so Back undoes it.</figcaption>
+    </figure>
+    <div class="callout why"><span class="tag">Why it matters</span>
+      <p>Fragments exist for reuse and multi-pane UIs: one fragment class embedded in several
+      activities, or several fragments side by side on a tablet. If a screen is only ever one
+      whole page in one app, an activity is simpler: which is why Card 24 (page 7) is one
+      activity with no fragments at all.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 42-52.</p>
+
+    <h2>Check yourself</h2>
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A starts B. Which is the first callback to execute?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A's onPause()</button>
+        <button class="quiz-option">B's onCreate()</button>
+        <button class="quiz-option">A's onStop()</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The ordering rule: "1. A's onPause() method executes. 2. B's onCreate(), onStart(), and onResume() execute in sequence. 3. If A is no longer visible, its onStop() executes."</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">A component's manifest entry has no intent-filter at all. What can it
+      receive?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Only explicit intents.</button>
+        <button class="quiz-option">Only implicit intents.</button>
+        <button class="quiz-option">Both explicit and implicit intents, but only with http data.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">"If a component does not have any intent filters, it can receive only explicit intents. A component with filters can receive both explicit and implicit intents."</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">Where should an activity write to a database to be sure the write happens
+      before the next activity appears?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">onPause(): it runs before the next activity's onCreate.</button>
+        <button class="quiz-option">onStop(): it is the last callback either way.</button>
+        <button class="quiz-option">onDestroy(): it always runs before the next activity starts.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The slide's explicit advice: "if A needs to write to a DB before B starts, use onPause() instead of onStop()". onStop may run only after B is up (and never if A stays visible); onDestroy is not guaranteed at all.</span></p>
+    </div>
+
+    <h2>Recap flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The six activity lifecycle callbacks, in order.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">onCreate (enter memory) → onStart (visible) → onResume (focus) → onPause (lose focus) → onStop (invisible) → onDestroy (leave memory).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Order of callbacks when A starts B.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A.onPause() → B.onCreate(), B.onStart(), B.onResume() → A.onStop() if A is no longer visible.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Explicit vs. implicit intent.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Explicit names the component (Intent(this, FooActivity::class.java)): used for switching pages inside your app. Implicit names only the action (Intent(ACTION_VIEW, uri)): the system picks the component via intent filters.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What do intent filters do, and who needs them?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">They advertise which implicit intents a component can handle (action/category/data matching). Only implicit intents need them: no filters means explicit intents only.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Put and read an int extra named "ID".<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">myIntent.putExtra("ID", 6999) on the sender; on the receiver, val bundle: Bundle? = intent.extras then bundle?.getInt("ID"). Getter type must match the type put.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Fragment's three callbacks to know.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">onCreate (initialize components to retain), onCreateView (inflate the UI for the first time), onPause (first sign the user is leaving).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The fragment transaction pattern.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">supportFragmentManager.beginTransaction(); ft.replace(regionId, fragment, tag); optionally ft.addToBackStack(tag); ft.commitAllowingStateLoss(). The back stack lets Back reverse the transaction.</span>
+      </span></button>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="06-activity-1">
+          <span class="check-text">Recite the six callbacks with their one-line meanings, and the A-starts-B order.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-activity-2">
+          <span class="check-text">Decide onPause vs. onStop for a pre-switch save and justify it from the ordering rule.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-activity-3">
+          <span class="check-text">Write an explicit and an implicit intent in Kotlin and say who receives each.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-activity-4">
+          <span class="check-text">Predict whether a given manifest filter matches a given intent (action, category, data).</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-activity-5">
+          <span class="check-text">Build a fragment transaction with a back stack entry, and say what Back does afterwards.</span></li>
+    </ul>
+
+    <div class="callout tip"><span class="tag">Practise this</span>
+      <p><a href="practice-06-activities-and-fragments.html">Practice set 6: activities and
+      fragments</a>: callback-order drills, intent matching and transaction reasoning, with full
+      worked answers.</p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 3-52 (chapter read in
+    full).</p>
+
+    <nav class="pager">
+      <a class="prev" href="05-kotlin-and-java-syntax.html">&larr; Previous: Kotlin and Java syntax</a>
+      <a class="next" href="07-card24-and-flutter.html">Next: Card 24 and Flutter &rarr;</a>
+    </nav>
+  </main>
+</body>
+</html>

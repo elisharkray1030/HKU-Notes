@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: activities and fragments</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: activities and fragments</h1>
+    <p class="lede">Chapter 6 is the mechanics of moving around an app: which callbacks fire and when, how intents route between screens, how data rides along, and how fragments let you swap pieces of a screen. The exam tests all four as one story.</p>
+    <p>Background: <a href="06-activities-and-fragments.html">Activities and fragments</a>.</p>
+
+    <h2>Quiz: callbacks, intents, fragments</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">Which statement matches the chapter's simple understanding of an activity?</p>
+      <div class="options">
+        <button class="quiz-option">An activity is a background job such as music playback</button>
+        <button class="quiz-option" data-correct="true">An activity is a page in the foreground, and only one activity can be in the foreground at any time</button>
+        <button class="quiz-option">An activity is a data manager for files and databases</button>
+        <button class="quiz-option">An activity handles system-wide events such as low battery</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 6, slide 5: "A simple understanding of an activity is a page in the foreground" and "Only one activity can be in the foreground at any time." The other options are the Service, Content provider and Broadcast receiver from the component list.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Which is an explicit intent?</p>
+      <div class="options">
+        <button class="quiz-option">Intent(Intent.ACTION_VIEW, Uri.parse(url))</button>
+        <button class="quiz-option" data-correct="true">Intent(this, FooActivity::class.java): it names the Android component to switch to</button>
+        <button class="quiz-option">Intent("hkucs.myintentfilter", Uri.parse("http://www.hku.hk"))</button>
+        <button class="quiz-option">Any intent carrying putExtra data</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 6: explicit intents are used within the application to switch from one activity to another and take a context plus the target activity (Java: new Intent(this, FooActivity.class)). Implicit intents specify only the action; the system picks the component. Extras do not make an intent explicit.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">Which fragment callbacks must you implement at minimum, per the chapter?</p>
+      <div class="options">
+        <button class="quiz-option">onResume() and onDestroy()</button>
+        <button class="quiz-option" data-correct="true">onCreate() and onCreateView()</button>
+        <button class="quiz-option">onStart() and onPause()</button>
+        <button class="quiz-option">None; Fragment implements them all for you</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The chapter lists "You should implement at least the following": onCreate() to initialize essential components the fragment should retain across pause/stop/resume; onCreateView(), called when it is time for the fragment to draw its UI for the first time. onPause() is listed as optional ("first indication that the user is leaving the fragment").</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">In what order do the callbacks fire on a cold start of one activity?</p>
+      <div class="options">
+        <button class="quiz-option">onResume(), onStart(), onCreate()</button>
+        <button class="quiz-option" data-correct="true">onCreate() (enter memory), onStart() (become visible), onResume() (get focus / foreground)</button>
+        <button class="quiz-option">onCreate() then onResume() only</button>
+        <button class="quiz-option">onStart(), onCreate(), onResume()</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 6's lifecycle list is ordered and labelled: onCreate() = enter memory, onStart() = become visible, onResume() = get focus / foreground; then onPause() = lose focus, onStop() = become invisible, onDestroy() = leave memory.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q5</span>
+      <p class="quiz-q">The sender writes myIntent.putExtra("ID", 6999). How should the receiver read it?</p>
+      <div class="options">
+        <button class="quiz-option">intent.extras.getString("ID")</button>
+        <button class="quiz-option" data-correct="true">intent.extras and getInt("ID"): the getter must match the type passed to putExtra</button>
+        <button class="quiz-option">intent.data.getInt("ID")</button>
+        <button class="quiz-option">intent.getStringExtra("ID") then parse to int</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The receiver side reads val bundle: Bundle? = intent.extras and pulls values with typed getters; the chapter's own note says "Can use getInt("ID") if ID is an integer / Can use getLong("ID") if ID is a long integer". 6999 is an integer extra, so getInt is the getter that matches. intent.data is for the URI, not extras.</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 3, 5, 7, 11, 38, 43.</p>
+
+    <h2>Exercise 1: the full callback trace</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: predicting callback order across a screen change</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Activity A is a note list and Activity B is the editor, opened full screen. Trace, in order, every callback from the moment the user taps the app icon with A as the entry activity, to the moment B is showing and interactive. Then say: (a) where A should flush its draft to the database and why; (b) which of A's callbacks do not fire if the phone shows A and B side by side so A stays visible.</p>
+      <details class="step"><summary>Step 1: cold start of A</summary>
+        <p>onCreate() (A enters memory) → onStart() (A becomes visible) → onResume() (A gets focus; it is in the foreground).</p>
+      </details>
+      <details class="step"><summary>Step 2: the tap starts B</summary>
+        <p>Chapter 6's coordination example: A's onPause() executes first (A loses focus), then B's onCreate(), onStart(), onResume() execute in sequence, and B now has user focus.</p>
+      </details>
+      <details class="step"><summary>Step 3: A's fate</summary>
+        <p>If A is no longer visible on screen, its onStop() executes (A becomes invisible). It is not destroyed: onDestroy() means leave memory and is not part of this flow.</p>
+      </details>
+      <details class="step"><summary>Step 4: answers (a) and (b)</summary>
+        <p>(a) The flush goes in onPause(): it is A's only callback guaranteed to run before B is created, and the lecture says it plainly: "if A needs to write to a DB before B starts, use onPause() instead of onStop()". (b) Side by side, A is visible but without focus, so A's onStop() does not fire; onCreate/onStart stay as they were.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>A.onCreate() → A.onStart() → A.onResume() → [tap] → A.onPause() → B.onCreate() → B.onStart() → B.onResume() → A.onStop() (only if A is no longer visible). (a) Write the draft in onPause(). (b) In the side-by-side case A.onStop() does not fire; A stays visible without focus.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>The plausible wrong order is A.onPause() → A.onStop() → B.onCreate() ... The chapter puts B's entire creation between A's pause and A's stop. The order matters in practice: anything you defer to onStop() happens too late to influence B's startup.</p>
+        </div>
+        <div class="callout tip"><span class="tag">Tip</span>
+          <p>Remember the labels, not just the names: enter memory, become visible, get focus, lose focus, become invisible, leave memory. Every ordering question is answered from those six labels.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 6-8.</p>
+
+    <h2>Exercise 2: passing a result to the next screen</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: explicit intents and typed extras, both languages</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A quiz app has QuizActivity and ResultActivity (already declared in AndroidManifest.xml). When the user finishes, QuizActivity must open ResultActivity showing the final score (an Int) and the player's name (a String). Write the sender's click handler and the receiver's onCreate reading both extras, following the chapter's explicit-intent steps and its extras code. Then: what does ResultActivity read if QuizActivity instead just sent a URL as intent data?</p>
+      <details class="step"><summary>Step 1: follow the explicit-intent steps</summary>
+        <p>Create the layout for the new activity; define the new activity in the manifest; in the calling activity create an Intent instance and start it; the called activity creates another Intent instance to return. The Intent needs a context and the name of the activity to start. (The lecture's word "return" is loose: as the re-teach page notes, that second Intent starts a new instance of the calling activity; the real way back is the system Back button.)</p>
+      </details>
+      <details class="step"><summary>Step 2: attach extras with explicit types</summary>
+        <p>putExtra("Score", score) with score: Int and putExtra("Name", name) with name: String. The receiver obtains the Bundle via intent.extras and uses matching getters.</p>
+      </details>
+      <details class="step"><summary>Step 3: read the data</summary>
+        <p>The chapter's receiver shape: val bundle: Bundle? = intent.extras; bundle?.let { bundle.apply { ... } }. The safe call handles a missing extras bundle (Chapter 5's null safety in action).</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <div class="tabs">
+          <section class="tab-panel" data-label="Kotlin">
+            <div class="code-block"><span class="lang-label">Kotlin: sender (QuizActivity)</span><pre><code>finish.setOnClickListener {
+    val myIntent = Intent(this, ResultActivity::class.java)
+    myIntent.putExtra("Score", score)      // Int
+    myIntent.putExtra("Name", playerName)  // String
+    startActivity(myIntent)
+}</code></pre></div>
+            <div class="code-block"><span class="lang-label">Kotlin: receiver (ResultActivity)</span><pre><code>override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_result)
+    val output = findViewById&lt;TextView&gt;(R.id.resultText)
+    val bundle: Bundle? = intent.extras
+    bundle?.let {
+        bundle.apply {
+            val score: Int = getInt("Score")
+            val name: String? = getString("Name")
+            output.text = "Score: $score ($name)"
+        }
+    }
+}</code></pre></div>
+          </section>
+          <section class="tab-panel" data-label="Java">
+            <div class="code-block"><span class="lang-label">Java: sender (QuizActivity)</span><pre><code>finish.setOnClickListener(new View.OnClickListener() {
+    public void onClick(View v) {
+        Intent myIntent = new Intent(QuizActivity.this, ResultActivity.class);
+        myIntent.putExtra("Score", score);      // int
+        myIntent.putExtra("Name", playerName);  // String
+        startActivity(myIntent);
+    }
+});</code></pre></div>
+            <div class="code-block"><span class="lang-label">Java: receiver (ResultActivity)</span><pre><code>protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_result);
+    TextView output = (TextView) findViewById(R.id.resultText);
+    Bundle bundle = getIntent().getExtras();
+    if (bundle != null) {
+        int score = bundle.getInt("Score");
+        String name = bundle.getString("Name");
+        output.setText("Score: " + score + " (" + name + ")");
+    }
+}</code></pre></div>
+          </section>
+        </div>
+        <p>If QuizActivity sent only a URL as intent data (Intent(this, ResultActivity::class.java).apply { data = Uri.parse(url) } or the chapter's two-argument Intent(action, uri) style), the receiver reads it with val url: Uri? = intent.data (Kotlin) or getIntent().getData() (Java), not from the extras bundle.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Copying the lecture's receiver snippet verbatim for an integer extra. Its sender puts an Int (myIntent.putExtra("ID", 6999)) but the snippet reads it with getString("ID"), and the very next line of the slide says "Can use getInt("ID") if ID is an integer". The durable rule: the getter must match the type given to putExtra: getInt for 6999. Note also that intent.data and intent.extras are different channels: data carries the Uri, extras carry your key-value pairs.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 28-34 (explicit intent code), 37-40 (extras, typed getters, arrays and objects), 19 (intent.data).</p>
+
+    <h2>Exercise 3: implicit intents and matching filters</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: deciding which component an implicit intent reaches</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>An app declares three activities in AndroidManifest.xml:</p>
+      <div class="code-block"><span class="lang-label">XML</span><pre><code>&lt;activity android:name=".MainActivity" android:exported="true"&gt;
+  &lt;intent-filter&gt;
+    &lt;action android:name="android.intent.action.MAIN" /&gt;
+    &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+  &lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;activity android:name=".ViewerActivity" android:exported="true"&gt;
+  &lt;intent-filter&gt;
+    &lt;action android:name="android.intent.action.VIEW" /&gt;
+    &lt;action android:name="hkucs.studyroom.OPEN" /&gt;
+    &lt;category android:name="android.intent.category.DEFAULT" /&gt;
+    &lt;data android:scheme="http" /&gt;
+  &lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;activity android:name=".PlainActivity" /&gt;</code></pre></div>
+      <p>Three sends follow: (i) Intent(Intent.ACTION_VIEW, Uri.parse("http://www.hku.hk")); (ii) Intent("hkucs.studyroom.OPEN", Uri.parse("http://www.hku.hk")); (iii) Intent(this, PlainActivity::class.java). For each, name every activity that can receive it and why. Then say how ViewerActivity reads the URL.</p>
+      <details class="step"><summary>Step 1: explicit versus implicit</summary>
+        <p>(iii) is explicit (it names the component), so it goes to PlainActivity regardless of filters. (i) and (ii) are implicit: they name only an action (plus data), so the system compares each intent against components' intent filters and picks the best match.</p>
+      </details>
+      <details class="step"><summary>Step 2: match (i) against the filters</summary>
+        <p>Its action is android.intent.action.VIEW and its data scheme is http. ViewerActivity's filter advertises VIEW and declares scheme http, so it matches. MainActivity's filter advertises MAIN/LAUNCHER only, so no match. PlainActivity has no filters, and "if a component does not have any intent filters, it can receive only explicit intents", so it is excluded.</p>
+      </details>
+      <details class="step"><summary>Step 3: match (ii) against the filters</summary>
+        <p>The first argument of Intent("hkucs.studyroom.OPEN", uri) is the action string. The system looks for intent filters containing that action; ViewerActivity's filter lists it, so ViewerActivity is invoked, the same pattern as the lecture's hkucs.myintentfilter example. The Uri rides as intent data.</p>
+      </details>
+      <details class="step"><summary>Step 4: reading the URL</summary>
+        <p>In ViewerActivity: val url: Uri? = intent.data (Kotlin) or getIntent().getData() (Java); the lecture then shows label.text = url.toString().</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(i) ViewerActivity only (action VIEW + http scheme both match its filter). (ii) ViewerActivity only (its filter advertises the custom action). (iii) PlainActivity (explicit, filters irrelevant). MainActivity receives none of these; it is the launcher because it holds action MAIN with category LAUNCHER. ViewerActivity reads the URL via intent.data (Kotlin) / getIntent().getData() (Java) into a Uri, then uses it anywhere.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two traps. First, treating "hkucs.studyroom.OPEN" as the name of a filter: it is the action inside an intent object, matched against the actions listed in filters; filters have no names of their own. Second, assuming PlainActivity can still catch implicit intents because it is in the same app: no filters means explicit intents only.</p>
+        </div>
+        <div class="callout exam"><span class="tag">Exam</span>
+          <p>One nuance visible in the lecture's manifests: implicit intents started with startActivity carry category DEFAULT, and every filter meant to receive them includes &lt;category android:name="android.intent.category.DEFAULT" /&gt;. Copy that pattern in your answers; the LAUNCHER category belongs only to the MAIN filter.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 11-12 (explicit vs implicit), 17-27 (intent filters, manifests, code).</p>
+
+    <h2>Exercise 4: fragments and the back stack</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: reasoning about FragmentTransaction and addToBackStack</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>The chapter's Fragment example has an activity layout with a FrameLayout region (@+id/frame_container) and two tap targets. Tapping "Fragment 1" runs addFragment(FragmentOne(), false, "one"); tapping "Fragment 2" runs addFragment(FragmentTwo(), false, "two"), where the method is:</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>fun addFragment(fragment: Fragment?, addToBackStack: Boolean, tag: String?) {
+    val manager: FragmentManager = supportFragmentManager
+    val ft: FragmentTransaction = manager.beginTransaction()
+    if (addToBackStack) {
+        ft.addToBackStack(tag)
+    }
+    if (fragment != null) {
+        ft.replace(R.id.frame_container, fragment, tag)
+    }
+    ft.commitAllowingStateLoss()
+}</code></pre></div>
+      <p>(a) With the code as written, what is on screen after tapping "Fragment 1" then "Fragment 2", and what happens when the user presses the Back button? (b) What changes if both calls pass true? (c) In which order must the three FragmentTransaction calls happen, and what do each of the fragment's two mandatory callbacks do?</p>
+      <details class="step"><summary>Step 1: trace the two taps</summary>
+        <p>Each tap begins a transaction and calls replace on the region: FragmentOne is placed in frame_container, then FragmentTwo replaces it. The tag ("one"/"two") identifies the fragment in the transaction. Final screen: FragmentTwo only; replace swaps the region's content.</p>
+      </details>
+      <details class="step"><summary>Step 2: the Back button</summary>
+        <p>addToBackStack is the call that saves a transaction so Back can reverse it, and both calls pass false, so neither transaction is on the back stack. Pressing Back therefore does not restore FragmentOne; it behaves like the activity's own back (leaving the screen).</p>
+      </details>
+      <details class="step"><summary>Step 3: with true</summary>
+        <p>Each transaction is saved. Back then undoes the most recent one: FragmentTwo is removed and FragmentOne is shown again; Back again undoes the first transaction, emptying the region.</p>
+      </details>
+      <details class="step"><summary>Step 4: the call order and the callbacks</summary>
+        <p>The chapter's steps: obtain the FragmentManager (supportFragmentManager), beginTransaction(), then replace with the region id, fragment and tag, optionally addToBackStack(tag), then commit. The course code uses commitAllowingStateLoss(). Mandatory callbacks: onCreate() initializes essential components the fragment should retain across pause/stop/resume; onCreateView() is called when it is time to draw the fragment's UI for the first time and returns the inflated layout (inflater.inflate(R.layout.fragment_fragment_one, container, false) in the example).</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) FragmentTwo is on screen (it replaced FragmentOne). Back does not bring FragmentOne back, because neither transaction called addToBackStack. With the false arguments in the lecture's own MainActivity, Back leaves the activity's screen. (b) With true, Back undoes the latest replace (FragmentTwo → FragmentOne), and another Back undoes the first (region empty). (c) beginTransaction → [addToBackStack(tag) if wanted] → replace(region id, fragment, tag) → commitAllowingStateLoss(). The fragment must implement onCreate() (init retained components) and onCreateView() (inflate and return its UI).</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>The sample code is the trap. Read addFragment(FragmentOne(), false, "one") carefully: the second argument is the addToBackStack flag and it is false in the lecture's wiring, so the "obvious" answer (Back returns to the previous fragment) is wrong for this code. Back-stack membership is opt-in per transaction, not a property of fragments.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 42-51 (fragment concept, lifecycle, basic steps, example code).</p>
+
+    <h2>Mixed exercise: one flow through the whole chapter</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: combining callbacks, intents, extras and null handling</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This one pulls Chapter 4's findViewById wiring and Chapter 5's null safety in with Chapter 6. A flashcard app has StudyActivity (the question screen) and StatsActivity. The user taps "Stats"; the app must open StatsActivity, show "Cards reviewed: N" where N is an Int kept in StudyActivity, and the UI must be wired through @+id views as usual. (1) List the callback sequence of StudyActivity and StatsActivity from the tap to the stats text being visible. (2) Write the send and read code for N in the chapter's shape, with the safe handling of a missing bundle. (3) If StatsActivity's layout has a TextView @+id/statsText, what does the wiring look like and where? (4) The designer wants the two screens side by side on tablets using fragments instead. Name the two mandatory fragment callbacks and the one call that makes Back return to the previous fragment.</p>
+      <details class="step"><summary>Step 1: callbacks</summary>
+        <p>StudyActivity.onPause() → StatsActivity.onCreate() → onStart() → onResume() (stats text set inside onCreate) → StudyActivity.onStop() if no longer visible.</p>
+      </details>
+      <details class="step"><summary>Step 2: extras with types</summary>
+        <p>Send: Intent(this, StatsActivity::class.java) plus putExtra("Reviewed", reviewed) with reviewed: Read: val bundle: Bundle? = intent.extras; bundle?.let { ... getInt("Reviewed") ... }. Matching getter, safe call for the possibly missing bundle.</p>
+      </details>
+      <details class="step"><summary>Step 3: wiring</summary>
+        <p>In StatsActivity.onCreate, after setContentView(R.layout.activity_stats): val statsText = findViewById&lt;TextView&gt;(R.id.statsText); the id comes from @+id/statsText in the XML (Chapter 4: "@" parse and expand, "+" add to R).</p>
+      </details>
+      <details class="step"><summary>Step 4: the fragment route</summary>
+        <p>Mandatory: onCreate() and onCreateView(). Back behaviour: ft.addToBackStack(tag) on each transaction before commit.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) StudyActivity.onPause() → StatsActivity.onCreate() → StatsActivity.onStart() → StatsActivity.onResume() → StudyActivity.onStop() if it ended up invisible. (2) Sender: val myIntent = Intent(this, StatsActivity::class.java); myIntent.putExtra("Reviewed", reviewed); startActivity(myIntent). Receiver: val bundle: Bundle? = intent.extras; bundle?.let { val n: Int = getInt("Reviewed"); statsText.text = "Cards reviewed: $n" }. (3) After setContentView, findViewById&lt;TextView&gt;(R.id.statsText) in onCreate. (4) onCreate() and onCreateView() are mandatory; addToBackStack(tag) before committing the transaction gives the reverse-on-Back behaviour.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Setting the text before setContentView, or reading extras before super.onCreate and setContentView have run. The lecture's receiver code reads the bundle and touches the widget inside onCreate after setContentView; and a missing extras bundle is a real possibility, and the bundle?.let form is the chapter's own answer, which is Chapter 5 null safety doing real work.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 8, 33-38, 43-44; COMP3330_Ch04_Layout.pdf, slides 9-10, 17; COMP3330_Ch05_Syntax.pdf, slides 13-17.</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>The chapter says "in Android, we usually use explicit intent to do page switching" inside one project. Take a position: should a multi-screen app ever use implicit intents for its own screens, or only for reaching other apps (browser, camera)? Evidence that would change your mind: a concrete feature of the Card 24 or flashcard apps where an implicit route is the better design.</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>A fragment is described as "like a modular section of an activity ... like a 'sub-activity' that you can reuse in different activities". Defend or attack the sub-activity analogy: what does it get right and where does it mislead? Evidence that would change your mind: a behaviour from the fragment lifecycle (its own lifecycle, its own input events, add/remove while running) that breaks the analogy.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The six activity callbacks and their meanings.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">onCreate = enter memory; onStart = become visible; onResume = get focus / foreground; onPause = lose focus / foreground; onStop = become invisible; onDestroy = leave memory. An activity can be visible without focus.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">A starts B: the order and the DB rule.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A.onPause() → B.onCreate(), onStart(), onResume() → A.onStop() if A is no longer visible. Write to the DB in onPause(), not onStop().</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Explicit vs implicit intents.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Explicit names the component (Intent(this, FooActivity::class.java)) and is the usual way to switch pages inside an app. Implicit names only the action (e.g. Intent(Intent.ACTION_VIEW, Uri.parse(url))); the system picks the component.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Intent filter rules.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Filters are for implicit intents only: the system compares the Intent object to filters. No filter → explicit intents only. With filters → both. Filters advertise actions (and optionally categories, data scheme) a component can handle.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How does a called activity read the intent's URL?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">val url: Uri? = intent.data in Kotlin; getIntent().getData() in Java. Then use the value anywhere, e.g. label.text = url.toString().</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Passing extras: the matching-getter rule.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">putExtra("ID", 6999) stores an Int → read getInt("ID"); getLong for Long, getString for String, getIntArrayList/getStringArrayList for array lists, getSerializable for serializable objects (conversion of an object to bytes for storage or transfer).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is a fragment?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A behaviour or portion of UI in a FragmentActivity: a modular section with its own lifecycle and input events, addable/removable while the activity runs, combinable for multi-pane UI and reusable across activities.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">FragmentTransaction basics.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">supportFragmentManager → beginTransaction() → replace(region id, fragment, tag) → optional addToBackStack(tag) → commitAllowingStateLoss(). addToBackStack is what makes Back reverse the change.</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch06_Activity_Fragment.pdf, slides 3-52.</p>
+
+    <nav class="pager">
+      <a href="practice-05-kotlin-and-java-syntax.html"><span class="dir">Previous</span><span class="name">Kotlin and Java syntax</span></a>
+      <a class="next" href="practice-07-card24-and-flutter.html"><span class="dir">Next</span><span class="name">Card 24 and Flutter</span></a>
+    </nav>
+  </main>
+</body>
+</html>

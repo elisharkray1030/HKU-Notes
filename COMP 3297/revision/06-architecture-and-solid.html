@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Architecture and SOLID</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Architecture and SOLID</h1>
+    <p class="lede">The decisions that are expensive to reverse, at two scales: the architecture that organises a whole system, and the SOLID principles that keep individual classes changeable. Both exist for the same reason — software inevitably changes.</p>
+
+    <h2>The mental model: the expensive decisions</h2>
+    <p><strong>Architectural design</strong> is "understanding how a software system should be organized and designing the overall structure of that system". The lecture calls it "the critical link between design and requirements engineering", because it identifies the main structural components and the relationships between them. Its output is an <strong>architectural model</strong>: how the system is organised as a set of communicating components.</p>
+    <p>Two facts justify the whole topic. First, "refactoring the system architecture is usually expensive because it affects so many components in the system", which is why even agile processes design an overall architecture at an early stage. Second, architecture lives at two scales: <strong>architecture in the small</strong> (how one program decomposes into components) and <strong>architecture in the large</strong> (enterprise systems spanning systems, programs and components, distributed across machines possibly owned by different companies).</p>
+    <p>What you get for making the architecture explicit: <strong>stakeholder communication</strong> (a focus for discussion), <strong>system analysis</strong> (you can check whether the system can meet its non-functional requirements, the payoff of the measurement work on <a href="02-requirements-engineering.html">page 2</a>), and <strong>large-scale reuse</strong> (the architecture may be reusable across a range of systems).</p>
+    <p>How it is drawn: <strong>box and line diagrams</strong>: "simple, informal block diagrams showing entities and relationships". A box is a component; boxes within boxes are subcomponents; arrows are data or control signal flow. They are very abstract but useful for communication with stakeholders and for project planning. The lecture notes the standing criticism: these diagrams lack semantics. They show that things talk; they do not say what the talk means.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 620 220" role="img" aria-label="Box and line diagram conventions: components as boxes, subcomponents as boxes within boxes, arrows for data or control flow">
+        <defs>
+          <marker id="flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a4a4a"></path>
+          </marker>
+        </defs>
+        <rect x="30" y="30" width="220" height="150" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="140" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Component (box)</text>
+        <rect x="50" y="66" width="180" height="44" rx="6" fill="#ffffff" stroke="#5b7ba6" stroke-width="1.2"></rect>
+        <text x="140" y="93" text-anchor="middle" font-size="12" fill="#22303f">Subcomponent</text>
+        <rect x="50" y="120" width="180" height="44" rx="6" fill="#ffffff" stroke="#5b7ba6" stroke-width="1.2"></rect>
+        <text x="140" y="147" text-anchor="middle" font-size="12" fill="#22303f">Subcomponent</text>
+
+        <rect x="370" y="30" width="220" height="150" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="480" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Component (box)</text>
+
+        <line x1="250" y1="105" x2="368" y2="105" stroke="#4a4a4a" stroke-width="1.6" marker-end="url(#flow)"></line>
+        <text x="309" y="97" text-anchor="middle" font-size="11.5" fill="#4a4a4a">arrow: data or control signal flow</text>
+      </svg>
+      <figcaption>Box and line diagram conventions from L5a slide 7. Boxes are components, nested boxes are subcomponents, arrows are data or control signals.</figcaption>
+    </figure>
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 3-7.</p>
+
+    <h2>Architectural design decisions</h2>
+    <p>Architectural design is creative and varies by system type, but common decisions span all design processes, and "these decisions affect the non-functional characteristics of the system". The lecture's eight:</p>
+    <ol>
+      <li>Is there a generic application architecture that can act as a template for the system being designed?</li>
+      <li>How will the system be distributed across hardware cores or processors?</li>
+      <li>What architectural patterns or styles might be used?</li>
+      <li>What will be the fundamental approach used to structure the system?</li>
+      <li>How will the structural components be decomposed into sub-components?</li>
+      <li>What strategy will be used to control the operation of the components?</li>
+      <li>What architectural organization is best for delivering the non-functional requirements?</li>
+      <li>How should the architecture of the system be documented?</li>
+    </ol>
+    <p><strong>Architecture reuse</strong> makes decision 1 practical: systems in the same domain often have similar architectures reflecting domain concepts; <strong>application product lines</strong> are built around a core architecture with variants for particular customers (the lecture's example: Microsoft 365); and an architecture can be designed around one or more <strong>architectural patterns or styles</strong>, which "capture the essence of an architecture and can be instantiated in different ways".</p>
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 8-11.</p>
+
+    <h2>Quality attributes and trade-offs</h2>
+    <p>Decision 7 is where architecture earns its keep, and the lecture gives a tactic per characteristic:</p>
+    <ul>
+      <li><strong>Performance</strong>: localise critical operations and minimise communications. Use large rather than fine-grain components.</li>
+      <li><strong>Security</strong>: use a layered architecture with critical assets in the inner layers.</li>
+      <li><strong>Safety</strong>: localise safety-critical features in a small number of sub-systems.</li>
+      <li><strong>Availability</strong>: include redundant components and mechanisms for fault tolerance.</li>
+      <li><strong>Maintainability</strong>: use fine-grain, replaceable components.</li>
+    </ul>
+    <p>Now spot the collision. Performance wants <em>large</em> components and minimal communication; maintainability wants <em>fine-grain</em> components you can replace. You cannot maximise both: this is the lecture's open-floor question ("Do you find any potential conflict to achieve these five system characteristics at the same time?") and its benchmark follow-up (a single-level design versus a nested-levels design, in the spirit of "clean code versus performance"). Clean structure costs call overhead; monolithic speed costs replaceability. The mature answer is not "pick one forever" but "know which one this system is paying for, and record why": that recording is decision 8.</p>
+
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: for a booking system whose peak load one day a year is 50 times normal, the performance tactic (large components, minimal communication) should win over the maintainability tactic (fine-grain replaceable parts). Evidence that would change your mind: the actual cost of the peak-day failure versus the year-round cost of slower change: one incident report or one maintenance time sheet beats intuition here.</p>
+    </div>
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 12-15.</p>
+
+    <h2>Architectural patterns</h2>
+    <p>"Patterns are a means of representing, sharing and reusing knowledge. An architectural pattern is a stylized description of good design practice, which has been tried and tested in different environments." The lecture's demand on a pattern: it should say when it is and when it is <em>not</em> useful. Four in the course, each in the same four-part shape.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 620 250" role="img" aria-label="MVC pattern: user talks to controller and view; controller updates model; model notifies view">
+        <defs>
+          <marker id="mvc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a4a4a"></path>
+          </marker>
+        </defs>
+        <circle cx="60" cy="125" r="20" fill="none" stroke="#22303f" stroke-width="1.6"></circle>
+        <text x="60" y="130" text-anchor="middle" font-size="12" fill="#22303f">User</text>
+
+        <rect x="170" y="30" width="150" height="50" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="245" y="60" text-anchor="middle" font-size="14" font-weight="600" fill="#22303f">Controller</text>
+
+        <rect x="410" y="30" width="150" height="50" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="485" y="60" text-anchor="middle" font-size="14" font-weight="600" fill="#22303f">View</text>
+
+        <rect x="290" y="165" width="150" height="50" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="365" y="195" text-anchor="middle" font-size="14" font-weight="600" fill="#22303f">Model</text>
+
+        <line x1="80" y1="115" x2="168" y2="72" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#mvc)"></line>
+        <line x1="485" y1="80" x2="485" y2="120" stroke="#4a4a4a" stroke-width="1.5"></line>
+        <path d="M 485 120 L 485 132 L 78 132 L 78 128" fill="none" stroke="#4a4a4a" stroke-width="1.5"></path>
+        <line x1="285" y1="80" x2="325" y2="163" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#mvc)"></line>
+        <line x1="425" y1="163" x2="480" y2="82" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#mvc)"></line>
+        <text x="120" y="88" text-anchor="middle" font-size="11" fill="#4a4a4a">user actions</text>
+        <text x="255" y="135" text-anchor="middle" font-size="11" fill="#4a4a4a">updates</text>
+        <text x="465" y="135" text-anchor="end" font-size="11" fill="#4a4a4a">displays</text>
+      </svg>
+      <figcaption>The MVC pattern after L5a slide 18: presentation and interaction (view, controller) are separated from the system data (model).</figcaption>
+    </figure>
+
+    <h3>Model-View-Controller (MVC)</h3>
+    <p><strong>Description:</strong> separates presentation and interaction from the system data, structured into three logical components that interact. <strong>When used:</strong> multiple ways to view and interact with the data; future requirements for interaction and presentation are unknown. <strong>Advantage:</strong> the data can change independently of its representation, and vice versa. <strong>Disadvantage:</strong> additional code and code complexity.</p>
+
+    <h3>Layered architecture</h3>
+    <p><strong>Description:</strong> organises the system into layers with related functionality; lowest-level layers represent core services. <strong>When used:</strong> building new facilities on top of existing systems; each team responsible for a layer; multi-level security. <strong>Advantages:</strong> entire layers can be replaced so long as the interface is maintained; redundant facilities (e.g. authentication) can be provided in each layer to increase dependability. <strong>Disadvantages:</strong> clean separation is often difficult; a high-level layer may have to interact directly with lower layers rather than only with the one below; performance suffers from "multiple levels of interpretation of a service request as it is processed at each layer". The lecture's own example: the iLearn system architecture.</p>
+
+    <h3>Repository</h3>
+    <p><strong>Description:</strong> all data is managed in a central repository; components do not interact directly, only through the repository. <strong>When used:</strong> large volumes of information generated and stored for a long time; data-driven systems where inclusion of data triggers an action or tool. <strong>Advantages:</strong> components can be independent; changes made by one component propagate to all; all data managed consistently in one place. <strong>Disadvantages:</strong> the repository is a single point of failure; organising all communication through it may be inefficient; distributing it across several computers may be difficult. Example: a repository architecture for an IDE.</p>
+
+    <h3>Client-server</h3>
+    <p><strong>Description:</strong> functionality organised into services, each delivered from a separate server. <strong>When used:</strong> data in a shared database accessed from a range of locations; because servers can be replicated, also when load is variable. <strong>Advantages:</strong> servers can be distributed across a network; general functionality (e.g. printing) available to all clients. <strong>Disadvantages:</strong> each service is a single point of failure (the lecture names DDoS and server failure); performance may be unpredictable because it depends on the network; management problems if servers are owned by different organisations.</p>
+
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>Pattern questions almost always come as "which pattern fits this system, and what do you give up?" The selection half is the "when used" clause; the trade-off half is the disadvantages list. Choosing layered for a multi-level security system and naming "clean separation is difficult and every layer adds interpretation cost" is a complete answer.</p>
+    </div>
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 16-21.</p>
+
+    <h2>SOLID: five ways to keep change cheap</h2>
+    <p>The summary slide gives the reason for the whole acronym: "Software inevitably changes/evolves over time (maintenance, upgrade)." SOLID is five principles for surviving that. Learn each as statement, mechanism, and the lecture's named example and smell.</p>
+
+    <h3>Single Responsibility Principle (SRP)</h3>
+    <p>"A class should have only one reason to change." A class should concentrate on doing one thing and one thing only. The habit: every time you create or change a class, ask how many responsibilities it has. The lecture's example: a <code>Modem</code> interface with <code>dial</code>, <code>hangup</code>, <code>send</code>, <code>recv</code> carries two responsibilities (connection management and data communication) and the smell is <em>rigidity</em>. The fix splits it into <code>Connection</code> and <code>DataChannel</code>. The caution is as important as the rule: if the application is not changing in ways that create those two responsibilities, no need to separate them. Otherwise the smell is <em>needless complexity</em>.</p>
+    <div class="code-block"><span class="lang-label">Java</span><pre><code>// BAD: two responsibilities in one interface
+interface Modem {
+  public void dial(String pno);
+  public void hangup();
+  public void send(char c);
+  public char recv();
+}
+
+// GOOD: one responsibility each
+interface DataChannel {
+  public void send(char c);
+  public char recv();
+}
+interface Connection {
+  public void dial(String pno);
+  public void hangup();
+}</code></pre></div>
+
+    <h3>Open-Closed Principle (OCP)</h3>
+    <p>"Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification." Applied well, further changes of that kind are achieved by adding new code, not by changing old code that already works. The lecture's mechanism: build classes so you extend them through child classes and inheritance; once created, the class no longer needs to change. Its example: a <code>PaymentManager</code> with an enum and an if/else chain makes adding "Check" payment impossible without modifying <code>PaymentManager</code>, and adding a payment means hunting down every such switch statement. The fix: a <code>Payment</code> base class with <code>pay()</code>, and <code>Cash</code>, <code>CreditCard</code>, <code>Check</code> subclasses that override it.</p>
+    <div class="code-block"><span class="lang-label">C#-style (as in the lecture)</span><pre><code>// BAD: extension requires modification
+public enum PaymentType { Cash, CreditCard }
+public class PaymentManager {
+  public PaymentType PaymentType { get; set; }
+  public void Pay(Money money) {
+    if (PaymentType == PaymentType.Cash) { /* pay with cash */ }
+    else { /* pay with credit card */ }
+  }
+}
+
+// GOOD: open for extension, closed for modification
+public class Payment {
+  public virtual void pay(Money money) { /* base class */ }
+}
+public class Cash : Payment {
+  public override void pay(Money money) { /* pay with cash */ }
+}
+public class CreditCard : Payment {
+  public override void pay(Money money) { /* pay with credit card */ }
+}</code></pre></div>
+
+    <h3>Liskov Substitution Principle (LSP)</h3>
+    <p>The formal statement: "If for each object o1 of type S there is an object o2 of type T such that for all programs P defined in terms of T, the behavior of P is unchanged when o1 is substituted for o2 then S is a subtype of T." The working phrase: <strong>subtypes must be substitutable for their base types</strong>. The lecture's example: a <code>Bird</code> class with <code>flySpeed</code> and a <code>Penguin</code> subclass that cannot fly: the "is-a" wording survives ("a penguin is a bird") but substitutability does not (a program using <code>flySpeed</code> breaks when handed a penguin). The fix: capabilities as interfaces (<code>CanFly</code> and <code>CanSwim</code>) with <code>Eagle</code> taking fly speed and <code>Penguin</code> taking swim speed, both extending the base <code>Bird</code> that only holds what all birds share. Any functionality expected from the base type must be fulfilled by the subtype.</p>
+
+    <h3>Interface Segregation Principle (ISP)</h3>
+    <p>"Many specialized interfaces are better than one universal", or "Clients should not depend on methods that they do not use." The example: a <code>Worker</code> interface with <code>work()</code> and <code>eat()</code> forces <code>RobotWorker</code> to implement an <code>eat()</code> that is "not applicable": the interface is <em>polluted</em>, and the smell is needless complexity. The fix: <code>Workable</code> and <code>Feedable</code>; <code>ManWorker</code> implements both, <code>RobotWorker</code> only <code>Workable</code>. Keep interfaces as small as possible to avoid unnecessary dependencies; ideally any part of the code should be understandable in isolation.</p>
+
+    <h3>Dependency Inversion Principle (DIP)</h3>
+    <p>Two clauses: "High-level modules should not depend on low-level modules. Both should depend on abstractions." and "Abstractions should not depend on details. Details should depend on abstractions." The example: a <code>DataHandler</code> that constructs a concrete <code>FilesystemStorage</code> inside itself: the dependency is transitive, so <code>DataHandler</code> is sensitive to changes all the way down. The fix: a <code>Storage</code> protocol with <code>save()</code>, implemented by <code>FilesystemStorage</code> and <code>CloudStorage</code>, and <code>DataHandler</code> receives a <code>Storage</code> through its initialiser. Decoupled by formalising the communication interface around the needs of the higher-level class.</p>
+    <div class="code-block"><span class="lang-label">Swift-style (as in the lecture)</span><pre><code>// BAD: high-level class depends on a concrete low-level class
+class DataHandler {
+  let storage = FilesystemStorage()   // dependency is transitive
+  func handle(_ data: Data) { storage.save(data) }
+}
+
+// GOOD: both depend on the abstraction
+protocol Storage { func save(_ data: Data) }
+class DataHandler {
+  let storage: Storage
+  init(storage: Storage) { self.storage = storage }
+  func handle(_ data: Data) { storage.save(data) }
+}
+let handler = DataHandler(storage: CloudStorage())</code></pre></div>
+    <p>The lecture adds the "depend on abstractions" checklist: no variable should hold a pointer or reference to a concrete class; no class should derive from a concrete class; no method should override an implemented method of its base classes, with the standing exceptions like Java's <code>String</code>. And the ownership picture: naive layering has high layers owning low layers; inverted layers have both pointing at abstractions ("inversion of ownership").</p>
+
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>The two named smells are diagnostic, and mixing them up loses marks. Rigidity means the class resists the kind of change the application actually makes (two responsibilities pulling it apart). Needless complexity means you split or abstract something the application never changes around. SRP and ISP are where the lecture names both: the principles are about the change you can predict, not about elegance.</p>
+    </div>
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 22-43.</p>
+
+    <h2>Why SOLID matters more with AI</h2>
+    <p>The lecture's closing claim: "AI writes code fast - structure is what keeps it testable and changeable." SRP keeps AI-generated classes small enough to review and unit-test; DIP is what makes code testable in isolation; OCP is what makes a project change request cheap — extend, do not rewrite (the course promises you will feel this after Client Meeting #2).</p>
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slide 44.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A system must satisfy multi-level security, with each team owning one tier of functionality. Which pattern does the lecture's "when used" clause point to, and what is its named performance cost?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Layered architecture; each layer interprets the service request again, so performance may suffer.</button>
+        <button class="quiz-option">Repository; the central store is a single point of failure.</button>
+        <button class="quiz-option">MVC; the extra components add code and complexity.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">"Multi-level security" and "each team responsible for a layer" are both in the layered pattern's when-used list, and its stated disadvantage includes performance problems from multiple levels of interpretation of a service request. Repository and MVC have different named costs that do not match the scenario.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">A class handles invoice formatting and also opens the SMTP connection that sends the invoice. Which SOLID principle is primarily violated, and what is the lecture's named smell?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">SRP: one class, two responsibilities; the smell of rigidity.</button>
+        <button class="quiz-option">DIP: the class depends on a concrete SMTP implementation.</button>
+        <button class="quiz-option">LSP: the sending behaviour cannot be substituted.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The Modem example is exactly this shape: connection management plus data communication in one place is two responsibilities, and the lecture names the resulting smell rigidity. Depending on a concrete class would additionally violate DIP, but the primary fault the question describes is the responsibility count.</span></p>
+    </div>
+
+    <p>One position worth arguing somewhere: the repository pattern is a poor default for a new web application in 2026, because the single-point-of-failure and distribution disadvantages outweigh its consistency advantage. Evidence that would change your mind: a system with a measured consistency or propagation requirement that only a central repository met within budget.</p>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: the lecture's SRP caution (separating responsibilities that never change is needless complexity) means a student project should deliberately ignore SOLID until the second change request. Evidence that would change your mind: the cost curve of your own project: if the first change request already cost more than the upfront structure would have, the position fails.</p>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="06-arch-1">
+        <span class="check-text">Say what an architectural model is, why architecture is designed even in agile processes, and what architecture refactoring costs.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-arch-2">
+        <span class="check-text">Name the three advantages of explicit architecture and the box-and-line diagram conventions (box, nested box, arrow).</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-arch-3">
+        <span class="check-text">Recall the eight architectural design decisions well enough to restate five in your own words.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-arch-4">
+        <span class="check-text">Match each quality attribute (performance, security, safety, availability, maintainability) to its architectural tactic, and explain the performance-versus-maintainability conflict.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-arch-5">
+        <span class="check-text">For MVC, layered, repository, and client-server: give the description, one "when used" case, one advantage, one disadvantage.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-arch-6">
+        <span class="check-text">State each SOLID principle in one sentence and name the lecture's example and smell for SRP, OCP, LSP, ISP, DIP.</span></li>
+      <li><input type="checkbox" class="persist" data-id="06-arch-7">
+        <span class="check-text">Look at a class with if/else type-switching or a fat interface and name the principle it violates before reading the answer.</span></li>
+    </ul>
+
+    <h2>Flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is the output of architectural design?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">An architectural model describing how the system is organised as a set of communicating components.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Performance tactic vs maintainability tactic<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Performance: localise critical operations, minimise communications, large rather than fine-grain components. Maintainability: fine-grain, replaceable components. They conflict.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">MVC in one line: description, advantage, disadvantage<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Separates presentation and interaction from system data (model, view, controller). Advantage: data and its representation change independently. Disadvantage: additional code and complexity.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five SOLID principles<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">SRP (one reason to change), OCP (open for extension, closed for modification), LSP (subtypes substitutable for base types), ISP (small specialised interfaces), DIP (both levels depend on abstractions).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The two named smells and where they come from<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Rigidity: a class with more than one responsibility resists the changes the application makes (SRP/ISP examples). Needless complexity: separating responsibilities or bloating interfaces the application never changes around.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">DIP's two clauses<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">High-level modules should not depend on low-level modules; both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions.</span>
+      </span></button>
+    </div>
+
+    <p>Ready to apply this? <a href="practice-06-architecture-and-solid.html">Practice page 6: architecture and SOLID</a> drills pattern selection, trade-off arguments, and spotting principle violations in code.</p>
+
+    <p class="source">Source: L5a - Design - Architecture Patterns and SOLID v1.pdf, slides 3-44 (whole lecture). Code examples are the lecture's own (Modem, PaymentManager, Bird/Penguin, Worker, DataHandler), lightly re-formatted.</p>
+
+    <nav class="pager">
+      <a href="05-ux-and-prototyping.html"><span class="dir">Previous</span><span class="name">UX and prototyping</span></a>
+      <a class="next" href="index.html"><span class="dir">Next</span><span class="name">Revision hub</span></a>
+    </nav>
+  </main>
+</body>
+</html>

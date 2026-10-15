@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: Kotlin and Java syntax</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: Kotlin and Java syntax</h1>
+    <p class="lede">Chapter 5 is the syntax the course assumes everywhere else. These exercises trace small programs line by line, in Kotlin first with Java beside it, until the differences stop surprising you.</p>
+    <p>Background: <a href="05-kotlin-and-java-syntax.html">Kotlin and Java syntax</a>.</p>
+
+    <h2>Quiz: types, variables and nulls</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">What does val mean in Kotlin, and what happens on re-assignment?</p>
+      <div class="options">
+        <button class="quiz-option">val means mutable; re-assignment is fine</button>
+        <button class="quiz-option" data-correct="true">val declares an immutable variable; re-assignment causes an error. var declares a mutable one</button>
+        <button class="quiz-option">val is Java's final, but re-assignment warns only</button>
+        <button class="quiz-option">val variables are automatically nullable</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 5's Variables slide: val a: Int = 1 is the immutable version, var a: Int = 1 the mutable one, and "Value re-assignment to a and b will cause error" in the immutable version. Type inference works in both (val a = 1 infers Int).</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Given var s2: String? = "hku", what is the type of s2?.length and why?</p>
+      <div class="options">
+        <button class="quiz-option">Int, because s2 currently holds a non-null string</button>
+        <button class="quiz-option" data-correct="true">Int?, because a safe call returns null when the reference is null, so the result can be null</button>
+        <button class="quiz-option">String?, because of the ? on the declaration</button>
+        <button class="quiz-option">The expression does not compile</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 5 states it: "l is assigned null if S2 is null. So the type of l is Int?" and later "The type of expressions a?.length and b?.length is Int?". The current value is irrelevant; the declared type decides.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">What array does val num = Array(3, {i -&gt; i*1}) create?</p>
+      <div class="options">
+        <button class="quiz-option">[1, 2, 3]</button>
+        <button class="quiz-option" data-correct="true">[0, 1, 2]: equivalent to arrayOf(0, 1, 2)</button>
+        <button class="quiz-option">[0, 1, 2, 3]</button>
+        <button class="quiz-option">[3, 3, 3]</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 5: the Array constructor takes the size and a function that accepts the index of an element and returns its initial value. With size 3 the indices are 0, 1, 2 and the lambda returns i*1, so the content is 0, 1, 2, matching the slide's own equivalence: "equivalent to val num = arrayOf(0, 1, 2)".</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">You write class Employee(name: String, val salary: Int): Person(name). What must be true about Person?</p>
+      <div class="options">
+        <button class="quiz-option">Nothing; inheritance works by default in Kotlin</button>
+        <button class="quiz-option" data-correct="true">Person must be marked open, because all classes in Kotlin are final by default</button>
+        <button class="quiz-option">Person must be abstract</button>
+        <button class="quiz-option">Person must have a secondary constructor</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 5, next to the Employee example: "All classes in Kotlin are final by default. We need to add the open keyword so that we can inherit from our Person class." The subclassing syntax is fine only once Person is open.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q5</span>
+      <p class="quiz-q">For fun calculate(num1: Int, num2: Int = 2, num3: Int = 4), which call sets num3 to 5 while leaving num2 at its default?</p>
+      <div class="options">
+        <button class="quiz-option">calculate(1, 5)</button>
+        <button class="quiz-option">calculate(1, 2, 5) only; no shorter form exists</button>
+        <button class="quiz-option" data-correct="true">calculate(1, num3 = 5)</button>
+        <button class="quiz-option">calculate(num3 = 5) alone</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 5 shows exactly this: parameter names can be used in calls, and calculate(1, num3 = 5) leaves num2 at its default 2. calculate(1, 5) would set num2 = 5 positionally. num1 has no default, so it must be provided.</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 8-10, 15-16, 25.</p>
+
+    <h2>Exercise 1: default parameters and named arguments</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: tracing parameter binding with defaults and names</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>Given the Chapter 5 function:</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>fun calculate(num1: Int, num2: Int = 2, num3: Int = 4) {
+    println("$num1 $num2 $num3")
+}</code></pre></div>
+      <p>State the three printed values for each call: (a) calculate(1, 3) (b) calculate(1, num2 = 3) (c) calculate(1, num3 = 5) (d) calculate(num3 = 5, num1 = 1). Then answer the lecture's own challenge: how do you provide the 1st and 3rd parameters while missing the 2nd?</p>
+      <details class="step"><summary>Step 1: bind positionally where no name is given</summary>
+        <p>(a) calculate(1, 3): num1 = 1, num2 = 3 (positional, left to right), num3 falls back to 4.</p>
+      </details>
+      <details class="step"><summary>Step 2: bind by name where names are used</summary>
+        <p>(b) num1 = 1, num2 = 3 by name, num3 = 4 default. (c) num1 = 1, num2 = 2 default, num3 = 5 by name. (d) names decide placement, so num1 = 1, num2 = 2 default, num3 = 5; the argument order in the call does not matter once names are attached.</p>
+      </details>
+      <details class="step"><summary>Step 3: the challenge</summary>
+        <p>Provide the 1st positionally and the 3rd by name: calculate(1, num3 = 5). The 2nd keeps its default because nothing names or positions it.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) 1 3 4. (b) 1 3 4. (c) 1 2 5. (d) 1 2 5. Challenge: calculate(1, num3 = 5), or equivalently calculate(num1 = 1, num3 = 5). The rule chain: unnamed arguments fill parameters left to right, named arguments bind to their parameter and can skip others, and anything still unbound takes its default.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Reading calculate(1, 5) as "num1 and num3". Positional means left to right: 5 lands in num2, and num3 stays 4. Names are the only way to skip a middle parameter with a default.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 8-9 (default values, named parameters).</p>
+
+    <h2>Exercise 2: null safety, line by line</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: predicting types and values of nullable expressions</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>For each line, state the declared type of the result and the value or error it produces:</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>var s1: String = "hku"
+val l1 = s1.length
+var s2: String? = "hku"
+val l2 = s2.length
+val l3 = s2?.length
+var s3: String? = null
+val l4 = s3?.length
+val a = "Computer"
+val b: String? = null
+println(b?.length)
+println(a?.length)</code></pre></div>
+      <p>Then explain the difference in shape between this Java method and its one-line Kotlin version:</p>
+      <div class="code-block"><span class="lang-label">Java</span><pre><code>public ZipCode getZipCode(User user) {
+    if (user != null) {
+        if (user.address != null) {
+            return user.address.zipCode;
+        }
+    }
+    return null;
+}</code></pre></div>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>fun getZipCode(user: User?): ZipCode? {
+    return user?.address?.zipCode
+}</code></pre></div>
+      <details class="step"><summary>Step 1: use the declared type, not the current value</summary>
+        <p>l1: Int, value 3 (s1 is non-null, so .length is safe). l2: the compiler reports an error ("variable 'S2' can be null") even though s2 currently holds "hku", because its type String? allows null.</p>
+      </details>
+      <details class="step"><summary>Step 2: follow the safe call</summary>
+        <p>l3: Int?, value 3 (s2 non-null today). l4: Int?, value null (s3 is null, so the whole expression short-circuits to null). The rule from the slides: l is assigned null if the reference is null, so the type is Int?.</p>
+      </details>
+      <details class="step"><summary>Step 3: the print statements</summary>
+        <p>println(b?.length) prints null. println(a?.length) prints 8. a is non-null so the safe call is unnecessary, but the expression type is still Int? and the value is 8.</p>
+      </details>
+      <details class="step"><summary>Step 4: Java versus Kotlin shape</summary>
+        <p>The Java version nests two null checks and falls through to null; the Kotlin version is one line because the safe-call chain tim?.department?.head?.name (and user?.address?.zipCode) returns null if any property in the chain is null. Same behaviour, explicit in Java, encoded in the operator in Kotlin.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>l1: Int = 3. l2: compile error ("S2 can be null"). l3: Int? = 3. l4: Int? = null. println(b?.length) prints null; println(a?.length) prints 8. The Kotlin getZipCode is the Java method with the null-guard nesting replaced by the safe-call chain: each ?. propagates null instead of requiring an if.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two traps. Deciding l2 by reading the current value ("s2 holds 'hku', so it compiles"): Kotlin decides by type, and String? can hold null. And expecting println(a?.length) to complain or print differently because the safe call is unnecessary: the slide marks it as an unnecessary safe call and the output is the plain value 8.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 13-18 (null safety, safe-call chains, Java comparison).</p>
+
+    <h2>Exercise 3: how objects get built</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: tracing constructors, init blocks and inheritance requirements</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Given these Chapter 5 classes:</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class Person(val name: String, val age: Int? = null) {
+    init {
+        println("Hello, I'm $name")
+    }
+}
+
+class Car(val id: String, val type: String) {
+    constructor(id: String) : this(id, "unknown")
+}</code></pre></div>
+      <p>Answer: (a) what does val person1 = Person("Sam", 20) print and what are person1's property values? (b) same for val person2 = Person("Priscilla"). (c) for val car2 = Car("2"), what are id and type? (d) where would you put code that must run on every construction, and why is the primary constructor not the place? (e) what single keyword makes Employee(name: String, val salary: Int): Person(name) legal?</p>
+      <details class="step"><summary>Step 1: trace Person</summary>
+        <p>The primary constructor takes name and age (age defaults to null). The initializer block runs after the primary constructor and prints "Hello, I'm $name". So Person("Sam", 20) prints "Hello, I'm Sam"; name = "Sam", age = 20, both read-only (val). Person("Priscilla") prints "Hello, I'm Priscilla"; age is null because the default kicks in.</p>
+      </details>
+      <details class="step"><summary>Step 2: trace Car</summary>
+        <p>Car("2") hits the secondary constructor, which delegates to the primary with this(id, "unknown"). So id = "2", type = "unknown".</p>
+      </details>
+      <details class="step"><summary>Step 3: the init rule and the open rule</summary>
+        <p>"We cannot put any code in the primary constructor"; initialization code goes in an initializer block prefixed with init, called after the primary constructor, and class fields are accessible there. For inheritance: "All classes in Kotlin are final by default. We need to add the open keyword so that we can inherit from our Person class."</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Prints "Hello, I'm Sam"; name = "Sam", age = 20. (b) Prints "Hello, I'm Priscilla"; age = null. (c) id = "2", type = "unknown" via the secondary constructor delegating with this(...). (d) In an init block: the primary constructor cannot contain code, and init runs after it on every construction. (e) open, on Person's declaration.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Assuming Kotlin classes extend anything by default is backwards: they are final by default. Writing the Employee subclass without open on Person is the compile error the lecture warns about. Second trap: expecting the init block to run before the constructor parameters are assigned: it runs after the primary constructor, which is exactly why $name is already available in it.</p>
+        </div>
+        <div class="callout compare"><span class="tag">Compare</span>
+          <p>Java needs far more code for the same Person: fields, two overloaded constructors assigning this.name and this.age. Kotlin's one-liner plus default value replaces both. No "new" keyword in Kotlin: instantiation is constructor invocation, val person1 = Person("Sam", 20).</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 20-25 (class declaration, init, secondary constructors, inheritance).</p>
+
+    <h2>Exercise 4: arrays and string interpolation</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: predicting array contents and interpolated output</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>(a) What are the contents of val sq = Array(4, {i -&gt; i*i})? (b) What exactly does this loop print, including spacing?</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>val num = arrayOf(1, 2, 3, 4)
+for (i in 0..num.size-1) {
+    print(" " + num[i])
+}</code></pre></div>
+      <p>(c) A Song has id, title and author properties. Rewrite this toString as a single expression-bodied function using string interpolation, and state the printed form for id=7, title="HKU", author="Tim".</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>override fun toString(): String {
+    return "Song{id=" + id + ", title='" + title + "', author='" + author + "'}"
+}</code></pre></div>
+      <details class="step"><summary>Step 1: array constructor semantics</summary>
+        <p>The constructor's function receives the index and returns that element's initial value. For size 4, indices 0-3 give 0, 1, 4, 9.</p>
+      </details>
+      <details class="step"><summary>Step 2: the loop</summary>
+        <p>0..num.size-1 is the inclusive range 0..3, so all four elements print in order, each preceded by one space: " 1 2 3 4" (one line, no trailing newline from print).</p>
+      </details>
+      <details class="step"><summary>Step 3: interpolation</summary>
+        <p>$ substitutes a variable's value inside the string, so the concatenation collapses into one template. The three forms in the lecture are equivalent; the shortest is expression-bodied: override fun toString() = "Song{id=$id, title='$title', author='$author'}".</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) [0, 1, 4, 9]. (b) " 1 2 3 4". (c) override fun toString() = "Song{id=$id, title='$title', author='$author'}" which prints Song{id=7, title='HKU', author='Tim'}. Chain: Array(size, function-of-index) fills by index; .. is inclusive at both ends; $ pulls the variable's value into the string.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Reading Array(4, {i -&gt; i*i}) as four copies of 4, or as starting at 1. The lambda receives the element's index (0-based) and returns its initial value, so a size-4 array yields indices 0 through 3. Same trap as the lecture's own Array(3, {i -&gt; i*1}) = [0, 1, 2].</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 11-12 (arrays), 19 (string interpolation).</p>
+
+    <h2>Mixed exercise: hardening the BMI calculator</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: applying null safety and typing to real activity code</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This pulls Chapter 4's wiring in with Chapter 5. Tutorial 1's BMI calculator declares its fields as nullable, finds them in onCreate, and computes on button click:</p>
+      <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class MainActivity : AppCompatActivity() {
+    private var height: EditText? = null
+    private var weight: EditText? = null
+    private var result: TextView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        height = findViewById&lt;EditText&gt;(R.id.editText1)
+        weight = findViewById&lt;EditText&gt;(R.id.editText2)
+        result = findViewById&lt;TextView&gt;(R.id.textView)
+    }
+
+    fun calc(v: View?) {
+        val h = height!!.text.toString().toFloat()
+        val w = weight!!.text.toString().toFloat()
+        val bmi = w / h / h
+        result!!.text = "Your BMI is: $bmi"
+    }
+}</code></pre></div>
+      <p>(1) For each of the three fields, state its type and why the "!" is used at the call site. (2) Which line of Chapter 4's example replaced the findViewById casts used elsewhere in the course? (3) Write the Java equivalent of calc's listener-style version with the required capture rule. (4) The XML wires the button to calc via the onClick attribute (Tutorial 1). What does the argument v represent?</p>
+      <details class="step"><summary>Step 1: the field types</summary>
+        <p>height, weight are EditText? and result is TextView?; the "?" says the property can hold null, matching Chapter 4's note that "? notation indicates that a data type can take a null value". The "!!" asserts the value is non-null and, per the same slide, "throws an exception if the value is null". This is safe only because onCreate assigns all three before any click.</p>
+      </details>
+      <details class="step"><summary>Step 2: the findViewById form</summary>
+        <p>Here findViewById&lt;EditText&gt;(...) supplies the target type directly, unlike Chapter 4's findViewById&lt;View&gt;(...) as EditText cast form. Both reach the same widgets through R.id values created by the @+id declarations in activity_main.xml.</p>
+      </details>
+      <details class="step"><summary>Step 3: the Java shape</summary>
+        <p>Java anonymous listeners capture locals, so the view references must be final, per the Chapter 4 rule: "final = always contain the same value". Java also needs casts out of findViewById.</p>
+      </details>
+      <details class="step"><summary>Step 4: the callback argument</summary>
+        <p>calc is invoked as the button's click handler, and the framework passes the clicked View as the parameter; Chapter 4's Java example names it dummy. It is the widget that was clicked, here the BMI button.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) EditText? and TextView?: nullable because they start as null and are assigned in onCreate; "!!" asserts non-null and throws if violated. (2) The typed findViewById&lt;EditText&gt;(...) form replaces Chapter 4's findViewById&lt;View&gt;(...) as EditText cast form; both resolve through R.id. (3) The listener-shaped Java version, beside its Kotlin twin:</p>
+        <div class="tabs">
+          <section class="tab-panel" data-label="Kotlin">
+            <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>val calc = findViewById&lt;View&gt;(R.id.calc) as Button
+val listener = View.OnClickListener {
+    val h = height!!.text.toString().toFloat()
+    val w = weight!!.text.toString().toFloat()
+    val bmi = w / h / h
+    result!!.text = "Your BMI is: $bmi"
+}
+calc.setOnClickListener(listener)</code></pre></div>
+          </section>
+          <section class="tab-panel" data-label="Java">
+            <div class="code-block"><span class="lang-label">Java</span><pre><code>final EditText height = (EditText) findViewById(R.id.editText1);
+final EditText weight = (EditText) findViewById(R.id.editText2);
+final TextView result = (TextView) findViewById(R.id.textView);
+Button calc = (Button) findViewById(R.id.calc);
+
+Button.OnClickListener listener = new Button.OnClickListener() {
+    public void onClick(View v) {
+        double h = Double.parseDouble(height.getText().toString());
+        double w = Double.parseDouble(weight.getText().toString());
+        double bmi = w / h / h;
+        result.setText("Your BMI is: " + bmi);
+    }
+};
+calc.setOnClickListener(listener);</code></pre></div>
+          </section>
+        </div>
+        <p>(4) v is the View that was clicked.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>The "!!" assertions look like a style choice; they are a contract. If any click handler ran before onCreate finished assigning (or a future refactor moves the findViewById calls), the assertion throws. The Kotlin way to keep the type system happy without "!" is to keep the code in one place where assignment has provably happened. The course's own examples lean on "!!" with that assumption made explicit.</p>
+        </div>
+        <div class="callout why"><span class="tag">Why it matters</span>
+          <p>This is the pattern every app in the course shares: nullable fields, findViewById in onCreate, a listener doing the work on click. Once you can read this, the Card 24 code in Tutorial 3 is the same shape with more widgets.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial1.pdf, slides 17-20 (BMI calculator code and onClick wiring); COMP3330_Ch04_Layout.pdf, slides 9-10 (findViewById and listener examples); COMP3330_Ch05_Syntax.pdf, slides 5-7, 13-15.</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Chapter 0 claims "Kotlin is just a variation of Java and is intended to simplify the use of Java". Take a position after Chapter 5: is that fair or misleading? Point at two concrete Chapter 5 differences (types, null safety, classes, functions) as evidence. Evidence that would change your mind: a course exercise where the Java version is genuinely simpler than the Kotlin one.</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>The lecture shows Java's nested null checks collapsing into one Kotlin safe-call line and calls Kotlin "much shorter". Take a side on whether shorter means safer: does user?.address?.zipCode actually prevent the bugs the nesting prevents, or just hide the branches? Evidence that would change your mind: a specific case where one style fails and the other does not.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">val vs var.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">val: immutable, re-assignment is an error. var: mutable. Both support type inference (val a = 1 infers Int).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Kotlin types versus Java primitives.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Kotlin has no primitive types; it uses classes as object wrappers (Boolean, Char 16-bit, Byte 8-bit, Short 16-bit, Int 32-bit, Long 64-bit, Float 32-bit, Double 64-bit, String).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Three equivalent function forms in Kotlin.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">public fun sum(a: Int, b: Int): Int { return a + b }; public fun sum(a: Int, b: Int): Int = a + b; public fun sum(a: Int, b: Int) = a + b. Differences from Java: fun keyword, colon notation for parameters and return type, no semicolons.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Default parameters and named arguments.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">fun calculate(num1: Int, num2: Int = 2, num3: Int = 4): calculate(1, 3) sets num2=3, num3=4; calculate(1, num3 = 5) sets num2=2 default, num3=5. Names let you skip a middle parameter.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Nullable types and safe calls.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">String cannot hold null; String? can. s2.length on a nullable reference is a compile error. s2?.length yields Int? (null when s2 is null). Chains like tim?.department?.head?.name return null if any link is null.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Kotlin class essentials.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">class Person(val name: String, val age: Int? = null); no new keyword; no code in the primary constructor: use an init block (runs after it); secondary constructors use constructor keyword and delegate with this(...); classes are final by default, open to inherit.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Arrays in Kotlin.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">arrayOf(1, 2, 3, 4) or Array(size, {i -&gt; initial value from index i}); Array(3, {i -&gt; i*1}) is [0, 1, 2]. Traverse with for (i in 0..num.size-1); the .. range is inclusive.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">String interpolation and toString().<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">$ substitutes a variable inside a string; "Song{id=$id, title='$title', author='$author'}" equals the concatenation version; an expression-bodied override fun toString() = ... returns it directly.</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 3-27; COMP3330_Tutorial1.pdf, slides 17-20.</p>
+
+    <nav class="pager">
+      <a href="practice-04-ui-and-layouts.html"><span class="dir">Previous</span><span class="name">UI and layouts</span></a>
+      <a class="next" href="practice-06-activities-and-fragments.html"><span class="dir">Next</span><span class="name">Activities and fragments</span></a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Software engineering foundations</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Software engineering foundations</h1>
+    <p class="lede">What software engineering actually is, why it exists as a discipline, and the vocabulary the rest of the course assumes: products, process activities, diversity, and ethics. Exam questions here are usually "explain why", not "define".</p>
+
+    <h2>The mental model: production, not programming</h2>
+    <p>Start from the course's own definition. Software engineering is "an engineering discipline that is concerned with all aspects of software production from the early stages of system specification through to maintaining the system after it has gone into use." Two words carry the weight.</p>
+    <p><strong>Engineering discipline</strong> means using appropriate theories and methods to solve problems while bearing in mind organisational and financial constraints. You do not get to pick the technically pure solution if the budget or the organisation forbids it. <strong>All aspects of software production</strong> means the scope is wider than writing code: project management counts, and so does building the tools and methods that support production.</p>
+    <p>Software itself is "computer programs and associated documentation". If you ship code with no documentation, you have shipped half a product. And what counts as <strong>good software</strong> is a fixed short list: deliver the required functionality and performance, and be maintainable, dependable, and usable. The lecture's table unpacks those into four product characteristics:</p>
+    <ul>
+      <li><strong>Maintainability</strong>: software must evolve to meet changing customer needs. The lecture calls this critical because software change is an inevitable requirement of a changing business environment.</li>
+      <li><strong>Dependability and security</strong>: reliability, security, safety. Dependable software should not cause physical or economic damage when it fails, and malicious users should not get in.</li>
+      <li><strong>Efficiency</strong>: no wasteful use of memory or processor cycles: responsiveness, processing time, memory utilisation.</li>
+      <li><strong>Acceptability</strong>: understandable, usable, and compatible with the other systems its users have.</li>
+    </ul>
+    <p>Note that only one of those four is about features. That is the point. A program that does the right thing but cannot be changed, trusted, or understood is not good software.</p>
+    <p class="source">Source: L1 - Introduction v1.pdf, slides 10-14.</p>
+
+    <div class="callout why"><span class="tag">Why it matters</span>
+      <p>Every later topic in this course buys one of these four attributes. Requirements work buys maintainability and acceptability. Architecture and SOLID buy maintainability. Testing and QA buy dependability. When an exam question asks "why do we do X?", the honest answer almost always names one of these characteristics.</p>
+    </div>
+
+    <h2>Why the discipline exists: cost and failure</h2>
+    <p>Two facts from the lecture set up the whole course.</p>
+    <p><strong>Costs.</strong> Software costs often dominate computer system costs; on a PC the software frequently costs more than the hardware. And software costs more to maintain than to develop: for long-lived systems, maintenance costs may be several times development costs (source on the slide: R. L. Glass, <em>Frequently Forgotten Fundamental Facts about Software Engineering</em>, IEEE Software 2001). Software engineering is therefore "concerned with cost-effective software development", not elegance for its own sake.</p>
+    <p><strong>Failure.</strong> Projects fail for two reasons the lecture names: increasing system complexity, and failure to use software engineering methods. It is fairly easy to write programs without SE methods, and that is exactly the trap — the resulting software is "often more expensive and less reliable than it should be". The importance slide adds the long-run view: it is usually cheaper to use SE methods than to treat a professional product like a personal programming project (the slide cites NASA/INCOSE error-cost-escalation data: the later you find an error, the more it costs).</p>
+    <h3>A worked cost story</h3>
+    <p>Take a payment system with a 10-year life. Development costs 2 million; per the lecture's rule of thumb, maintenance over the life may be several times that, say 6 million. Cutting 20% of the development budget by skipping requirements validation saves 400k up front. If it adds even 10% to the maintenance bill (600k), you are down 200k, and that is before counting the reputational cost of a dependability failure. The arithmetic is invented; the shape of it is exactly what the lecture's cost slides describe. This is why the course front-loads requirements and design rather than coding.</p>
+    <p class="source">Source: L1 - Introduction v1.pdf, slides 5-6, 15.</p>
+
+    <h2>Products: generic versus customised</h2>
+    <p>The lecture splits all software products in two, and the split matters for who gets to decide things.</p>
+    <ul>
+      <li><strong>Generic products</strong>: stand-alone systems marketed and sold to any customer who wants them: graphics programs, project management tools, CAD software, appointment systems for dentists. The software developers own the product specification.</li>
+      <li><strong>Customised products</strong>: commissioned by a specific customer to meet their own needs: embedded control systems, air traffic control software, traffic monitoring systems. The customer owns the specification.</li>
+    </ul>
+    <p>The <strong>product specification</strong> is the specification of what the software should do. The lecture's key sentence: decisions on software change are made by the owners. For a generic product that is the developer; for a customised product it is the customer. The slide follows this with a pointed question, "What if an accident happens?", because ownership of the specification is also ownership of the consequences. If a customised air traffic control system fails, the customer's decision to prioritise feature X over safety requirement Y is on the record.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A hospital commissions a firm to build a patient scheduling system to the hospital's own written specification. Who owns the product specification, and who decides whether the system's change requests are accepted?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">The hospital owns the specification and makes the change decisions.</button>
+        <button class="quiz-option">The development firm owns the specification because it wrote the code.</button>
+        <button class="quiz-option">Ownership is shared, so either party can approve changes alone.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">A system commissioned by a specific customer is a customised product, and the lecture is explicit: customised products are owned by the customer, and decisions on software change are made by the owners. Writing the code never transfers ownership of the specification.</span></p>
+    </div>
+    <p class="source">Source: L1 - Introduction v1.pdf, slides 12-13.</p>
+
+    <h2>The four process activities</h2>
+    <p>Every software process includes these four activities, and the lecture states them in this order:</p>
+    <ol>
+      <li><strong>Specification</strong>: customers and engineers define the software to be produced and the constraints on its operation.</li>
+      <li><strong>Development</strong>: the software is designed and programmed.</li>
+      <li><strong>Validation</strong>: the software is checked to ensure it is what the customer requires.</li>
+      <li><strong>Evolution</strong>: the software is modified to reflect changing customer and market requirements.</li>
+    </ol>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 240" role="img" aria-label="Cycle of the four software process activities">
+        <defs>
+          <marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a4a4a"></path>
+          </marker>
+        </defs>
+        <rect x="20" y="30" width="150" height="52" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="95" y="52" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">1 Specification</text>
+        <text x="95" y="71" text-anchor="middle" font-size="11.5" fill="#4a4a4a">define what and the constraints</text>
+
+        <rect x="245" y="30" width="150" height="52" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="320" y="52" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">2 Development</text>
+        <text x="320" y="71" text-anchor="middle" font-size="11.5" fill="#4a4a4a">design and program</text>
+
+        <rect x="470" y="30" width="150" height="52" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="545" y="52" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">3 Validation</text>
+        <text x="545" y="71" text-anchor="middle" font-size="11.5" fill="#4a4a4a">check it is what is required</text>
+
+        <rect x="245" y="150" width="150" height="52" rx="8" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.5"></rect>
+        <text x="320" y="172" text-anchor="middle" font-size="15" font-weight="600" fill="#22303f">4 Evolution</text>
+        <text x="320" y="191" text-anchor="middle" font-size="11.5" fill="#4a4a4a">modify for changing needs</text>
+
+        <line x1="170" y1="56" x2="240" y2="56" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow1)"></line>
+        <line x1="395" y1="56" x2="465" y2="56" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow1)"></line>
+        <path d="M 545 82 L 545 120 L 395 120" fill="none" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow1)"></path>
+        <path d="M 245 176 L 120 176 L 120 87" fill="none" stroke="#4a4a4a" stroke-width="1.5" marker-end="url(#arrow1)"></path>
+        <text x="152" y="146" text-anchor="middle" font-size="11.5" fill="#4a4a4a">the loop repeats over the system's life</text>
+      </svg>
+      <figcaption>The four process activities from L1. Validation feeds back into development; evolution feeds back into a fresh round of specification. Drawing after L1 slide 16.</figcaption>
+    </figure>
+
+    <p>Read the table entries closely and the distinctions are clean. Validation is about the customer's requirements, "is it what the customer requires", not "does it run". Evolution is about changing requirements, not fixing bugs. Specification is a joint activity of customers and engineers, not something engineers do alone.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">A team finishes coding and runs the system against the customer's stated needs, finding that the built feature set does not match what the customer actually wanted. Which process activity has failed, and which activity's output should have prevented this?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Validation failed; a stronger specification would have helped.</button>
+        <button class="quiz-option">Development failed; the programmers wrote the wrong code.</button>
+        <button class="quiz-option">Evolution failed; requirements changed after delivery.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Validation is the activity that checks the software is what the customer requires, so the mismatch surfaces there. The root cause sits in specification, where customers and engineers define what is to be produced. Evolution is about modifying a system to reflect changing requirements, which is not the situation described.</span></p>
+    </div>
+    <p class="source">Source: L1 - Introduction v1.pdf, slide 16.</p>
+
+    <h2>Process diversity and application types</h2>
+    <p>The lecture's answer to its own open-floor question (can you use the same method and tool for an information system, a controller, and a game?) is no. "There are many different types of software system and there is no universal set of software techniques that is applicable to all of these." What you choose depends on the type of application, the customer's requirements, and the background of the development team.</p>
+    <p>The application types the lecture lists: stand-alone applications (local, no network), interactive transaction-based applications (remote server, users on their own PCs), embedded control systems (manage hardware), batch processing systems (large batches of data), entertainment systems, systems for modelling and simulation, data collection systems (sensors feeding other systems), and systems of systems. A safety-critical embedded controller and a mobile game are at opposite ends of almost every method decision: how much design you write down, how you validate, how you manage change.</p>
+    <p>Four general issues cut across all types: <strong>heterogeneity</strong> (systems must work across different platforms and devices: the lecture's example is Una Platform not supporting mobile because block coding needs a large screen), <strong>business and social change</strong> (Flash games had to be rebuilt in HTML5 when browsers dropped Flash), <strong>security and trust</strong>, and <strong>scale</strong>.</p>
+    <p>And then the fundamentals that survive all that diversity: develop using a managed and understood process; dependability and performance matter for every system type; understanding and managing the specification and requirements matters; and where appropriate, reuse existing software rather than writing new.</p>
+    <p class="source">Source: L1 - Introduction v1.pdf, slides 17-21.</p>
+
+    <h2>Ethics and professional responsibility</h2>
+    <p>Software engineering involves wider responsibilities than technical skill. Engineers must behave honestly and ethically to be respected as professionals, and the lecture is careful to say ethical behaviour is "more than simply upholding the law": it involves following principles that are morally correct. Four issue areas:</p>
+    <ul>
+      <li><strong>Confidentiality</strong>: respect the confidentiality of employers or clients whether or not a formal agreement was signed.</li>
+      <li><strong>Competence</strong>: do not misrepresent your level of competence, and do not knowingly accept work outside it.</li>
+      <li><strong>Intellectual property rights</strong>: know the local law on patents, copyright and the rest, and protect the IP of employers and clients.</li>
+      <li><strong>Computer misuse</strong>: do not use technical skills to misuse other people's computers, from the trivial (games on an employer's machine) to the serious (viruses and malware).</li>
+    </ul>
+    <p>The course's own AI policy is this same principle applied to your coursework: AI tools are allowed and expected, but "you must be able to explain every line you submit", and AI use is declared in your Individual Contribution and AI-Usage Report, graded on honesty, not on volume.</p>
+    <p class="source">Source: L1 - Introduction v1.pdf, slides 22-25; L0 - Course Preliminaries v2.pdf, slide 9.</p>
+
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: on a 6-week project with five developers, the four process activities can be compressed to almost nothing except development without hurting the final product. Argue for or against using a concrete project you know. Evidence that would change your mind: one measurable cost of skipping specification or validation on that project: a rework count, a missed requirement, a defect that testing traced back to a wording problem.</p>
+    </div>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: a colleague deploys a personal side project on an employer's unused server, in a way that breaks no law and no written policy. Is this within the lecture's four responsibility areas, or beyond them? Evidence that would change your mind: the actual ownership terms of the server and the employer's stated policy: the lecture's confidentiality and computer-misuse items turn on facts, not vibes.</p>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="01-se-1">
+        <span class="check-text">State the course definition of software engineering and explain why "all aspects of software production" is in it.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-se-2">
+        <span class="check-text">List the four attributes of good software and give one concrete failure for each attribute you drop.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-se-3">
+        <span class="check-text">Classify a system as generic or customised and say who owns its specification and its change decisions.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-se-4">
+        <span class="check-text">Name the four process activities in order and say what each one produces or checks.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-se-5">
+        <span class="check-text">Explain process diversity: why an information system, a controller, and a game cannot share one method, and name the three factors that drive the choice.</span></li>
+      <li><input type="checkbox" class="persist" data-id="01-se-6">
+        <span class="check-text">Name the four professional responsibility areas and give a borderline example for one of them.</span></li>
+    </ul>
+
+    <h2>Flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is software, in the lecture's words?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Computer programs and associated documentation, developed for a particular customer or a general market.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Which costs more over a long-lived system: development or maintenance?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Maintenance. For systems with a long life, maintenance costs may be several times development costs.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Generic vs customised product: who owns the specification?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Generic: the software developers. Customised: the customer. Change decisions are made by the owners.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The four process activities, in order<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Specification (define the software and constraints), Development (design and program), Validation (check it is what the customer requires), Evolution (modify for changing requirements).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Why do software projects fail, per L1?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Increasing system complexity, and failure to use software engineering methods: the latter produces software that is more expensive and less reliable than it should be.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Name the four professional responsibility areas<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Confidentiality, competence, intellectual property rights, computer misuse.</span>
+      </span></button>
+    </div>
+
+    <p>Ready to apply this? <a href="practice-01-software-engineering.html">Practice page 1: software engineering</a> walks through scenarios on product ownership, process activities, and ethical calls.</p>
+
+    <p class="source">Source: L1 - Introduction v1.pdf, slides 2-28 (whole lecture), with course context from L0 - Course Preliminaries v2.pdf, slides 7-13. Cost figures on slide 5 cite R. L. Glass, IEEE Software 2001; slide 15 cites J. Stecklein et al., NASA/INCOSE, 2004.</p>
+
+    <nav class="pager">
+      <a href="index.html"><span class="dir">Previous</span><span class="name">Revision hub</span></a>
+      <a class="next" href="02-requirements-engineering.html"><span class="dir">Next</span><span class="name">Requirements engineering</span></a>
+    </nav>
+  </main>
+</body>
+</html>

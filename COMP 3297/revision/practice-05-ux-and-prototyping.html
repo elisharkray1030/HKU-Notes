@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: UX and prototyping practice</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>UX and prototyping: practice</h1>
+    <p class="lede">Exercises on planning prototypes, auditing screens against the lecture's design errors and usability guidelines, and building dialog maps. The recurring skill: deciding what a prototype is for before you build it, and not letting a picture settle a requirement.</p>
+    <p>Background: <a href="05-ux-and-prototyping.html">UX and prototyping</a>.</p>
+
+    <h2>Quiz</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A requirements uncertainty is whether nurses will understand the triage screen. Do you always need an executable prototype to resolve it?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">No. A paper prototype is a cheap, fast, low-tech way to explore how a portion of an implemented system might look.</button>
+        <button class="quiz-option">Yes. Only running code can resolve any requirements uncertainty.</button>
+        <button class="quiz-option">Yes, but only for safety-critical systems.</button>
+        <button class="quiz-option">No, because prototyping never resolves requirements uncertainty.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture opens the topic with that question and answers it with the paper prototype (sometimes called a low-fidelity prototype, credited to Rettig 1994); a storyboard is a similar deliverable. Executable prototypes earn their place when the question needs behaviour or performance, not when the question is "will this layout make sense?".</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">The client watches a wireframe demo and says, "It looks almost done — ship it Friday." Which prototyping risk is this?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Pressure to release. A throwaway prototype is never production-ready.</button>
+        <button class="quiz-option">Distraction by details.</button>
+        <button class="quiz-option">Unrealistic performance.</button>
+        <button class="quiz-option">Excessive effort.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's risk list names this one almost verbatim: "pressure to release — it looks almost done! A throwaway prototype is never production-ready." Distraction by details is users fixating on how screens look; unrealistic performance is the mock-up feeling faster than the real product; excessive effort is spending too long on an experiment.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">Garret's component elements of user experience design are:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Strategy, scope, structure, skeleton, surface.</button>
+        <button class="quiz-option">Requirements, design, coding, testing, release.</button>
+        <button class="quiz-option">Layout, colour, typography, icons, animation.</button>
+        <button class="quiz-option">Discover, define, develop, deliver, defend.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture cites Garret [Gar10] breaking UX work into strategy, scope, structure, skeleton, and surface, to make crafting a positive experience manageable. The tempting wrong answer is the colour-and-icons list: that is surface alone, and UX design is broader than UI design and usability or accessibility engineering.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">While a large video downloads, the app shows progress but lets the user keep editing their document as if the download were done. Which usability guideline does this follow?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Latency reduction: use multitasking so the user proceeds instead of waiting for an internal operation.</button>
+        <button class="quiz-option">Anticipation: the app anticipates the user's next move.</button>
+        <button class="quiz-option">Track state: the interaction is stored so the user can log off and return.</button>
+        <button class="quiz-option">Response time: one of the accessibility guidelines.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Latency reduction is the lecture's own example: rather than making the user wait for an internal operation such as downloading a video, the app lets the user proceed as if the operation has been completed. Response time is a separate heading in the accessibility list, and it is about the interface answering, not about hiding the wait.</span></p>
+    </div>
+
+    <h2>Guided exercises</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: planning a prototyping campaign</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>MealPrep is a meal-planning app mid-project. Three questions are open: (a) will users understand the weekly plan screen without training? (b) is the barcode scanner fast enough on old phones? (c) the recipe data model is already agreed and signed off. The team proposes: one high-fidelity prototype of the whole app, built in two weeks, kept as the base for production; and a prototype of the data layer too. Write the plan the lecture would demand: what to prototype, at what fidelity, what each outcome decides, and what to cut.</p>
+      <details class="step"><summary>Step 1: state the purpose of each prototype before building it</summary>
+        <p>The lecture's first success factor after planning the tasks: state the purpose of each prototype before you build it, and explain what will happen with the outcome. Question (a) is about comprehension; (b) is about performance; (c) is settled.</p>
+      </details>
+      <details class="step"><summary>Step 2: pick the cheapest fidelity that answers each question</summary>
+        <p>Comprehension of a screen: paper prototype or wireframe. Performance on old phones: must run, so an executable prototype, and even then the outcome is evidence, not proof. Settled requirements: do not prototype.</p>
+      </details>
+      <details class="step"><summary>Step 3: apply the throwaway rules and the risks</summary>
+        <p>Throwaway prototypes are built quickly and cheaply: no input validation, no defensive coding, no error-handling code, no extensive documentation. Plan to develop multiple prototypes, not one grand one.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) Weekly plan screen: paper prototype or wireframe, built in hours. Purpose: test comprehension with real users. Outcome decides: whether the layout stands or is redesigned. If comprehension fails, redraw and test again: the lecture expects multiple prototypes.</p>
+        <p>(b) Barcode speed: small executable prototype, one screen and the scanner, on the oldest supported phone. Purpose: measure scan-to-result time. Outcome decides: whether to ship the feature, restrict the device range, or change the scanning approach. The trap: trusting a mock-up's speed. The lecture's "unrealistic performance" risk exists precisely because mock-ups feel faster than the real product, so a wireframe cannot answer (b), and even the executable prototype's numbers must be treated as a measurement under test conditions.</p>
+        <p>(c) Data model: nothing. "Don't prototype requirements that you already understand, except to explore design alternatives." The signed-off model is understood; prototyping it is the "excessive effort" risk in costume.</p>
+        <p>Cut the team's proposal entirely. One high-fidelity prototype of the whole app, two weeks, kept as the production base: it violates the throwaway rules (it invites production pressure and defensive-coding scope), it is excessive effort, and it merges three different questions into one artifact. State what happens to each prototype's outcome up front: (a) informs the written UI requirements; (b) informs a go/no-go on the feature; (c) is not built.</p>
+        <p>And the standing rule: do not expect the prototypes to replace written requirements. They are experiments; the requirements document is the record.</p>
+        <p>Reasoning chain: purpose per prototype → minimum fidelity that can answer → throwaway rules → risks checked against the plan → outcomes stated before building.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: naming design errors and their fixes</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Screen review of a shopping site. For each flaw, name the lecture's design error category and the usability or accessibility guideline that fixes it.</p>
+      <p>F1: The list pages use "Buy" buttons in green; the detail page uses a grey "Buy now" in a different font.</p>
+      <p>F2: The checkout shows twelve fields at once with no grouping and no indication of which are required.</p>
+      <p>F3: A search for a rare book returns a bare "No results found." and stops.</p>
+      <p>F4: Tapping "Checkout" on a phone shows no response for six seconds, then the page changes.</p>
+      <p>F5: The help text tells the user to "terminate the extant cart entity".</p>
+      <details class="step"><summary>Step 1: fix the six error categories</summary>
+        <p>Lack of consistency; too much memorization; no guidance or help; no context sensitivity; poor response; arcane or unfriendly. Match each flaw to the category by its harm to the user, not by its look.</p>
+      </details>
+      <details class="step"><summary>Step 2: match the fix from the guidelines</summary>
+        <p>Consistency; communication (the interface should communicate the status of any activity); focus (stay on the task at hand); readability; human interface objects; learnability; help facilities and error handling from the accessibility list.</p>
+      </details>
+      <details class="step"><summary>Step 3: check the boundary cases</summary>
+        <p>F3 looks like a slow or dead feature. Ask what the user needed and did not get.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>F1: lack of consistency. Fix: the consistency guideline (navigation controls, menus, icons, and aesthetics consistent throughout); the lecture's own solution slide pairs this error with a colour palette.</p>
+        <p>F2: too much memorization (too much content at once) and, in its details, no context sensitivity (no indication of which fields are required). Fix: focus (the interface stays on the user's task) and good indicators of required state.</p>
+        <p>F3: no guidance or help. Fix: the lecture's solution for the "no results found" page is help: suggest what to try next, offer a help button. This is the page's trap: a bare no-results page reads like a broken or slow feature, so it gets filed under "poor response". Poor response is about the interface not answering (slow loading, clicks that do nothing). F3 answered instantly; it just had nothing useful to say.</p>
+        <p>F4: poor response. Fix: communication (report the status of the activity the user initiated) and the response-time accessibility guideline; a six-second silence on a tap is the "no response to selected click buttons" example.</p>
+        <p>F5: arcane or unfriendly. Fix: readability (information readable by young and old) and menu and command labeling from the accessibility list. "Terminate the extant cart entity" is jargon where the user needed "Empty cart".</p>
+        <p>Reasoning chain: category by user harm → guideline that addresses that harm → boundary check on the ambiguous case.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: building and using a dialog map</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>TutorMatch lets students find and book tutors. Its use cases: search for tutors, view a tutor profile, book a session, pay for a session, message a tutor. Sketch the dialog map as pages and links (a page is a state of the interface; a link is the action that moves you). Then use the map the way the lecture says to: name one new action the map reveals, and one place to simplify the student's experience.</p>
+      <details class="step"><summary>Step 1: turn each use case into a page or a link</summary>
+        <p>A dialog map illustrates a conceptual page architecture. Searching leads to results; selecting leads to a profile; booking leads to payment; payment leads to confirmation.</p>
+      </details>
+      <details class="step"><summary>Step 2: draw the links and read the map for gaps</summary>
+        <p>Every action a user could want at a page must have somewhere to go. A page with only one exit, or a trap with no exit, shows up immediately in the map.</p>
+      </details>
+      <details class="step"><summary>Step 3: find the simplification</summary>
+        <p>The lecture's stated benefit: find ways to simplify and streamline the user's experience. Look for pages that exist only to forward the user to the next one.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <figure class="diagram">
+          <svg viewBox="0 0 720 330" role="img" aria-label="Dialog map: Home links to Search results, which link to Tutor profile; profile links to Booking, Message tutor; Booking links to Payment, which links to Confirmation.">
+            <defs>
+              <marker id="map" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+                <path d="M0,0 L10,5 L0,10" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              </marker>
+            </defs>
+            <g stroke="currentColor" fill="none" stroke-width="1.5">
+              <rect x="30" y="30" width="150" height="50"/>
+              <rect x="285" y="30" width="150" height="50"/>
+              <rect x="540" y="30" width="150" height="50"/>
+              <rect x="540" y="150" width="150" height="50"/>
+              <rect x="285" y="150" width="150" height="50"/>
+              <rect x="30" y="150" width="150" height="50"/>
+              <rect x="285" y="255" width="150" height="50"/>
+              <line x1="180" y1="55" x2="280" y2="55" marker-end="url(#map)"/>
+              <line x1="435" y1="55" x2="535" y2="55" marker-end="url(#map)"/>
+              <line x1="615" y1="80" x2="615" y2="145" marker-end="url(#map)"/>
+              <line x1="540" y1="185" x2="440" y2="185" marker-end="url(#map)"/>
+              <line x1="285" y1="185" x2="185" y2="185" marker-end="url(#map)"/>
+              <line x1="660" y1="80" x2="480" y2="258" marker-end="url(#map)"/>
+            </g>
+            <g fill="currentColor" font-family="sans-serif" font-size="13">
+              <text x="105" y="60" text-anchor="middle">Home</text>
+              <text x="360" y="60" text-anchor="middle">Search results</text>
+              <text x="615" y="60" text-anchor="middle">Tutor profile</text>
+              <text x="615" y="180" text-anchor="middle">Booking</text>
+              <text x="360" y="180" text-anchor="middle">Payment</text>
+              <text x="105" y="180" text-anchor="middle">Confirmation</text>
+              <text x="360" y="285" text-anchor="middle">Message tutor</text>
+              <text x="205" y="48">search</text>
+              <text x="455" y="48">select</text>
+              <text x="625" y="118">book</text>
+              <text x="455" y="178">pay</text>
+              <text x="205" y="178">confirm</text>
+              <text x="530" y="140">message</text>
+            </g>
+          </svg>
+          <figcaption>Dialog map for TutorMatch: pages as boxes, links as labeled arrows.</figcaption>
+        </figure>
+        <p>New action revealed: comparing tutors. Once search results exist as a page, the obvious next user move is "keep two profiles side by side", and the map shows there is no page for it. The lecture's benefit (discover new actions) is exactly this: the map makes the missing state visible in a way a list of use cases does not.</p>
+        <p>Simplification: the Payment page exists only to forward the student to Confirmation. For a returning student with a stored card, let the Booking page take the payment and land on Confirmation directly. Streamlining the path through the map is the second benefit the lecture names.</p>
+        <p>The trap: treating the dialog map as the wireframe. The map is a conceptual page architecture: which states exist and how you move between them. What each page contains is the wireframe's job, and the wireframe's job is to work out what layout makes the pages easy to understand and use.</p>
+        <p>Reasoning chain: use cases to pages and links → read the map for missing exits and dead ends → new action found → unnecessary page removed.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: auditing a drafted screen before refining it</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>An AI tool drafts the booking screen for a clinic app. The draft: a white "Continue" button on a pale yellow background; a date picker with no indication of which dates are fully booked; a "Submit" label that becomes "Done" on the next screen for the same action; and 32px-wide checkbox targets. Apply the lecture's three checks for a draft and name each finding: typical design errors, usability guidelines (consistency, feedback, error prevention), and accessibility (contrast, touch targets, text size).</p>
+      <details class="step"><summary>Step 1: run the design-error check</summary>
+        <p>Six categories: lack of consistency, too much memorization, no guidance or help, no context sensitivity, poor response, arcane or unfriendly. The draft hits at least two.</p>
+      </details>
+      <details class="step"><summary>Step 2: run the usability check</summary>
+        <p>Consistency (same action, same label), communication and error prevention (the user must see what is not available before submitting), human interface objects (a standard date picker already knows how to show disabled dates).</p>
+      </details>
+      <details class="step"><summary>Step 3: run the accessibility check</summary>
+        <p>Contrast, touch targets, text size. The lecture's own AI screenshot story: a generated Continue button nobody could read, caught by the readability and contrast check.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Contrast: white on pale yellow fails readability. This is the lecture's own example: a generated Continue button nobody can read, caught by the readability and contrast check. Fix the palette before anything else.</p>
+        <p>Indication of which dates are booked: no context sensitivity and no guidance or help (the user gets no indicator of state), and an error-prevention gap: a user can choose a full date and only learn of the problem after submitting. Fix: good indicators on the dates, standard behaviour for a date picker.</p>
+        <p>Submit vs Done for the same action: lack of consistency. Fix: the consistency guideline: menus, icons, and labels consistent throughout.</p>
+        <p>32px checkboxes: accessibility touch target too small; also arcane or unfriendly on a phone. Fix: larger touch targets.</p>
+        <p>The trap: reading the draft as good because it looks clean and modern. That is the lecture's "distraction by details" risk aimed at the reviewer: attention goes to how the screen looks instead of what the system must do. The three checks are the counterweight, and they are the same checks you apply to any screen; an AI draft is just a fast, unreviewed first draft.</p>
+        <p>Reasoning chain: error categories → usability guidelines (consistency, feedback, error prevention) → accessibility (contrast, touch targets, text size) → refuse the looks-fine verdict.</p>
+      </details>
+    </section>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: mixed (story to use case to dialog map to testable requirement)</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This pulls in <a href="practice-02-requirements-engineering.html">page 2</a>, <a href="practice-03-use-case-modeling.html">page 3</a>, and the development sequence the lecture shows (use cases → dialog map → paper prototype → detailed UI design). User story: "As a student, I want to find a free study room in under a minute, so that I can start working quickly." (1) Write the use case (tabular, page 3's fields). (2) Sketch the dialog map for the booking path in words. (3) Choose the prototype fidelity for testing the story and state its purpose and outcome. (4) Turn the story's "under a minute" into a verifiable non-functional requirement.</p>
+      <details class="step"><summary>Step 1: use case from the story</summary>
+        <p>Actor, description, stimulus, response, comments, with the one-minute goal as a comment until it becomes measurable.</p>
+      </details>
+      <details class="step"><summary>Step 2: pages and links</summary>
+        <p>Find → results → room detail → booking → confirmation. Count the taps.</p>
+      </details>
+      <details class="step"><summary>Step 3: prototype and requirement</summary>
+        <p>Comprehension and flow are paper-testable; the one-minute clock needs measurement on a working build, and the requirement needs a measure.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>1. Find free room. Actors: Student. Description: A student enters a time and duration; the system lists free rooms for that period; the student may select one to book. Stimulus: Search command issued by the student. Response: A list of free rooms, or a message that none are free. Comments: The student's goal is to reach a usable room quickly; "quickly" must be quantified before it is testable.</p>
+        <p>2. Search page → results list (one tap) → room detail or direct booking (one tap) → confirm (one tap). Three taps from search to booked. The dialog map's first gift: counting the path. If the map shows results → filter → refine → results as the only route to a booking, the story is already lost in navigation.</p>
+        <p>3. Paper prototype. Purpose: test whether students can get from search to a booked room unaided, and where they hesitate. Outcome decides: the page sequence and labels. Note what it cannot decide: the one-minute clock, because a paper prototype's speed is the speed of the person moving paper. Performance is the "unrealistic performance" risk in its purest form here: measure it later on a running build.</p>
+        <p>4. "The system shall return free-room results within two seconds of a search command, and shall complete a booking within three taps of the results page (rationale: the student's stated goal is finding a room in under a minute; measured flow shows three taps and two-second responses leave margin for the student's own choices)." The pattern is the page 2 move: goal ("under a minute") becomes measures (response time, tap count) that can be objectively tested.</p>
+        <p>Reasoning chain: story to use case fields → path counted in the map → fidelity chosen by what must be tested → goal rewritten with measures.</p>
+      </details>
+    </section>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position: "A throwaway prototype that users pass is the cheapest possible specification. Stop writing requirements and ship the prototype with a test script." Defend or attack. Evidence that would change your mind: projects where prototype plus test script left no ambiguity about required behaviour, including the unhappy paths a mock-up never shows. The lecture is firm that a prototype does not replace written requirements; argue whether that firmness still holds when prototypes are cheap and requirements documents go unread.</p>
+    </div>
+
+    <p class="source">Source: COMP 3297, L4 - UX and Prototyping v1.pdf, slides 3-8 (paper prototypes, dialog maps, wireframes, prototyping success factors and risks), slide 10 (user experience design and Garret's elements), slides 11-21 (typical design errors, with the course's answers deck L4 v1 _Answers.pdf for the six categories and their example fixes), slides 22-25 (usability and accessibility guidelines), slide 26 (AI in UI design: draft, then refine). The TutorMatch dialog map and the clinic draft screen are fresh scenarios.</p>
+
+    <h2>Recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Paper prototype<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A cheap, fast, low-tech (low-fidelity) way to explore how a portion of an implemented system might look. A storyboard is a similar deliverable. You do not always need executable prototypes.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Four prototyping risks<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Pressure to release (a throwaway prototype is never production-ready); distraction by details (users fixate on looks); unrealistic performance (mock-ups feel faster); excessive effort (keep experiments quick and cheap).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Rules for throwaway prototypes<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">State the purpose and outcome first. Plan multiple prototypes. Build them fast: no input validation, no defensive coding, no error-handling code, no extensive documentation. Use plausible data. Do not prototype what is already understood, except to explore design alternatives. Never a substitute for written requirements.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Garret's five UX design elements<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Strategy, scope, structure, skeleton, surface. UX design is broader than UI design and usability or accessibility engineering.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The six typical design errors<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Lack of consistency; too much memorization; no guidance or help; no context sensitivity; poor response; arcane or unfriendly.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What a dialog map is for<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A conceptual page architecture of pages and links. It helps discover new actions and find ways to simplify and streamline the user's experience.</span>
+      </span></button>
+    </div>
+
+    <nav class="pager">
+      <a class="prev" href="practice-04-class-and-sequence-diagrams.html"><span class="dir">Previous</span><span class="name">Class and sequence diagrams practice</span></a>
+      <a class="next" href="practice-06-architecture-and-solid.html"><span class="dir">Next</span><span class="name">Architecture and SOLID practice</span></a>
+    </nav>
+  </main>
+</body>
+</html>

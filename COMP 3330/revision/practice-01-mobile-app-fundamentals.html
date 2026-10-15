@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: mobile app fundamentals</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: mobile app fundamentals</h1>
+    <p class="lede">Work the vocabulary of Chapter 1 until you can classify an app, price its data budget, and audit a screen against the course's UX principles without guessing. Every answer below follows from the lecture's own statements.</p>
+    <p>Background: <a href="01-mobile-app-fundamentals.html">Mobile app fundamentals</a>.</p>
+
+    <h2>Quiz: vocabulary and facts</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">On Android, how is security between applications and the system mainly enforced?</p>
+      <div class="options">
+        <button class="quiz-option">By encrypting every APK with a store-managed key</button>
+        <button class="quiz-option" data-correct="true">At the process level, through Linux user and group IDs, plus a permission mechanism for specific operations</button>
+        <button class="quiz-option">By running every app inside one shared browser process</button>
+        <button class="quiz-option">By requiring a certificate authority to sign every app</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture says Android is a multi-process system where each application runs in its own process, and that most security is enforced at the process level through standard Linux facilities such as user and group IDs, with a finer-grained "permission" mechanism on top. Certificate authorities are not part of this story; most Android developers self-sign.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Which description matches a hybrid app as defined in the course?</p>
+      <div class="options">
+        <button class="quiz-option">An app written entirely in Java or Kotlin, with no web code at all</button>
+        <button class="quiz-option">A mobile web page that the user bookmarks instead of installing</button>
+        <button class="quiz-option" data-correct="true">A bulk of HTML5, CSS and JavaScript wrapped in native code, with some native code for device access and a refined user experience</button>
+        <button class="quiz-option">A game built in a cross-platform game engine</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 1 defines hybrid apps as built mostly with cross-compatible web technologies, with some native code to reach device functionality, and says they "wrap web views within native code to deliver their content". A bookmarked mobile page is a web app; all-native code is a native app.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">Your screen uses 12 pt regular body text on a background of similar colour. Which W3C contrast ratio does the course say you must meet?</p>
+      <div class="options">
+        <button class="quiz-option">3:1</button>
+        <button class="quiz-option" data-correct="true">4.5:1</button>
+        <button class="quiz-option">7:1</button>
+        <button class="quiz-option">Any ratio, as long as the font is the platform standard</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The course quotes W3C: small text should have a contrast ratio of at least 4.5:1; large text (14 pt bold or 18 pt regular and up) gets 3:1. At 12 pt regular your text is small text, so 4.5:1 applies. Using 3:1 here is the trap.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Which statement about instant apps matches the lecture?</p>
+      <div class="options">
+        <button class="quiz-option">They are web apps, so they cannot use device hardware</button>
+        <button class="quiz-option">They must be installed before first use, like any native app</button>
+        <button class="quiz-option" data-correct="true">They let a user try part of a native Android app without installing it, run like local apps in native containers, and take up no storage</button>
+        <button class="quiz-option">They replaced the Play Store for lightweight apps in China</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 1: an instant app is a small program that lets users test a portion of a native Android app without installing it; instant apps run like local apps and are native containers with access to device hardware, and because they are not installed they do not take up storage. The China claim is about mini programs, a different thing.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q5</span>
+      <p class="quiz-q">Why does the course say that shipping even a tiny change to a mobile app is hard?</p>
+      <div class="options">
+        <button class="quiz-option">Because app stores refuse to host apps smaller than 10 MB</button>
+        <button class="quiz-option" data-correct="true">Because changes go through review (about 7 days on Apple, per the lecture), users must download updates manually, and a bad fix cannot be deployed instantly</button>
+        <button class="quiz-option">Because mobile apps cannot be versioned</button>
+        <button class="quiz-option">Because users uninstall an app whenever it updates</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Constraint 4 says a small change takes an average of 7 days to be approved by Apple, that data sits client side so users download updates manually, and that if a change performs badly you cannot fix it immediately but must wait for another review cycle. The lecture's conclusion: release management matters.</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 7 (security), 25-26 (why apps), 36 (contrast), 43 (update constraint), 48-50 (app types), 64 (instant apps).</p>
+
+    <h2>Exercise 1: choosing an app type</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: classifying app types from requirements</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A student team wants to build "QueueCam" for HKU canteens. Requirements: a live camera snapshot of the queue plus a short text summary, refreshed every five minutes; it must run on both Android and iPhone; the users are occasional visitors who must not install anything or give up storage; the only skills in the team are HTML, CSS and JavaScript. Should QueueCam be a native app, a web app, or a hybrid app? State the deciding requirement, not just the label.</p>
+      <details class="step"><summary>Step 1: split the requirements into hard constraints and preferences</summary>
+        <p>Hard: no installation, no storage cost to the user, both Android and iOS. Preferences: live image, five-minute refresh, the team's existing web skills. In a classification question, hard constraints decide; preferences only break ties.</p>
+      </details>
+      <details class="step"><summary>Step 2: apply the course's definitions to the hard constraints</summary>
+        <p>Native apps are downloaded from the stores and sit on the device, so they violate "must not install anything". Hybrid apps still ship as an installed app that wraps web views in native code, so they also violate it. A web app loads inside a mobile browser like any web site: the lecture says the audience "doesn't have to install a web app" and "doesn't need to have available space on their devices", and that web apps are ideal when the purpose is simply to make content available on mobile and an app is "not a good fit or too expensive".</p>
+      </details>
+      <details class="step"><summary>Step 3: check the preferences against the choice</summary>
+        <p>The live snapshot is content the browser fetches anyway, and the team's HTML/CSS/JS skills are exactly what a web app needs. The lecture's data argument for apps assumes the app stores heavy assets locally and downloads only light data; a live photo cannot be pre-stored, so that argument does not rescue the app choices here.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>QueueCam is a <strong>web app</strong>. The deciding requirement is "users must not install anything and must not give up storage": by the course's definitions, native and hybrid apps are both installed onto the device (the hybrid app wraps its web views inside native code), while a web app runs in the mobile browser with no install. The team's web-only skills line up with that choice, and the live snapshot is downloaded either way, so the "apps download less data" argument does not apply to this content.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>The naive answer is "hybrid, because the team only knows web technologies". Hybrid is about how an installed app is built, not about avoiding installation. The requirement that kills both native and hybrid is the no-install rule; the skill set alone would not have decided it.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 24 (data downloaded), 48-50 (native, web, hybrid).</p>
+
+    <h2>Exercise 2: the data budget</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: quantifying the app-vs-web data argument</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A campus shuttle app shows a status icon chosen from exactly 39 possible icons. Each user's phone refreshes 200 times per day. Three designs are on the table. (a) A mobile web page downloads the icon image each time: 2.9 KB per refresh. (b) An installed app stores the icons locally and downloads the word naming the icon: 5 bytes per refresh. (c) An installed app stores the icons locally and downloads a numeric code for the icon: one code per refresh. Using 1 KB = 1024 B, compute the daily transfer per user for each design, the ratio between (a) and (c), and explain why a code needs 6 bits but not 5.</p>
+      <details class="step"><summary>Step 1: get the units straight before any arithmetic</summary>
+        <p>Design (a) is in KB, (b) in bytes, (c) will be in bits. 2.9 KB = 2.9 x 1024 = 2969.6 bytes per refresh. 6 bits = 0.75 bytes. Mixing bits and bytes is the classic way to get this question wrong by a factor of 8.</p>
+      </details>
+      <details class="step"><summary>Step 2: justify 6 bits</summary>
+        <p>You need to distinguish 39 icons. With 5 bits you can encode only 2^5 = 32 distinct codes, which is fewer than 39. With 6 bits you get 2^6 = 64 codes, enough. So the minimum is 6 bits, matching the lecture's "only 39 possible icons and so each icon can be uniquely represented by 6 bits".</p>
+      </details>
+      <details class="step"><summary>Step 3: multiply by 200 refreshes per day</summary>
+        <p>(a) 200 x 2969.6 B = 593,920 B, which is exactly 580 KB. (b) 200 x 5 B = 1,000 B. (c) 200 x 6 bits = 1,200 bits = 150 B.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Per user per day: (a) 593,920 B (580 KB), (b) 1,000 B, (c) 150 B. The ratio (a):(c) is 593,920 / 150, about 3,960 to 1; even (b) is 6.7 times (c). The code needs 6 bits because 2^5 = 32 codes cannot name 39 icons while 2^6 = 64 can. The reasoning chain: convert to one unit first, argue the code length from 2^k &gt;= number of symbols, then scale by refresh count.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two ways to lose the marks: comparing "2.9 KB" against "6" without converting (the real gap is 2.9 KB against 0.75 B), and answering "5 bits, because 39 is less than 64". 5 bits gives 32 codes, not 64; the count of codes is 2^bits, and 32 &lt; 39.</p>
+        </div>
+        <div class="callout why"><span class="tag">Why it matters</span>
+          <p>This is the lecture's actual argument for why app clients can be cheaper than browsers: the images live in the app, so what crosses the network is text or less. The numbers are small per refresh and enormous per user per day.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slide 24 (sunny icon: 2.9 KB vs 5 B vs 6 bits).</p>
+
+    <h2>Exercise 3: auditing a screen against the UX principles</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: applying UX principles and constraints with their exact thresholds</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A food-ordering app screen has: eight action buttons on one screen; buttons about 3 mm wide; 9 pt grey text on a light grey background; a registration form with twelve fields; and the "Place order" button at the top-left corner of the screen. For each detail, name the principle or constraint it violates, quote the course's threshold or fact where one exists, and give the smallest fix that satisfies it.</p>
+      <details class="step"><summary>Step 1: match each detail to a numbered principle</summary>
+        <p>Eight buttons on one screen: Principle 1 (remove clutter; one primary action per screen; many screens with one action beat one screen with many). 3 mm targets: Principle 4 (targets not less than 7-10 mm, with clear visual feedback). 9 pt text: Principle 5 (text at least 11 points to be legible at typical viewing distance). Grey on light grey: Principle 6 (contrast; small text at least 4.5:1). Twelve fields: Principle 8 (minimise typing; keep forms short, use auto-complete). Top-left primary action: Principle 7 (about 49% of users drive the phone with one thumb, so put frequent controls in one-thumb comfort zones).</p>
+      </details>
+      <details class="step"><summary>Step 2: bring in the constraints where they apply</summary>
+        <p>The twelve-field form is also Constraint 2: the lecture reports that 56% of users said they had not signed up for an app because registration was too time consuming. That gives you a business reason for the fix, not just an aesthetic one.</p>
+      </details>
+      <details class="step"><summary>Step 3: write the minimal fix for each</summary>
+        <p>Split the screen (one primary action per screen, secondary actions behind navigation that communicates location). Enlarge targets to 7-10 mm. Raise text to 11 pt or larger (and use sp, which you will meet in Chapter 4). Increase contrast to at least 4.5:1 for this small text. Cut the form to the bare minimum with auto-complete and personalised data. Move the primary action into the one-thumb comfort zone near the bottom of the screen.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>Violations, in order: Principle 1 (clutter, one primary action per screen); Principle 4 (tap targets, minimum 7-10 mm); Principle 5 (legible content, minimum 11 points); Principle 6 (contrast, small text minimum 4.5:1); Principle 8 plus Constraint 2 (minimise typing; 56% abandon long registrations); Principle 7 (hand position; one-thumb comfort zones for the 49% single-thumb users). The fixes are the ones listed in step 3; each fix is the smallest change that meets the quoted threshold.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>It is tempting to quote 3:1 for the grey text because "3:1 appears in the contrast rule". Read the rule: 3:1 is for large text (14 pt bold or 18 pt regular and up). 9 pt is small text, so the threshold is 4.5:1. The threshold depends on the text size, not on how important the text is.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 32-38 (principles 1-8), 41 (registration statistic).</p>
+
+    <h2>Mixed exercise: one product, four decisions</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: combining app types, UX principles, business models and device features</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This one mixes the strands of this chapter, so keep every earlier quiz's vocabulary ready. A team proposes "ElderGo", an mHealth app for Hong Kong elderly users: medication reminders, a fall-prevention exercise list, and a one-tap booking of a clinic. The lecture notes that older people are least likely to accept new technology (only about two-thirds of adults aged 65+ own a smartphone) and that mHealth apps need time efficiency, user-friendliness and simplicity. Decide, with reasons: (1) native, web or hybrid; (2) which one UX principle to prioritise first and which course threshold shows why; (3) which of the three named business models fits a public-hospital-subsidised service; (4) which one device feature would add the most value, per the "Form / Mobility" question of inception.</p>
+      <details class="step"><summary>Step 1: app type</summary>
+        <p>Reminders and one-tap booking benefit from notifications and stored data; the lecture lists "ease of sending notifications" and "ability to work offline" among the advantages of apps over browsers. But the audience is occasional, hesitant users, and install friction is real for them. Either native or hybrid is defensible if you argue notifications and offline use; a web app is defensible if you argue no install. The chapter's own advantages list tips it toward an installed app.</p>
+      </details>
+      <details class="step"><summary>Step 2: UX priority</summary>
+        <p>Principle 4 (finger-friendly targets, 7-10 mm) and Principle 5 (legible content, at least 11 points) both matter for elderly users, but the lecture's own mHealth requirements name simplicity and user-friendliness first, and Principle 1's "one primary action per screen" is what simplicity means structurally. Pick one and justify with a threshold.</p>
+      </details>
+      <details class="step"><summary>Step 3: business model</summary>
+        <p>The three models the lecture lists are: free apps with in-app purchases, paid apps without in-app purchases, and paid apps with in-app purchases. A subsidised public service has no natural purchase moment.</p>
+      </details>
+      <details class="step"><summary>Step 4: device feature</summary>
+        <p>Inception's "Form / Mobility" question asks how mobile technology such as location awareness or the camera adds value. For booking a clinic, location awareness is the direct one.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) An installed app (native, or hybrid if the team reuses web code) because reminders need notifications and the content must work offline; those are on the lecture's list of app advantages over browsers. (2) Principle 1 first: one primary action per screen, because the lecture's mHealth requirements start with simple and user-friendly, and clutter is what scares hesitant users away; hold the 7-10 mm target and 11-point text thresholds as non-negotiables. (3) "Free apps with in-app purchases" is the closest of the three named models, but the honest reading is that none of the three fits a subsidised service cleanly: there is nothing to purchase. Say so. (4) Location awareness, to turn "book a clinic" into "book the nearest clinic": that is the Form / Mobility question answered with a named mobile technology.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Part (3) invites a confident wrong answer: inventing a fourth model such as "subscription" or "government funded". The exam skill is to reason inside the lecture's three named models and flag the mismatch instead of smuggling in an outside category. Your reasoning must use the course's own vocabulary.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 25-26 (app advantages), 32-38 (principles), 51 (business models), 65-66 (mHealth).</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Take a position and defend it: for a student society with about 500 members and content that changes weekly, a web app is a better first product than a native app. The lecture even hints at this: "frequency of use is far more important than perceived utility" on mobile. Evidence that would change your mind: name one requirement that would flip your choice and say which lecture statement it contradicts.</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>The lecture argues that mobile constraints (small screens, limited storage, review cycles) can make teams more creative and produce better products. Take a side: is that a design claim or a consolation? Evidence that would change your mind: a case from your own app use where a constraint clearly made the product worse.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How does Android enforce security between apps?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Each app runs in its own process; security is enforced at the process level through Linux user and group IDs, with a permission mechanism for specific operations and per-URI permissions.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Define native, web and hybrid apps in one line each.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Native: downloaded from a store, sits on the device, launched from its icon. Web: loads in the mobile browser, no install, no storage needed. Hybrid: mostly HTML5/CSS/JS plus some native code, wrapping web views inside native code.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Why can 39 icons be coded in 6 bits?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">2^5 = 32 codes is too few for 39 icons; 2^6 = 64 is enough. The minimum is 6 bits.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">W3C contrast thresholds quoted in the course.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Small text: at least 4.5:1 against its background. Large text (14 pt bold or 18 pt regular and up): at least 3:1.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Tap-target and text-size thresholds.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Targets not less than 7-10 mm with clear visual feedback; text at least 11 points to be legible at typical viewing distance.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The four UX constraints of mobile apps.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Client-side storage (users must delete something to install), small screens and clunky controls, distraction-prone environments (users drop off and forget to return), and hard updates (about 7 days review on Apple, manual user downloads, slow adoption of fixes).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Three app business models named in the lecture.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Free apps with in-app purchases; paid apps without in-app purchases; paid apps with in-app purchases.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is an instant app?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A small program that lets users test part of a native Android app without installing it. It runs like a local app in a native container with hardware access and takes up no storage.</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch01_Introduction.pdf, slides 3-21 (platforms and markets), 23-30 (why apps), 32-44 (principles and constraints), 46-66 (app types, business models, trends).</p>
+
+    <nav class="pager">
+      <a href="index.html"><span class="dir">Previous</span><span class="name">Revision hub</span></a>
+      <a class="next" href="practice-02-app-lifecycle.html"><span class="dir">Next</span><span class="name">App lifecycle</span></a>
+    </nav>
+  </main>
+</body>
+</html>

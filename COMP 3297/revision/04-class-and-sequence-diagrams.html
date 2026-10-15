@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Class and sequence diagrams</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Class and sequence diagrams</h1>
+    <p class="lede">The two UML workhorses: sequence diagrams show one interaction unfolding in time; class diagrams show what exists and how it relates. Notation is graded in this course, so this page states each convention exactly as the lecture draws it.</p>
+
+    <h2>The mental model: a script and a cast list</h2>
+    <p>Both diagrams model the same system, at different moments. A <strong>sequence diagram</strong> is the script of one performance: a particular use case running, participant by participant, message by message, from top to bottom. A <strong>class diagram</strong> is the cast list and the set of standing relationships: which kinds of object exist, what they know and do, and how they relate before anything runs.</p>
+    <p>Structural models "display the organization of a system in terms of the components that make up that system and their relationships", the lecture splits them into static models (structure of the design) and dynamic models (organisation while executing). Class diagrams belong to the object-oriented structural model: they show the classes in a system and the associations between them. Interaction models (use case plus sequence) sit alongside (see <a href="03-use-case-modeling.html">page 3</a>). One use case's interaction overview is exactly what a sequence diagram supplies.</p>
+    <p>Learn the pair together. The lecture builds class diagrams <em>from</em> sequence diagrams step by step, and every message in a sequence diagram becomes an operation on some class. If you can read one, you can derive the other.</p>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 40-43.</p>
+
+    <h2>Sequence diagrams</h2>
+    <p>"UML sequence diagrams model the interactions between the actors and the objects within a system. A sequence diagram shows the sequence of interactions that take place during a particular use case or use case instance." Time runs downward. The elements, numbered as the lecture annotates them:</p>
+    <ul>
+      <li><strong>Actor</strong> (1a): stick figure at the left, the external participant that starts the interaction.</li>
+      <li><strong>Object</strong> (1b): a rectangle labelled <code>name : Class</code>, such as <code>P: PatientInfo</code>. The name is the instance name; "P is the instance of the class PatientInfo".</li>
+      <li><strong>Lifeline</strong> (1c): the dashed vertical line below each participant, its existence over time.</li>
+      <li><strong>Message</strong> (2a): a horizontal arrow between lifelines. The annotation (2b) carries the call detail: operation name, parameters, and return values, like <code>report(Info, PID, UID)</code>.</li>
+      <li><strong>Synchronous call</strong> (3a): solid line with a filled triangle arrowhead. "Sender must wait for a response to continue."</li>
+      <li><strong>Reply message / asynchronous return</strong> (3b): dashed line with an open triangle arrowhead. Replies to an earlier call, like <code>authorization</code>.</li>
+      <li><strong>Asynchronous call</strong> (3c): solid line with an open triangle arrowhead. "Without waiting for return value."</li>
+      <li><strong>Execution occurrence</strong> (4): a thin rectangle on the lifeline while that participant is active.</li>
+      <li><strong>Combined fragment</strong> (5): for alternatives, a frame labelled <code>alt</code> in its corner with compartments guarded by conditions in square brackets, such as <code>[authorization OK]</code> and <code>[authorization fail]</code>. "One of the contained interactions will be executed."</li>
+    </ul>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 430" role="img" aria-label="Sequence diagram for View Patient Information: receptionist, PatientInfo, ReportEngine, Authorization, with an alt fragment for authorization success or failure">
+        <defs>
+          <marker id="sync" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#22303f"></path>
+          </marker>
+          <marker id="open" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffffff" stroke="#22303f" stroke-width="1.2"></path>
+          </marker>
+        </defs>
+
+        <!-- actor -->
+        <circle cx="70" cy="35" r="11" fill="none" stroke="#22303f" stroke-width="1.6"></circle>
+        <line x1="70" y1="46" x2="70" y2="80" stroke="#22303f" stroke-width="1.6"></line>
+        <line x1="70" y1="56" x2="52" y2="70" stroke="#22303f" stroke-width="1.6"></line>
+        <line x1="70" y1="56" x2="88" y2="70" stroke="#22303f" stroke-width="1.6"></line>
+        <line x1="70" y1="80" x2="57" y2="102" stroke="#22303f" stroke-width="1.6"></line>
+        <line x1="70" y1="80" x2="83" y2="102" stroke="#22303f" stroke-width="1.6"></line>
+        <text x="70" y="120" text-anchor="middle" font-size="12" fill="#22303f">Medical receptionist</text>
+
+        <!-- object boxes -->
+        <rect x="195" y="30" width="110" height="30" fill="#eef2f7" stroke="#22303f" stroke-width="1.4"></rect>
+        <text x="250" y="50" text-anchor="middle" font-size="12.5" fill="#22303f">P: PatientInfo</text>
+
+        <rect x="365" y="30" width="120" height="30" fill="#eef2f7" stroke="#22303f" stroke-width="1.4"></rect>
+        <text x="425" y="50" text-anchor="middle" font-size="12.5" fill="#22303f">R: ReportEngine</text>
+
+        <rect x="545" y="30" width="125" height="30" fill="#eef2f7" stroke="#22303f" stroke-width="1.4"></rect>
+        <text x="607" y="50" text-anchor="middle" font-size="12.5" fill="#22303f">AS: Authorization</text>
+
+        <!-- lifelines -->
+        <line x1="70" y1="112" x2="70" y2="415" stroke="#7a7a7a" stroke-width="1.2" stroke-dasharray="5 5"></line>
+        <line x1="250" y1="60" x2="250" y2="415" stroke="#7a7a7a" stroke-width="1.2" stroke-dasharray="5 5"></line>
+        <line x1="425" y1="60" x2="425" y2="415" stroke="#7a7a7a" stroke-width="1.2" stroke-dasharray="5 5"></line>
+        <line x1="607" y1="60" x2="607" y2="415" stroke="#7a7a7a" stroke-width="1.2" stroke-dasharray="5 5"></line>
+
+        <!-- execution occurrences -->
+        <rect x="65" y="140" width="10" height="262" fill="#cfe0f1" stroke="#5b7ba6" stroke-width="1"></rect>
+        <rect x="245" y="148" width="10" height="254" fill="#cfe0f1" stroke="#5b7ba6" stroke-width="1"></rect>
+        <rect x="420" y="188" width="10" height="105" fill="#cfe0f1" stroke="#5b7ba6" stroke-width="1"></rect>
+        <rect x="602" y="228" width="10" height="45" fill="#cfe0f1" stroke="#5b7ba6" stroke-width="1"></rect>
+
+        <!-- messages -->
+        <line x1="75" y1="155" x2="243" y2="155" stroke="#22303f" stroke-width="1.6" marker-end="url(#sync)"></line>
+        <text x="159" y="147" text-anchor="middle" font-size="11.5" fill="#22303f">ViewInfo(PID)</text>
+
+        <line x1="255" y1="195" x2="418" y2="195" stroke="#22303f" stroke-width="1.6" marker-end="url(#sync)"></line>
+        <text x="336" y="187" text-anchor="middle" font-size="11.5" fill="#22303f">report(Info, PID, UID)</text>
+
+        <line x1="430" y1="235" x2="600" y2="235" stroke="#22303f" stroke-width="1.6" marker-end="url(#sync)"></line>
+        <text x="515" y="227" text-anchor="middle" font-size="11.5" fill="#22303f">authorize(Info, UID)</text>
+
+        <line x1="602" y1="262" x2="432" y2="262" stroke="#22303f" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#open)"></line>
+        <text x="517" y="277" text-anchor="middle" font-size="11.5" fill="#22303f">authorization</text>
+
+        <!-- alt combined fragment -->
+        <rect x="35" y="295" width="345" height="115" fill="none" stroke="#22303f" stroke-width="1.4"></rect>
+        <rect x="35" y="283" width="38" height="12" fill="#ffffff"></rect>
+        <text x="38" y="293" font-size="11.5" font-weight="600" fill="#22303f">alt</text>
+        <line x1="35" y1="352" x2="380" y2="352" stroke="#22303f" stroke-width="1.1"></line>
+
+        <text x="50" y="312" font-size="11" fill="#22303f">[authorization OK]</text>
+        <line x1="245" y1="335" x2="77" y2="335" stroke="#22303f" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#open)"></line>
+        <text x="160" y="327" text-anchor="middle" font-size="11.5" fill="#22303f">Patient info</text>
+
+        <text x="50" y="370" font-size="11" fill="#22303f">[authorization fail]</text>
+        <line x1="245" y1="392" x2="77" y2="392" stroke="#22303f" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#open)"></line>
+        <text x="160" y="384" text-anchor="middle" font-size="11.5" fill="#22303f">Error (no access)</text>
+      </svg>
+      <figcaption>Sequence diagram for 'View Patient Information' in the lecture's notation: <code>name : Class</code> object boxes, dashed lifelines, thin execution occurrence bars, filled-triangle solid arrows for synchronous calls, open-triangle dashed arrows for replies, and an <code>alt</code> combined fragment with guarded compartments. Drawing after L3 slides 23-24.</figcaption>
+    </figure>
+
+    <p>Read it as a story, top to bottom. The receptionist issues <code>ViewInfo(PID)</code> and waits (solid, filled arrow). PatientInfo calls the report engine, which calls the authorization component, both synchronous. Authorization replies with <code>authorization</code> (dashed, open arrow) back to the caller's execution occurrence. Then the <code>alt</code> frame splits the world in two: on success the patient information goes back to the receptionist; on failure an error does. Exactly one compartment runs.</p>
+    <p>The arrowheads are not decoration. A filled triangle is a claim that the sender blocks; an open triangle on a solid line is a claim that it does not; a dashed line is a claim that this message is a response. The lecture's later slide asks whether an asynchronous message is appropriate for a fire-and-forget logging call, and whether a return is even needed: the notation is a set of promises about behaviour, so choose it from the behaviour, not from habit.</p>
+
+    <div class="callout exam"><span class="tag">Exam angle</span>
+      <p>The lecture's "Any problem(s)?" sequence is a notation audit with four named faults to look for: incorrect execution occurrence (a bar where the participant is not active, or no bar where it is), misplaced arrows (message starting or ending on the wrong lifeline), incorrect message order (a call drawn before the call that triggers it), and missing reply messages (a synchronous call with nothing coming back). Practise spotting these on unfamiliar diagrams. That is the exam skill.</p>
+    </div>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 23-25, 26-38; the four common mistakes are named in L3 - Modeling to Communicate (UML-lite) v2 _Answers.pdf, slides 27-35.</p>
+
+    <h2>Class diagrams</h2>
+    <p>"A Class is a blueprint for an object": every object is built from the same blueprint and so carries the same properties and methods. An object is an instance of a class; in a sequence diagram the object <code>P</code> is an instance of class <code>PatientInfo</code>. The class diagram draws the blueprints.</p>
+    <p>Notation, item by item as the lecture annotates it:</p>
+    <ul>
+      <li><strong>Class</strong>: a box with up to three compartments: class name, attributes, operations (methods).</li>
+      <li><strong>Visibility</strong>: <code>+</code> denotes public attributes or operations, <code>-</code> denotes private ones.</li>
+      <li><strong>Attribute</strong>: name plus attribute type, like <code>PID:int</code>.</li>
+      <li><strong>Operation</strong>: name plus parameter types plus return type, like <code>-authorize(Info:String, UID:int)</code>.</li>
+      <li><strong>Association</strong>: a solid line between classes, no arrowheads (navigation is not being claimed).</li>
+      <li><strong>Multiplicity</strong>: a number or range at each end of the line, such as <code>1</code>, <code>0..1</code>, <code>1..*</code>, <code>1..4</code>. If it is missing, the default multiplicity is <code>1</code>.</li>
+      <li><strong>Association name and end names</strong>: a name for the relationship ("Involves") and optionally a name for each end describing that end's perspective ("referred-by").</li>
+    </ul>
+
+    <h3>Reading multiplicity without fooling yourself</h3>
+    <p>The rule that makes every reading check out: <strong>a multiplicity counts objects of the class at its own end, per single object of the class at the other end</strong>. Then the lecture's examples fall out:</p>
+    <ul>
+      <li>Patient record to Patient with <code>1</code> at both ends: each patient record maintains information about exactly one patient, and each patient has exactly one record. A 1:1 relationship.</li>
+      <li>Patient <em>diagnosed-with</em> Condition with <code>1..*</code> at both ends: a patient may suffer from several conditions, and the same condition may be associated with several patients.</li>
+      <li>Consultation <em>Involves</em> Hospital doctor with <code>1..4</code> at the hospital doctor end: each consultation involves 1-4 hospital doctors. The <code>1..*</code> at the consultation end reads the other way: a hospital doctor may be involved in several consultations.</li>
+      <li><code>0..1</code> means optional: at most one, possibly none.</li>
+    </ul>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 660 300" role="img" aria-label="Class diagram: Patient record aggregated from Patient and Consultation, with class compartments and multiplicities">
+        <!-- Patient record -->
+        <rect x="30" y="30" width="180" height="120" fill="#eef2f7" stroke="#22303f" stroke-width="1.5"></rect>
+        <line x1="30" y1="58" x2="210" y2="58" stroke="#22303f" stroke-width="1.1"></line>
+        <line x1="30" y1="106" x2="210" y2="106" stroke="#22303f" stroke-width="1.1"></line>
+        <text x="120" y="49" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Patient record</text>
+        <text x="38" y="75" font-size="11" fill="#22303f">-patient: Patient</text>
+        <text x="38" y="94" font-size="11" fill="#22303f">-consultations: List</text>
+        <text x="38" y="124" font-size="11" fill="#22303f">+addConsultation(c: Consultation)</text>
+
+        <!-- Patient -->
+        <rect x="30" y="215" width="150" height="42" fill="#eef2f7" stroke="#22303f" stroke-width="1.5"></rect>
+        <text x="105" y="241" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Patient</text>
+
+        <!-- Consultation -->
+        <rect x="440" y="215" width="170" height="42" fill="#eef2f7" stroke="#22303f" stroke-width="1.5"></rect>
+        <text x="525" y="241" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Consultation</text>
+
+        <!-- aggregation: hollow diamond at the whole (Patient record) end -->
+        <polygon points="105,150 113,162 105,174 97,162" fill="#ffffff" stroke="#22303f" stroke-width="1.4"></polygon>
+        <line x1="105" y1="174" x2="105" y2="215" stroke="#22303f" stroke-width="1.5"></line>
+        <text x="118" y="190" font-size="11" fill="#22303f">1</text>
+        <text x="118" y="212" font-size="11" fill="#22303f">1</text>
+
+        <polygon points="210,120 222,112 234,120 222,128" fill="#ffffff" stroke="#22303f" stroke-width="1.4"></polygon>
+        <path d="M 234 120 L 525 120 L 525 215" fill="none" stroke="#22303f" stroke-width="1.5"></path>
+        <text x="243" y="112" font-size="11" fill="#22303f">1</text>
+        <text x="537" y="212" font-size="11" fill="#22303f">1..*</text>
+
+        <text x="330" y="288" text-anchor="middle" font-size="11.5" fill="#4a4a4a">hollow diamond at the whole: "part of" / "has a"</text>
+      </svg>
+      <figcaption>Aggregation in the lecture's notation: a hollow diamond at the whole (Patient record) end, solid lines, multiplicities at each end: one patient, and one or more consultations per record. Drawing after L3 slide 66.</figcaption>
+    </figure>
+
+    <h3>Aggregation, composition, and generalisation</h3>
+    <p><strong>Aggregation</strong> models how a "whole" object is composed of "part" objects, a "part of" / "has a" relationship. The hollow diamond sits at the whole end: a patient record is composed of a Patient and an indefinite number of Consultations. Standard UML draws one stronger variant the lecture's figure does not need: <strong>composition</strong>, a filled diamond, where parts share the whole's lifetime (delete the record and its consultations go with it). Use the hollow diamond unless you can defend the lifetime claim; the exam expects the diamond at the whole end either way.</p>
+    <p><strong>Generalisation</strong> manages complexity by factoring shared characteristics upward: hospital doctors and general practitioners share what all doctors have. The arrow points <em>up</em>: a hollow triangle on a solid line, toward the more general class, forming an "is-a" relationship. Subclasses inherit attributes and operations from their superclasses and add their own: all doctors have name, phone, email, register(), de-register(); hospital doctors add staff number and pager; general practitioners add practice name and address. The stated advantage is change management: "if changes are proposed, then you do not have to look at all classes in the system to see if they are affected." In Java, generalisation is implemented with class inheritance.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 660 250" role="img" aria-label="Generalization: Doctor with subclasses Hospital doctor and General practitioner, hollow triangles pointing up">
+        <defs>
+          <marker id="gen" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto">
+            <path d="M 1 1 L 11 6 L 1 11 z" fill="#ffffff" stroke="#22303f" stroke-width="1.3"></path>
+          </marker>
+        </defs>
+        <rect x="240" y="20" width="170" height="80" fill="#eef2f7" stroke="#22303f" stroke-width="1.5"></rect>
+        <line x1="240" y1="46" x2="410" y2="46" stroke="#22303f" stroke-width="1.1"></line>
+        <text x="325" y="39" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Doctor</text>
+        <text x="248" y="63" font-size="10.5" fill="#22303f">Name, Phone #, Email</text>
+        <text x="248" y="83" font-size="10.5" fill="#22303f">register(), de-register()</text>
+
+        <rect x="70" y="160" width="200" height="80" fill="#eef2f7" stroke="#22303f" stroke-width="1.5"></rect>
+        <line x1="70" y1="186" x2="270" y2="186" stroke="#22303f" stroke-width="1.1"></line>
+        <text x="170" y="179" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">Hospital doctor</text>
+        <text x="78" y="203" font-size="10.5" fill="#22303f">Name, Phone #, Email</text>
+        <text x="78" y="221" font-size="10.5" fill="#22303f">Staff #, Pager #</text>
+
+        <rect x="390" y="160" width="210" height="80" fill="#eef2f7" stroke="#22303f" stroke-width="1.5"></rect>
+        <line x1="390" y1="186" x2="600" y2="186" stroke="#22303f" stroke-width="1.1"></line>
+        <text x="495" y="179" text-anchor="middle" font-size="13" font-weight="600" fill="#22303f">General practitioner</text>
+        <text x="398" y="203" font-size="10.5" fill="#22303f">Name, Phone #, Email</text>
+        <text x="398" y="221" font-size="10.5" fill="#22303f">Practice, Address</text>
+
+        <path d="M 170 160 L 170 130 L 325 130 L 325 104" fill="none" stroke="#22303f" stroke-width="1.5" marker-end="url(#gen)"></path>
+        <path d="M 495 160 L 495 130 L 325 130" fill="none" stroke="#22303f" stroke-width="1.5"></path>
+        <text x="150" y="122" text-anchor="end" font-size="11" fill="#4a4a4a">generalization: hollow triangle pointing up ("is-a")</text>
+      </svg>
+      <figcaption>Generalisation in the lecture's notation: a hollow triangle pointing up to the more general class; subclasses inherit and add attributes. Drawing after L3 slides 62-63.</figcaption>
+    </figure>
+
+    <p>Generalisation versus aggregation is the exam's favourite distinction. Generalisation is "is-a": a hospital doctor <em>is a</em> doctor; the subclass inherits everything. Aggregation is "has-a": a patient record <em>has</em> consultations; the parts keep their own classes and are referenced by the whole. The lecture's follow-up question (what changes at implementation time) has the honest answer: inheritance implements generalisation, while aggregation is implemented by references or collections.</p>
+    <p>And you can live without generalisation: the lecture's answer slide flattens the hierarchy by copying the shared attributes into each class. It works — until a shared attribute changes, and you edit every class. That is the trade generalisation buys you.</p>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 44-53, 55, 61-68; the no-generalisation alternative and the default multiplicity are in L3 - Modeling to Communicate (UML-lite) v2 _Answers.pdf, slides 46, 65.</p>
+
+    <h2>From sequence diagram to class diagram</h2>
+    <p>The lecture's bridge between the two views is a five-step derivation, run on the 'View Patient Information' interaction you met above:</p>
+    <ol>
+      <li><strong>Identify classes</strong>: the objects in the sequence diagram are your classes: <code>PatientInfo</code>, <code>ReportEngine</code>, <code>Authorization</code>.</li>
+      <li><strong>Identify methods and types</strong>: each message becomes an operation, with the annotation's parameter and return types: <code>-viewInfo(PID:int)</code>, <code>-report(Info:String, PID:int, UID:int)</code>, <code>-authorize(Info:String, UID:int)</code>.</li>
+      <li><strong>Identify attributes and types</strong>: the data the operations work on: <code>PID:int</code>, <code>Info:String</code>, <code>UID:int</code>, and collections like <code>reports: List</code>.</li>
+      <li><strong>Define relationships</strong>: who talks to whom across the interaction.</li>
+      <li><strong>Draw associations and multiplicity</strong>: the worked derivation lands on multiplicities like <code>0..*</code> and <code>1</code> between the three classes, read by the per-object rule above.</li>
+    </ol>
+    <p>The reverse direction works too: the lecture notes that the overview of interaction for each use case can be presented by a sequence diagram, so a class diagram's associations suggest which interactions are possible. Keep the two consistent, the way the use case diagram must stay consistent with its description.</p>
+
+    <div class="callout tip"><span class="tag">Tooling</span>
+      <p>Text-based UML: you type the diagram, the tool draws it. Mermaid supports class and sequence diagrams (and state diagrams) and renders directly in GitHub Markdown, so a repository shows up to date diagrams with no plug-ins and no image files. It works with Git: version control, diff, code review. But always review AI-generated diagrams against the user stories, the notation, and your other diagrams: "AI makes the same mistakes you saw today, only faster".</p>
+    </div>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 55, 70; the five worked steps are itemised in L3 - Modeling to Communicate (UML-lite) v2 _Answers.pdf, slides 56-60.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">On a sequence diagram, a message drawn as a solid line with an open (hollow) triangle arrowhead means:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">An asynchronous call: the sender continues without waiting for a return value.</button>
+        <button class="quiz-option">A synchronous call: the sender must wait for a response to continue.</button>
+        <button class="quiz-option">A reply message answering an earlier call.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's three-way convention: synchronous call = solid line, filled triangle (sender waits); reply or asynchronous return = dashed line, open triangle; asynchronous call = solid line, open triangle (sender does not wait). The line style separates calls from replies; the arrowhead fill separates blocking from non-blocking.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">In a class diagram, Consultation is connected to Hospital doctor by an association labelled "Involves" with multiplicity <code>1..*</code> at the consultation end and <code>1..4</code> at the hospital doctor end. Which reading is correct?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Each consultation involves 1-4 hospital doctors, and a hospital doctor may be involved in several consultations.</button>
+        <button class="quiz-option">Each hospital doctor involves 1-4 consultations, and a consultation may have several doctors.</button>
+        <button class="quiz-option">There must be exactly 1 to 4 doctors in the hospital and 1 or more consultations each.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">A multiplicity counts objects at its own end, per one object at the other end. So <code>1..4</code> at the hospital doctor end says how many doctors per consultation, which is exactly the lecture's annotation, and <code>1..*</code> at the consultation end says how many consultations per doctor.</span></p>
+    </div>
+
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: on an exam class diagram, any association with both multiplicities greater than 1 is a modelling smell that should be resolved into an association class or a new class. Evidence that would change your mind: a domain where a genuine many-to-many relationship needs no extra artefact to stay understandable and implementable.</p>
+    </div>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: the lecture's four sequence-diagram faults (execution occurrence, misplaced arrows, message order, missing replies) are all really one fault: the diagram disagrees with the description. Evidence that would change your mind: a diagram that matches its description perfectly and is still wrong in one of the four named ways.</p>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="04-cs-1">
+        <span class="check-text">Label every part of a sequence diagram: actor, object box naming, lifeline, message, execution occurrence, alt fragment.</span></li>
+      <li><input type="checkbox" class="persist" data-id="04-cs-2">
+        <span class="check-text">Distinguish the three message line-and-arrowhead combinations (sync call, reply, async call) and say what each promises about waiting.</span></li>
+      <li><input type="checkbox" class="persist" data-id="04-cs-3">
+        <span class="check-text">Name the four common sequence diagram faults and spot one in a worked example.</span></li>
+      <li><input type="checkbox" class="persist" data-id="04-cs-4">
+        <span class="check-text">Read any multiplicity (1, 0..1, 1..*, 1..4) with the per-object rule and say what the default is when it is missing.</span></li>
+      <li><input type="checkbox" class="persist" data-id="04-cs-5">
+        <span class="check-text">Draw class boxes with name/attributes/operations compartments, +/- visibility, and typed attributes and operations.</span></li>
+      <li><input type="checkbox" class="persist" data-id="04-cs-6">
+        <span class="check-text">Tell aggregation (hollow diamond, "has-a") from generalisation (hollow triangle up, "is-a") and from composition (filled diamond), and say what each implies in code.</span></li>
+      <li><input type="checkbox" class="persist" data-id="04-cs-7">
+        <span class="check-text">Derive a class diagram skeleton from a sequence diagram in the five steps.</span></li>
+    </ul>
+
+    <h2>Flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The three message notations in a sequence diagram<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Sync call: solid line, filled triangle (sender waits). Reply / async return: dashed line, open triangle. Async call: solid line, open triangle (sender does not wait).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is an execution occurrence?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">The thin rectangle on a lifeline showing the interval during which that participant is active.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How is an alt combined fragment drawn?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A frame with "alt" in the corner, compartments separated by a line, each with a condition in square brackets; exactly one contained interaction runs.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The multiplicity reading rule<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A multiplicity at one end counts objects of the class at that end per single object of the class at the other end. Missing multiplicity defaults to 1.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Visibility markers in class diagrams<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">+ public, - private.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Aggregation vs generalisation, in one phrase each<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Aggregation: "has a" / "part of", hollow diamond at the whole end. Generalisation: "is-a", hollow triangle pointing up to the more general class.</span>
+      </span></button>
+    </div>
+
+    <p>Ready to apply this? <a href="practice-04-class-and-sequence-diagrams.html">Practice page 4: class and sequence diagrams</a> drills notation audits, multiplicity readings, and deriving classes from interactions.</p>
+
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 40-70, with worked answers from L3 - Modeling to Communicate (UML-lite) v2 _Answers.pdf, slides 27-35, 46, 56-60, 65. The composition (filled diamond) distinction is standard UML rather than a lecture figure.</p>
+
+    <nav class="pager">
+      <a href="03-use-case-modeling.html"><span class="dir">Previous</span><span class="name">Use case modeling</span></a>
+      <a class="next" href="05-ux-and-prototyping.html"><span class="dir">Next</span><span class="name">UX and prototyping</span></a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3297 revision: Use case modeling</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3297">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3297</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Use case modeling</h1>
+    <p class="lede">Actors, use cases, associations, and the system boundary: the notation the lecture uses, and the discipline of making a diagram and its written description say the same thing. Notation errors here lose marks even when your understanding is right.</p>
+
+    <h2>The mental model: a map of conversations</h2>
+    <p><strong>System modeling</strong> is developing abstract models of a system, each presenting a different view, using graphical notation: "now almost always based on notations in the Unified Modeling Language (UML)". Two audiences: models help the analyst understand the functionality, and they communicate with customers.</p>
+    <p>The lecture sorts diagrams into perspectives: <strong>context models</strong> model the environment (and are not UML), <strong>interaction models</strong> cover what passes between the system and its environment or among components (use case and sequence diagrams), <strong>structural models</strong> cover organisation of the system and its data (class diagrams), and <strong>behavioral models</strong> cover dynamic response to events (state machines). This page is one slice of the interaction perspective.</p>
+    <p>Two kinds of model, two jobs. Models of the <em>existing</em> system are used during requirements engineering to clarify what it does and to discuss strengths and weaknesses: these lead to requirements for the new system. Models of the <em>new</em> system explain proposed requirements to stakeholders, discuss design, and document for implementation. The lecture marks the first kind "may be incomplete" and the second "close to complete" for a reason: you model the old system only as far as you need to argue about the new one.</p>
+    <p>A use case diagram is the smallest useful map of the system's conversations. Each oval is one discrete task the system performs through external interaction; each stick figure is someone (or something) outside that takes part. The picture answers "who talks to this system, and about what?" — nothing more. Everything about <em>how</em> the conversation goes lives in a written description, and the lecture is explicit: "Use case diagrams give simple overview of interaction. We need to add more details for complete interaction description."</p>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 3-11.</p>
+
+    <h2>The notation, exactly as the lecture draws it</h2>
+    <p>Three elements carry the whole diagram. The lecture annotates them by number:</p>
+    <ul>
+      <li><strong>Actor</strong>: a stick figure. Actors "may be people or external systems": the Mentcare example has a medical receptionist (a person) and the patient record system (another system), both drawn as stick figures.</li>
+      <li><strong>Use case</strong>: an oval with the task name inside, for example "Transfer data". Each use case "represents a discrete task that involves external interaction with a system".</li>
+      <li><strong>Association</strong>: a plain straight line from an actor to a use case. No arrowhead.</li>
+    </ul>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 660 280" role="img" aria-label="Use case diagram for the Mentcare system: Medical receptionist linked to five use cases, Patient record system linked to Transfer data">
+        <!-- actor: medical receptionist -->
+        <circle cx="70" cy="95" r="13" fill="none" stroke="#22303f" stroke-width="1.8"></circle>
+        <line x1="70" y1="108" x2="70" y2="150" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="70" y1="120" x2="48" y2="138" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="70" y1="120" x2="92" y2="138" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="70" y1="150" x2="54" y2="178" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="70" y1="150" x2="86" y2="178" stroke="#22303f" stroke-width="1.8"></line>
+        <text x="70" y="200" text-anchor="middle" font-size="13" fill="#22303f">Medical receptionist</text>
+
+        <!-- use cases -->
+        <ellipse cx="350" cy="35" rx="105" ry="24" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.6"></ellipse>
+        <text x="350" y="40" text-anchor="middle" font-size="13" fill="#22303f">Register patient</text>
+
+        <ellipse cx="350" cy="95" rx="105" ry="24" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.6"></ellipse>
+        <text x="350" y="100" text-anchor="middle" font-size="13" fill="#22303f">Unregister patient</text>
+
+        <ellipse cx="350" cy="155" rx="105" ry="24" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.6"></ellipse>
+        <text x="350" y="160" text-anchor="middle" font-size="13" fill="#22303f">View patient info.</text>
+
+        <ellipse cx="350" cy="215" rx="105" ry="24" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.6"></ellipse>
+        <text x="350" y="220" text-anchor="middle" font-size="13" fill="#22303f">Transfer data</text>
+
+        <ellipse cx="350" cy="262" rx="105" ry="17" fill="#eef2f7" stroke="#5b7ba6" stroke-width="1.6"></ellipse>
+        <text x="350" y="267" text-anchor="middle" font-size="13" fill="#22303f">Contact patient</text>
+
+        <!-- associations from receptionist (plain lines, no arrows) -->
+        <line x1="96" y1="112" x2="246" y2="40" stroke="#22303f" stroke-width="1.4"></line>
+        <line x1="100" y1="122" x2="246" y2="97" stroke="#22303f" stroke-width="1.4"></line>
+        <line x1="104" y1="132" x2="246" y2="153" stroke="#22303f" stroke-width="1.4"></line>
+        <line x1="108" y1="145" x2="246" y2="212" stroke="#22303f" stroke-width="1.4"></line>
+        <line x1="112" y1="160" x2="250" y2="258" stroke="#22303f" stroke-width="1.4"></line>
+
+        <!-- actor: patient record system -->
+        <circle cx="590" cy="195" r="13" fill="none" stroke="#22303f" stroke-width="1.8"></circle>
+        <line x1="590" y1="208" x2="590" y2="250" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="590" y1="220" x2="568" y2="238" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="590" y1="220" x2="612" y2="238" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="590" y1="250" x2="574" y2="272" stroke="#22303f" stroke-width="1.8"></line>
+        <line x1="590" y1="250" x2="606" y2="272" stroke="#22303f" stroke-width="1.8"></line>
+        <text x="590" y="288" text-anchor="middle" font-size="13" fill="#22303f">Patient record system</text>
+
+        <line x1="455" y1="215" x2="572" y2="212" stroke="#22303f" stroke-width="1.4"></line>
+      </svg>
+      <figcaption>The Mentcare use case diagram including all use cases, drawn in the lecture's notation: stick-figure actors (person and external system), ovals for use cases, plain-line associations with no arrowheads, and no boundary box. Drawing after L3 slide 22.</figcaption>
+    </figure>
+
+    <p>Three things this figure shows that students often get wrong:</p>
+    <ul>
+      <li>An <strong>external system is an actor</strong> and gets the same stick figure as a person. The patient record system is outside this system, so it is an actor.</li>
+      <li><strong>Not every actor touches every use case.</strong> The receptionist uses all five; the patient record system takes part only in "Transfer data". Drawing a line "because it exists" invents a requirement.</li>
+      <li>Multiple use cases and multiple actors are fine: a system has as many use cases as it has discrete external-interaction tasks.</li>
+    </ul>
+
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>Arrows on use case associations are wrong, and the reason is the whole discipline in one line: "Formally, use case diagrams should use lines without arrows because arrows in the UML indicate the direction of flow of messages." The moment you draw an arrow you are claiming a message flow, which is a different diagram. If the exam asks whether an arrow can replace the line, the answer is no, with that rationale.</p>
+    </div>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 12-13; the arrow rule is stated in L3 - Modeling to Communicate (UML-lite) v2 _Answers.pdf, slide 15.</p>
+
+    <h2>Where the system boundary sits</h2>
+    <p><strong>Context models</strong> show what lies outside the system, and system boundaries "define what is inside and what is outside the system". The lecture's warning: "The position of the system boundary has a profound effect on the system requirements", and defining it "is a political judgment". Move authentication outside the boundary and someone else owns it; move it inside and you just signed up for a security requirement.</p>
+    <p>One notation note, since the exam grades notation. The lecture's own use case figures draw actors and ovals with plain lines and <em>no</em> enclosing rectangle. Standard UML permits a boundary rectangle named after the system, with use cases inside and actors outside; if you draw one, name it and keep actors outside. What is never negotiable is the association: plain line. Include and extend relationships (dashed arrows carrying <code>&lt;&lt;include&gt;&gt;</code> / <code>&lt;&lt;extend&gt;&gt;</code>) and comments on elements are listed in the lecture as required reading (uml-diagrams.org) rather than taught notation: know they exist and what they are for (factoring out shared behaviour, optional behaviour), but the graded core is actor, oval, plain association.</p>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 8-9, 18, 21.</p>
+
+    <h2>Writing use cases that communicate</h2>
+    <p>The diagram is the index; the description is the content. The lecture shows two levels: a simple textual description, and a structured description in a table. The tabular form for a Mentcare use case has these rows:</p>
+    <ul>
+      <li><strong>Actors</strong>: who takes part.</li>
+      <li><strong>Description</strong>: what happens, in prose.</li>
+      <li><strong>Stimulus</strong>: what starts it (a user command, an event).</li>
+      <li><strong>Response</strong>: what the system returns or does.</li>
+      <li><strong>Comments</strong>: conditions and caveats, such as permissions.</li>
+    </ul>
+    <h3>Worked example: View Patient Information</h3>
+    <ul>
+      <li><strong>Actors:</strong> Medical receptionist.</li>
+      <li><strong>Description:</strong> "A medical receptionist requests to view patient information. The request is processed through the report engine, which verifies the receptionist's authorization to access the information via the authorization component. If authorization is granted, the patient information is displayed; otherwise, an error message is returned."</li>
+      <li><strong>Stimulus:</strong> ViewInfo command issued by the medical receptionist.</li>
+      <li><strong>Response:</strong> Display of patient information or an error message indicating no access.</li>
+      <li><strong>Comments:</strong> The receptionist must have appropriate security permissions to access the patient information. Authorization is required to ensure secure access.</li>
+    </ul>
+    <p>Read that table and you already know the shape of its sequence diagram: a request in, a check with an authorization component, a branch into success or error. That is the point of the lecture's slide asking whether the diagram "aligns with the description": the two artefacts are two views of one truth, and a mismatch in either is a bug in your model. The 'Transfer data' table makes the same demand: the diagram must match rows like "Stimulus: user command issued by medical receptionist" and "Response: confirmation that PRS has been updated".</p>
+
+    <div class="callout tip"><span class="tag">Check habit</span>
+      <p>After drawing any use case diagram, pick one oval and say aloud who the actors are, what starts it, and what comes back. If the picture does not let you answer all three, the picture is wrong or the description is missing.</p>
+    </div>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 20, 23-25.</p>
+
+    <h2>When a use case diagram earns its place</h2>
+    <p>Use cases began as a requirements-elicitation tool and were later absorbed into the UML: keep that history in mind. The diagram earns its place when a reader needs the <em>overview</em>: a customer checking you have captured every task, a team agreeing on scope, an examiner seeing you know which actor touches which service. It loses to other artefacts when the question is about behaviour: the lecture hands each use case's interaction overview to a <strong>sequence diagram</strong> (page 4), and the detailed step-by-step behaviour to textual or tabular descriptions.</p>
+    <p>A practical way to decide: if removing the diagram would not change a decision anyone makes, it is decoration. The Mentcare figure changes decisions: "Contact patient" has no external system actor, so no interface work is scheduled; "Transfer data" does, so there is an integration requirement with the patient record system.</p>
+
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>Mermaid has no use case diagram. It supports class, sequence and state diagrams, but ask an AI tool for a Mermaid use case diagram and "it will still give you a fake one" (the lecture's words, from the W3 walkthrough). Text-based UML is great for the diagrams Mermaid supports because it works with Git; for use cases, draw them and check them by hand.</p>
+    </div>
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 11-12, 22, 70.</p>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A teammate draws the Transfer data use case with an arrow from the medical receptionist to the "Transfer data" oval, to show who starts it. Your review comment is:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Remove the arrowhead: UML arrows indicate direction of flow of messages, and a use case association is a plain line.</button>
+        <button class="quiz-option">Keep it: use case associations should show who initiates the task.</button>
+        <button class="quiz-option">Replace it with a dashed arrow, which is the correct way to show initiation.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's formal answer is that use case diagrams use lines without arrows, because in UML an arrow is a claim about message flow direction. Who initiates the task is written in the use case description's Stimulus row, not drawn as an arrow.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">In the Mentcare use case diagram, the patient record system is drawn as:</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A stick figure, because actors may be people or external systems.</button>
+        <button class="quiz-option">A cylinder or database symbol, because it is a data store.</button>
+        <button class="quiz-option">A rectangle with the system name, because it is a system.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture draws both the medical receptionist and the patient record system as stick figures: "Actors in a use case may be people or external systems." What matters is that the entity is outside the boundary of the system being modelled, not what shape it is in real life.</span></p>
+    </div>
+
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: for a system with fewer than ten use cases, the written descriptions alone are enough and the diagram should be dropped from the documentation. Evidence that would change your mind: a decision on a real project that the diagram made faster or more correct than prose alone, or a review comment that only the diagram caught.</p>
+    </div>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: putting the password service (authentication) inside your system boundary is the right call for a student project. Evidence that would change your mind: the cost of owning it: the security requirements you inherit, versus the cost and risk of depending on an external identity provider you do not control.</p>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="03-uc-1">
+        <span class="check-text">Draw a use case diagram with correct notation: stick-figure actors, named ovals, plain-line associations, no arrowheads.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-uc-2">
+        <span class="check-text">Say why a use case association must not carry an arrow, using the message-flow rationale.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-uc-3">
+        <span class="check-text">Decide for a given entity whether it is an actor, and justify it by the system boundary rather than by whether it is a person.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-uc-4">
+        <span class="check-text">Fill the tabular use case form (Actors, Description, Stimulus, Response, Comments) for a fresh task and check the diagram matches it.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-uc-5">
+        <span class="check-text">Explain why the system boundary is a political judgment and give one requirement that moves when the boundary moves.</span></li>
+      <li><input type="checkbox" class="persist" data-id="03-uc-6">
+        <span class="check-text">State when a use case diagram earns its place, and what artefact replaces it when it does not.</span></li>
+    </ul>
+
+    <h2>Flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The three elements of a use case diagram<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Actor (stick figure; person or external system), use case (oval naming a discrete task with external interaction), association (plain line, no arrow).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Why no arrows on use case associations?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Formally, use case diagrams use lines without arrows because arrows in UML indicate the direction of flow of messages.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does a use case diagram NOT tell you?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">How the interaction goes. It is only a simple overview; complete interaction description needs textual or tabular descriptions, or a sequence diagram.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Rows of the tabular use case description<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Actors, Description, Stimulus, Response, Comments.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">System boundary: why does its position matter?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">It has a profound effect on the system requirements, and defining it is a political judgment: inside means you own the requirement.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Can Mermaid draw use case diagrams?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">No. Mermaid supports class, sequence and state diagrams; an AI asked for a Mermaid use case diagram will produce a fake one.</span>
+      </span></button>
+    </div>
+
+    <p>Ready to apply this? <a href="practice-03-use-case-modeling.html">Practice page 3: use case modeling</a> drills notation fixes, actor decisions, and diagram-description alignment.</p>
+
+    <p class="source">Source: L3 - Modeling to Communicate (UML-lite) v1.pdf, slides 3-25, 70 (notation and interaction models), with the association-arrow answer from L3 - Modeling to Communicate (UML-lite) v2 _Answers.pdf, slide 15. Include/extend are named as required reading (uml-diagrams.org) on slide 18.</p>
+
+    <nav class="pager">
+      <a href="02-requirements-engineering.html"><span class="dir">Previous</span><span class="name">Requirements engineering</span></a>
+      <a class="next" href="04-class-and-sequence-diagrams.html"><span class="dir">Next</span><span class="name">Class and sequence diagrams</span></a>
+    </nav>
+  </main>
+</body>
+</html>

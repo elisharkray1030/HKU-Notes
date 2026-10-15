@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision: The app lifecycle</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>The app lifecycle</h1>
+    <p class="lede">Chapter 2 uses "lifecycle" for the journey from app idea to running product
+    to next version. This page builds that picture, then untangles it from the runtime lifecycle
+    you will meet in Chapter 6, because mixing the two up is the most common way to lose marks
+    on this topic.</p>
+
+    <h2>Two different things called "lifecycle"</h2>
+    <p>Fix this distinction first, because the course uses one word for two stories:</p>
+    <ul>
+      <li><strong>The development lifecycle</strong> (Chapter 2): how an app comes into existence
+      and keeps improving: inception, design, development, stabilization, deployment, then
+      tracking and updates. This is a <em>project</em> story. Timescale: months.</li>
+      <li><strong>The runtime lifecycle</strong> (Chapter 6): the sequence of callback methods
+      the Android system invokes on your activity as the user opens, switches away from and
+      returns to your screen. This is a <em>code</em> story. Timescale: seconds.</li>
+    </ul>
+    <p>Both are "managed" by someone other than you: the store manages your release flow, and the
+    Android system manages your component's callbacks. That is the shared idea underneath the
+    word: a lifecycle is a process you plug into rather than drive.</p>
+    <div class="callout why"><span class="tag">Why it matters</span>
+      <p>An exam question like "describe the app lifecycle" expects Chapter 2's phases unless it
+      names activities or callbacks. If it names onCreate/onPause, it wants Chapter 6. Read the
+      question's vocabulary before choosing a story.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 2-4; COMP3330_Ch06_Activity_Fragment.pdf, slides 6-7.</p>
+
+    <h2>Why a development lifecycle exists at all</h2>
+    <p>Two facts force structure onto mobile projects. First, mobile software is slow to ship:
+    the lecture quotes a Facebook release manager that "shipping mobile software is inherently
+    different than shipping web software – the stakes are higher", with even small changes taking
+    around 7 days of Apple review and users then needing to download the update. Second, mobile
+    software is slow to <em>fix</em>: a bad release cannot be patched instantly; it goes through
+    review again while users keep the broken version. So teams work in ordered phases with
+    checkpoints, and they test early precisely because late corrections are expensive.</p>
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slide 12; COMP3330_Ch01_Introduction.pdf, slide 43.</p>
+
+    <h2>The five phases</h2>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="The five development phases in a loop">
+        <rect x="20" y="30" width="110" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="75" y="52" text-anchor="middle" font-size="13" fill="currentColor">Inception</text>
+        <text x="75" y="70" text-anchor="middle" font-size="11" fill="currentColor">strategy + planning</text>
+        <rect x="165" y="30" width="110" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="220" y="52" text-anchor="middle" font-size="13" fill="currentColor">Design</text>
+        <text x="220" y="70" text-anchor="middle" font-size="11" fill="currentColor">UX then UI</text>
+        <rect x="310" y="30" width="110" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="365" y="52" text-anchor="middle" font-size="13" fill="currentColor">Development</text>
+        <text x="365" y="70" text-anchor="middle" font-size="11" fill="currentColor">working prototype</text>
+        <rect x="455" y="30" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="530" y="52" text-anchor="middle" font-size="13" fill="currentColor">Stabilization</text>
+        <text x="530" y="70" text-anchor="middle" font-size="11" fill="currentColor">bugs, usability, performance</text>
+        <line x1="130" y1="56" x2="163" y2="56" stroke="currentColor" stroke-width="2" marker-end="url(#arr2)"/>
+        <line x1="275" y1="56" x2="308" y2="56" stroke="currentColor" stroke-width="2" marker-end="url(#arr2)"/>
+        <line x1="420" y1="56" x2="453" y2="56" stroke="currentColor" stroke-width="2" marker-end="url(#arr2)"/>
+        <rect x="240" y="120" width="160" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="142" text-anchor="middle" font-size="13" fill="currentColor">Deployment</text>
+        <text x="320" y="160" text-anchor="middle" font-size="11" fill="currentColor">sign, distribute, publish</text>
+        <line x1="530" y1="82" x2="380" y2="118" stroke="currentColor" stroke-width="2" marker-end="url(#arr2)"/>
+        <rect x="240" y="210" width="160" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="232" text-anchor="middle" font-size="13" fill="currentColor">Performance tracking</text>
+        <text x="320" y="250" text-anchor="middle" font-size="11" fill="currentColor">downloads, time, revenue</text>
+        <line x1="320" y1="172" x2="320" y2="208" stroke="currentColor" stroke-width="2" marker-end="url(#arr2)"/>
+        <path d="M 240 236 C 120 236 75 180 75 84" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arr2)"/>
+        <text x="120" y="185" font-size="11" fill="currentColor">feedback drives the next version</text>
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>Chapter 2's phases. The loop closes through performance tracking: a release is
+      "the first step in developing a continuous evolution, not the final product".</figcaption>
+    </figure>
+
+    <h3>Inception (strategy, then analysis and planning)</h3>
+    <p>Inception defines and refines the app idea. Strategy questions: <strong>competitive
+    advantage</strong> (are there similar apps? how does this one differentiate?), <strong>infrastructure
+    integration</strong> (for enterprise distribution, what existing infrastructure does it
+    extend?), <strong>value</strong> (what does it bring users? how will they use it?) and
+    <strong>form / mobility</strong> (how does it work in mobile form? where do location awareness
+    and the camera add value?). To shape functionality, define <strong>actors</strong> (roles
+    within the application, often users) and <strong>use cases</strong> (actions or intents).</p>
+    <p>Analysis and planning then demands clear objectives (a specific purpose and marketing
+    campaign; expected outcome; you cannot ship every service in one app, so identify the exact
+    scope) and the target audience and their requirements (where you can reach them, their
+    implicit needs, the on-the-go features they might demand: functionality and UI must line up
+    with customer expectations).</p>
+
+    <h3>Design: UX first, then UI</h3>
+    <p><strong>UX design</strong> is done with wireframes or mockups, so the experience can be
+    designed before the real UI exists. <strong>Paper prototyping</strong>: hand drawings of
+    interfaces: is used to communicate ideas between designers, developers, users and
+    stakeholders at the start of user-centred design, and as a usability testing technique to
+    observe interaction before interfaces are designed and developed. Platform guidelines matter
+    (Apple Human Interface Guidelines, Android Design Guidelines): the app should "feel at home"
+    on each platform. Hardware shapes UX too: iOS devices have no physical back button (hence the
+    Navigation Controller metaphor), and a tablet's larger screen compresses what takes several
+    phone screens into one.</p>
+    <p><strong>UI design</strong> comes once the UX is settled: UX mockups are typically black
+    and white; UI design adds colours and graphics. Popular apps have professional design, and a
+    well-designed application may still look different on each platform.</p>
+
+    <h3>Development</h3>
+    <p>Development starts very early. Once the idea matures, build a working prototype: not an
+    animation: to validate functionality and assumptions and to expose the true scope of the
+    work.</p>
+
+    <h3>Stabilization / testing</h3>
+    <p>Stabilization works out the bugs from a functional standpoint, plus usability and
+    performance, and should start early so corrections are cheap. The lecture's maturity ladder:</p>
+    <ul>
+      <li><strong>Prototype</strong>: proof of concept; only core functionality or specific
+      parts work; major bugs present. Audience: key stakeholders.</li>
+      <li><strong>Alpha</strong>: core functionality is generally code-complete (built, not
+      fully tested); major bugs remain, outlying functionality may be missing.</li>
+      <li><strong>Beta</strong>: most functionality complete, at least light testing and bug
+      fixing done; major known issues may still be present.</li>
+      <li><strong>Release candidate</strong>: all functionality complete and tested; barring new
+      bugs, it is a candidate for release. May be distributed to customers who signed up for
+      early access.</li>
+    </ul>
+    <p>Notice the ladder is also an audience ladder: the app opens to more testers and feedback
+    as it moves along.</p>
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 3-12.</p>
+
+    <h3>Deployment (distribution)</h3>
+    <p>Once stabilized, publish. iOS options: <strong>ad-hoc deployment</strong> for development
+    and testing on a limited number of provisioned devices (what happens when you deploy from
+    Xcode), <strong>in-house deployment</strong> for internal corporate apps not on the App Store,
+    and the <strong>Apple App Store</strong> itself. Certificates prove authenticity under public
+    key infrastructure: a development certificate runs apps on devices during development, a
+    distribution certificate signs apps for designated devices or store submission.</p>
+    <p>Android: all applications must be <strong>signed</strong> before distribution, using the
+    developer's own certificate protected by a private key. Certificates can chain back to a
+    certificate authority, but most developers self-sign; the main purpose is to differentiate
+    developers and applications. Distribution is open: devices are not locked to one approved
+    store, and third-party stores are generally allowed.</p>
+
+    <h3>Performance tracking and enhancement</h3>
+    <p>Judge success with analysis: number of downloads, total minutes spent per user, total
+    revenue. The lecture's remark is the closing idea of the whole chapter: release is the first
+    step of continuous evolution. Ship the minimum, then listen to what customers love, hate,
+    desire, and say in critical reviews: all of it is scope for improvement.</p>
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 13-16.</p>
+
+    <h2>The runtime side: process state and "background"</h2>
+    <p>Chapter 2's slides barely touch runtime, but the scope of the course expects you to hold a
+    simple picture of it here, and page 6 develops it fully.</p>
+    <ul>
+      <li>Each application runs in <strong>its own process</strong> (Android is multi-process;
+      isolation uses Linux user and group IDs). Your code executes inside a process the system
+      owns, not one you created.</li>
+      <li>The system manages app life cycles: different callback functions are invoked at
+      different stages (onCreate, onStart, onResume, onPause, onStop, onDestroy: detailed on
+      <a href="06-activities-and-fragments.html">page 6</a>).</li>
+      <li>In the lecture's component vocabulary, <strong>"background"</strong> first appears as a
+      component label: an <em>activity</em> is "user interface / foreground" (buttons, lists),
+      while a <em>service</em> is "no user interface / background" (music, download). So
+      "background work" means work with no screen of its own.</li>
+      <li>The lifecycle note on slide 7 of Chapter 6 adds a second sense: an activity can be
+      <strong>visible but not in focus</strong> when the screen shows multiple activities at
+      once. Focus and visibility are separate axes, which is why the callbacks come in pairs
+      (onStart = visible, onResume = focus).</li>
+    </ul>
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>"Background" is overloaded: no UI (a service), or not the thing the user is interacting
+      with (the plain-English sense). The slides define the first. When answering, say which sense
+      you mean.</p>
+    </div>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: the release-candidate stage is the first point at which real users
+      should touch an app, and prototypes should be shown only to stakeholders. Evidence that
+      would change your mind: cases where usability testing on paper prototypes with real end
+      users (not stakeholders) at the design stage prevented a wrong feature set: the lecture
+      itself suggests paper prototypes are a usability testing technique.</p>
+    </div>
+
+    <h2>Worked mini-example: one app through the phases</h2>
+    <p>Take a "class deadline reminder" app for HKU students. Inception: competitive advantage
+    against calendar apps is HKU course-code awareness; value is fewer missed deadlines; form:
+    push notifications and timetable import; actors: student, and (later) course coordinator;
+    use cases: import courses, set reminders, snooze. Planning: scope to one faculty first.
+    Design: paper prototype of the reminder screen tested with three classmates; on Android no
+    back-button problem, but tablet layout would compress two screens into one. Development: a
+    working prototype that imports one real timetable format. Stabilization: alpha when import
+    works but notifications misfire; beta after two weeks of light testing; release candidate
+    after all functionality is tested. Deployment: self-signed APK for testers, then Google Play.
+    Tracking: downloads, minutes per user, reviews complaining about import: next version fixes
+    import. That loop is the whole chapter in one story.</p>
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 3-16.</p>
+
+    <h2>Check yourself</h2>
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">Your app is code-complete and built, but not fully tested, and major bugs
+      remain. Which stage of the lecture's ladder are you in?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Alpha</button>
+        <button class="quiz-option">Beta</button>
+        <button class="quiz-option">Release candidate</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Alpha is defined as core functionality generally code-complete but not fully tested, with major bugs still present. Beta has had at least light testing and bug fixing.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Which pair of questions belongs to the inception phase?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">What is our competitive advantage? Who is our target audience?</button>
+        <button class="quiz-option">Which certificate type signs the store submission? How long is review?</button>
+        <button class="quiz-option">Which callbacks fire when A starts B? Where should the DB write go?</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Inception covers competitive advantage, value, form/mobility, and then audience and requirements. Certificates belong to deployment; callbacks are Chapter 6 runtime material.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">In the lecture's component vocabulary, what does "background" describe?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">A component with no user interface, such as a service doing music playback or downloads.</button>
+        <button class="quiz-option">Any app that is installed but not currently open.</button>
+        <button class="quiz-option">A screen the user has scrolled past.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 6 lists Service as "no user interface / background" (music, download) versus Activity as "user interface / foreground". The second option is everyday English, not the course's definition.</span></p>
+    </div>
+
+    <h2>Recap flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five phases of the mobile app development lifecycle.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Inception (strategy + analysis/planning), Design (UX then UI), Development, Stabilization / Testing, Deployment: then performance tracking feeds the next iteration.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Prototype vs. Alpha vs. Beta vs. Release candidate.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Prototype: proof of concept, major bugs, core only. Alpha: code-complete core, not fully tested. Beta: most functionality complete, lightly tested. RC: all functionality complete and tested, barring new bugs.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Why start stabilization early?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Corrections occur before they become costly: late fixes hit store review (about 7 days on Apple) and slow user adoption.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How does Android app distribution differ from iOS?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Android is open: apps must be signed (self-signing is common; certificates differentiate developers), but devices are not locked to one store and third-party stores are allowed. iOS uses ad-hoc, in-house, or App Store distribution with Apple certificates.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Two meanings of "background" in this course.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A component with no UI (service); and, loosely, anything the user is not interacting with. The slides define the first: say which sense you mean.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is paper prototyping for?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Hand-drawn interfaces used to communicate ideas between designers, developers, users and stakeholders, and to observe usability before interfaces are built.</span>
+      </span></button>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="02-lifecycle-1">
+          <span class="check-text">Say which "lifecycle" a question means before answering it.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-lifecycle-2">
+          <span class="check-text">Walk an app idea through the five phases and name one concrete artefact per phase.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-lifecycle-3">
+          <span class="check-text">Distinguish the four stabilization stages by code state, testing state and audience.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-lifecycle-4">
+          <span class="check-text">Explain what app signing proves on Android and why self-signing is common.</span></li>
+      <li><input type="checkbox" class="persist" data-id="02-lifecycle-5">
+          <span class="check-text">Explain why "background" is an overloaded word here, and give both senses.</span></li>
+    </ul>
+
+    <div class="callout tip"><span class="tag">Practise this</span>
+      <p><a href="practice-02-app-lifecycle.html">Practice set 2: the app lifecycle</a>: stage
+      calls, release decisions and the runtime/development distinction, with full worked answers.</p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch02_Lifecycle.pdf, slides 2-16 (chapter read in full);
+    runtime terms from COMP3330_Ch06_Activity_Fragment.pdf, slides 3, 6-7.</p>
+
+    <nav class="pager">
+      <a class="prev" href="01-mobile-app-fundamentals.html">&larr; Previous: mobile app fundamentals</a>
+      <a class="next" href="03-ide-and-tooling.html">Next: IDEs and tooling &rarr;</a>
+    </nav>
+  </main>
+</body>
+</html>

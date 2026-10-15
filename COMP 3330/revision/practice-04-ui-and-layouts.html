@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision — Practice: UI and layouts</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Practice</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Practice: UI and layouts</h1>
+    <p class="lede">Chapter 4 rewards one skill above all: predicting what a piece of layout XML actually draws, then wiring the drawn views to code. These exercises drill that prediction, the id system behind it, and the dimension units that decide whether your screen survives different phones.</p>
+    <p>Background: <a href="04-ui-and-layouts.html">UI and layouts</a>.</p>
+
+    <h2>Quiz: views, attributes and units</h2>
+
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">A ScrollView is a FrameLayout. What does the lecture say this means for your layout XML?</p>
+      <div class="options">
+        <button class="quiz-option">You should place as many children as possible directly in it</button>
+        <button class="quiz-option" data-correct="true">You should place one child in it containing the entire contents to scroll; that child may itself be a layout with a complex hierarchy</button>
+        <button class="quiz-option">It cannot contain a RelativeLayout</button>
+        <button class="quiz-option">It scrolls automatically for any number of direct children</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 4: "A ScrollView is a FrameLayout, meaning you should place one child in it containing the entire contents to scroll. This child may itself be a layout manager with a complex hierarchy of objects." The course's own ScrollView example wraps a single RelativeLayout.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">Why does the lecture recommend sp for font sizes but dp for other dimensions?</p>
+      <div class="options">
+        <button class="quiz-option">sp is only for iOS fonts; dp is for Android fonts</button>
+        <button class="quiz-option" data-correct="true">sp is like dp but is also scaled by the user's font size preference, so text adjusts for both screen density and user preference</button>
+        <button class="quiz-option">dp cannot be used inside a TextView</button>
+        <button class="quiz-option">sp is physical, dp is abstract</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 4: dp is an abstract unit based on physical screen density, relative to a 160 dpi screen (1 dp = 1 px there); sp is like dp but also scaled by the user's font size preference, and is recommended for font sizes. In, mm and pt are physical units; px is raw pixels.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">In a ConstraintLayout, a Button has layout_constraintLeft_toLeftOf="parent", layout_constraintRight_toRightOf="parent" and layout_constraintHorizontal_bias="0.3". Where does it sit?</p>
+      <div class="options">
+        <button class="quiz-option">Centred, because two opposing constraints cancel out</button>
+        <button class="quiz-option" data-correct="true">30% of the way from the parent's left edge to its right edge</button>
+        <button class="quiz-option">Pinned to the left edge with a 0.3 dp margin</button>
+        <button class="quiz-option">The XML is invalid, so the app crashes</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The lecture's "Contradiction???" slide answers its own question: the plain version with left and right constrained to parent is the opposing-constraint case, and adding layout_constraintHorizontal_bias="0.3" places the element at a 30% position between the two anchors. The bias resolves the tension; it is not a margin.</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">In android:id="@+id/my_button", what do "@" and "+" mean?</p>
+      <div class="options">
+        <button class="quiz-option">@ marks a comment; + means the id is optional</button>
+        <button class="quiz-option" data-correct="true">"@" means parse and expand the reference; "+" means add the id to the resources (R), so code can fetch it with findViewById(R.id.my_button)</button>
+        <button class="quiz-option">@ means static resource; + means runtime value</button>
+        <button class="quiz-option">They are only needed in ConstraintLayout</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 4's XML attributes slide: the id is needed when the view is referenced by other views or by Java/Kotlin code; "@": parse and expand; "+": add to resource (that is, R). The code side then reads Button myButton = (Button) findViewById(R.id.my_button);</span></p>
+    </div>
+
+    <div class="quiz">
+      <span class="qnum">Q5</span>
+      <p class="quiz-q">What is the relationship between fill_parent and match_parent?</p>
+      <div class="options">
+        <button class="quiz-option">fill_parent expands to the parent; wrap_content is the same thing</button>
+        <button class="quiz-option">match_parent only works below API 8</button>
+        <button class="quiz-option" data-correct="true">They mean the same "take all available space in the parent" behaviour; fill_parent is the old name and match_parent applies from API 8</button>
+        <button class="quiz-option">fill_parent wraps content; match_parent fills the screen physically</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Chapter 4 writes "fill_parent / match_parent (&gt;API 8)" together and defines the shared behaviour: the widget expands to take up as much space as is available within the layout element it is placed in. wrap_content instead expands only far enough to contain its values or child controls.</span></p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 11, 17, 32, 35, 39.</p>
+
+    <h2>Exercise 1: predict what the XML draws</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 1</span>
+        <span class="ex-skill">skill: predicting LinearLayout rendering from width and orientation</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>This layout is Chapter 4's horizontal form example, trimmed:</p>
+      <div class="code-block"><span class="lang-label">XML</span><pre><code>&lt;LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"&gt;
+  &lt;Button android:text="Back"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" /&gt;
+  &lt;TextView android:text="First Name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" /&gt;
+  &lt;EditText android:width="100px"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" /&gt;
+&lt;/LinearLayout&gt;</code></pre></div>
+      <p>(a) Describe the drawing left to right. (b) Flip orientation to vertical and describe again. (c) Change the Button's layout_width to match_parent while keeping the row horizontal: what happens to the TextView and EditText, and why?</p>
+      <details class="step"><summary>Step 1: apply the container's rule</summary>
+        <p>LinearLayout "organize elements along a single line", horizontal or vertical per android:orientation. Drawing is done from the root of the view hierarchy. So with horizontal, the three children appear in declaration order along one line: Back button, then the label, then a 100 px wide input field.</p>
+      </details>
+      <details class="step"><summary>Step 2: apply each child's sizing</summary>
+        <p>wrap_content expands the view only far enough to contain its contents; 100px (android:width, a raw pixel width) forces the field's width to 100 physical pixels regardless of screen density. With vertical orientation the order stays the same but the stacking runs top to bottom.</p>
+      </details>
+      <details class="step"><summary>Step 3: the match_parent row case</summary>
+        <p>match_parent (equal to fill_parent) forces the widget to take up as much space as is available within its parent. In a horizontal LinearLayout, "as much as available" is the whole row, so the Button claims everything and the two views declared after it fall outside the visible edge of the row.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) One row: "Back" button, "First Name" label, 100 px input field, in that order. (b) With orientation="vertical": the same three, stacked top to bottom in that order. (c) The Button takes the entire row; the TextView and EditText are laid out after it and end up beyond the visible area. The chain: match_parent means "all space available in the parent", LinearLayout places children along a single line in order, so a full-width first child leaves nothing visible after it.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>android:width="100px" is not layout_width. The slide example uses it, and it sets a raw pixel width that does not scale with screen density, exactly the habit Chapter 4's dimension section warns against. And fill_parent is not "fill the screen": it fills the parent container, which is why the second slide page writes fill_parent / match_parent as one concept.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 11 (match_parent / wrap_content), 20-21 (LinearLayout examples), 37-38 (px and other physical units).</p>
+
+    <h2>Exercise 2: counting TableLayout columns</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 2</span>
+        <span class="ex-skill">skill: deriving column count from rows, layout_column and layout_span</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>Rows are declared in XML; columns are determined by Android. Use the Chapter 4 rules: each element gets at least one column; android:layout_column picks which column an element occupies; android:layout_span lets one element occupy several columns and can increase the total column count. Now this table:</p>
+      <div class="code-block"><span class="lang-label">XML</span><pre><code>&lt;TableLayout ...&gt;
+  &lt;TableRow&gt;
+    &lt;Button android:text="Back" ... /&gt;
+  &lt;/TableRow&gt;
+  &lt;TableRow&gt;
+    &lt;TextView android:text="Title" android:layout_column="1" ... /&gt;
+    &lt;EditText ... /&gt;
+  &lt;/TableRow&gt;
+  &lt;TableRow&gt;
+    &lt;TextView android:layout_span="2" ... /&gt;
+    &lt;TextView ... /&gt;
+  &lt;/TableRow&gt;
+&lt;/TableLayout&gt;</code></pre></div>
+      <p>(a) How many rows and columns does the table have? (b) In which column does each element of rows 2 and 3 sit? (c) If a fourth row adds two elements each with android:layout_span="3", what is the column count then?</p>
+      <details class="step"><summary>Step 1: place row 1</summary>
+        <p>One element, no explicit column: it takes column 0. Minimum columns so far: 1.</p>
+      </details>
+      <details class="step"><summary>Step 2: place rows 2 and 3 in order</summary>
+        <p>Elements are placed one after another along the row; layout_column="1" forces the row-2 label into column 1, and the next element follows into column 2. Row 3: the span-2 label occupies columns 0-1, the following label lands in column 2. Widest row reaches column 2, so the table has 3 columns, matching the worked answer to the lecture's own challenge (3 rows, 3 columns) on its variant of this table.</p>
+      </details>
+      <details class="step"><summary>Step 3: apply the span rule for part (c)</summary>
+        <p>The lecture states it directly: two elements each with layout_span="3" give "at least six columns in your table". Six exceeds the current three, so the count becomes 6.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) 3 rows, 3 columns. (b) Row 2: label in column 1, input in column 2. Row 3: span-2 label in columns 0-1, second label in column 2. (c) At least 6 columns. The reasoning chain: rows come from XML, columns from placement; explicit layout_column jumps the placement index, span widens an element and raises the total when it overflows.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Two traps. First, "columns = most elements in any row" gives 2 here and is wrong: the row-2 label jumps to column 1, which pushes its input to column 2. Second, the slide's phrase "first unused column in the row" is loose wording: its own worked challenge (3 rows, 3 columns) only works if elements advance along the row after a layout_column jump. Trust the worked answer: placement advances one element at a time; layout_column forces a column index.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 25-26 (TableLayout rules and the 3-row 3-column challenge).</p>
+
+    <h2>Exercise 3: from XML ids to working code</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 3</span>
+        <span class="ex-skill">skill: wiring views to listeners in Kotlin and Java</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>A tip calculator's layout has: EditText @+id/total (bill total), EditText @+id/percent (tip percentage), Button @+id/calc, TextView @+id/result. Write the activity code that inflates this layout in onCreate, obtains the four views, and shows the tip when the button is pressed, in the Chapter 4 style: a named listener object handed to setOnClickListener. Then answer: why does the Java version mark its view variables final?</p>
+      <details class="step"><summary>Step 1: inflate, then find</summary>
+        <p>setContentView(R.layout.activity_main) inflates the XML at run time ("inflate the xml for Activity.onCreate()", no additional coding). Then findViewById with the R.id values matching the @+id names.</p>
+      </details>
+      <details class="step"><summary>Step 2: attach the listener</summary>
+        <p>Dynamic behaviour in Chapter 4 is event handling: define a listener object and hand it to the button with setOnClickListener. The onClick body reads the fields, computes, and sets the label's text.</p>
+      </details>
+      <details class="step"><summary>Step 3: check the language details</summary>
+        <p>Kotlin: findViewById needs a target type and the result is cast (findViewById&lt;View&gt;(R.id.total) as EditText); nullable fields use "?" and "!!" where you know onCreate ran first. Java: findViewById returns View, so it is cast to the widget class; an anonymous listener class captures local variables, which must be final ("final = always contain the same value", as the slide notes).</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <div class="tabs">
+          <section class="tab-panel" data-label="Kotlin">
+            <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class MainActivity : AppCompatActivity() {
+    private var total: EditText? = null
+    private var percent: EditText? = null
+    private var result: TextView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        total = findViewById&lt;View&gt;(R.id.total) as EditText
+        percent = findViewById&lt;View&gt;(R.id.percent) as EditText
+        result = findViewById&lt;View&gt;(R.id.result) as TextView
+        val calc = findViewById&lt;View&gt;(R.id.calc) as Button
+
+        val listener = View.OnClickListener {
+            val t = total!!.text.toString().toDouble()
+            val p = percent!!.text.toString().toDouble()
+            val tip = t * p / 100
+            result!!.text = "Tip: $tip"
+        }
+        calc.setOnClickListener(listener)
+    }
+}</code></pre></div>
+          </section>
+          <section class="tab-panel" data-label="Java">
+            <div class="code-block"><span class="lang-label">Java</span><pre><code>public class MainActivity extends AppCompatActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        final EditText total = (EditText) findViewById(R.id.total);
+        final EditText percent = (EditText) findViewById(R.id.percent);
+        final TextView result = (TextView) findViewById(R.id.result);
+        Button calc = (Button) findViewById(R.id.calc);
+
+        Button.OnClickListener listener = new Button.OnClickListener() {
+            public void onClick(View dummy) {
+                double t = Double.parseDouble(total.getText().toString());
+                double p = Double.parseDouble(percent.getText().toString());
+                result.setText("Tip: " + (t * p / 100));
+            }
+        };
+        calc.setOnClickListener(listener);
+    }
+}</code></pre></div>
+          </section>
+        </div>
+        <p>The Java view variables are final because the anonymous listener class reads them from its onClick method: the captured reference must always contain the same value. The Kotlin lambda does the same capture without the keyword, and "!!" asserts non-null (it throws if the value is null), which is safe here because onCreate assigned the fields before any click.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Forgetting the cast. findViewById hands back a View; the slide examples cast in Java ((EditText) findViewById(...)) and in Kotlin (findViewById&lt;View&gt;(...) as EditText). Without it, the compiler will not let you call setText or getText. Second trap: calling findViewById before setContentView: you would search a hierarchy that does not exist yet.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 8-10 (layout + Java/Kotlin wiring), 16 (inflation), 17 (ids), 9 (final note). Code style follows the lecture's random-number example, with a fresh tip-calculator scenario.</p>
+
+    <h2>Exercise 4: choosing dimension units</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 4</span>
+        <span class="ex-skill">skill: reasoning about dp, sp, px and density</span>
+        <span class="difficulty">easy</span>
+      </div>
+      <p>A designer specifies a card image 100 dp wide and its caption 15 sp. (a) How many physical pixels wide is the image on a 160 dpi screen, and on a 320 dpi screen? (b) Why is the caption specified in sp and the image in dp? (c) The course's dimension example defines a resource dimen name="textsize" with value 15sp. Show how the code side reads it, and say what breaks if the caption were 15px instead.</p>
+      <details class="step"><summary>Step 1: the dp rule</summary>
+        <p>1 dp is 1 pixel on a 160 dpi screen; the ratio of dp to pixels changes with screen density (the lecture's picture: 1 dp = 1 px at 160 dpi, 1 dp = 2 px at 320 dpi). So 100 dp = 100 px at 160 dpi and 200 px at 320 dpi.</p>
+      </details>
+      <details class="step"><summary>Step 2: the sp rule</summary>
+        <p>sp is like dp but also scaled by the user's font size preference, and is recommended for font sizes so text adjusts for both density and user preference. An image has no font preference to honour, so dp is the right unit for it.</p>
+      </details>
+      <details class="step"><summary>Step 3: the resource and the px failure</summary>
+        <p>The slide's pair: define &lt;dimen name="textsize"&gt;15sp&lt;/dimen&gt; in a resources file, then in Java textView.setTextSize(getResources().getDimension(R.dimen.textsize));. If the caption were 15px, it would be 15 raw pixels on every screen: microscopic on a 320 dpi panel and immune to the user's font-size setting.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(a) 100 px at 160 dpi; 200 px at 320 dpi. (b) Text in sp so it honours the user's font-size preference on top of density; images in dp, which handle density only. (c) XML: &lt;dimen name="textsize"&gt;15sp&lt;/dimen&gt;; code: textView.setTextSize(getResources().getDimension(R.dimen.textsize)); 15px would ignore density and the user's font preference, so the caption would look wrong on most phones.</p>
+        <div class="callout compare"><span class="tag">Compare</span>
+          <p>px (raw pixels), in and mm (physical size), pt (1/72 inch physically) are all physical; dp is abstract and density-based; sp is dp plus user font scaling. Exam rule of thumb from the slides: font sizes in sp, everything else in dp, physical units only when you genuinely mean physical size.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 38-41 (px/in/mm/pt, dp, sp, dimen example).</p>
+
+    <h2>Mixed exercise: the Card 24 screen skeleton</h2>
+
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 5</span>
+        <span class="ex-skill">skill: combining nesting rules, UX thresholds and wiring</span>
+        <span class="difficulty">hard</span>
+      </div>
+      <p>This pulls Chapters 1 and 5 in with Chapter 4. You are laying out a simplified Card 24 scoreboard: four card ImageButtons in a row, an expression TextView, a row of six operator Buttons (+, -, x, /, (, )), and two Buttons ("New game", "Clear") plus one "=" Button. Tutorial 2's guidance: the outermost layout is a ScrollView and all inner layouts are LinearLayouts, because the content can exceed the screen. (1) Sketch the nesting tree and say how many direct children the ScrollView may have and why. (2) The card buttons must be tappable with one thumb at 7-10 mm minimum; name the Chapter 1 principle this serves. (3) Name which views need ids and write the one-line rule from Chapter 4. (4) Preview the Kotlin field declaration Tutorial 3 uses for the card array and say what "lateinit" means there.</p>
+      <details class="step"><summary>Step 1: the tree</summary>
+        <p>ScrollView (outermost) → one LinearLayout (vertical) → row LinearLayouts (horizontal) for the cards and the operator row, plus the expression TextView and the bottom Button row. Because a ScrollView is a FrameLayout, it takes one direct child; everything else nests inside that child layout.</p>
+      </details>
+      <details class="step"><summary>Step 2: the UX principle</summary>
+        <p>Principle 4: "Design finger-friendly tap-targets": targets not less than 7-10 mm, with clear visual feedback (Tutorial 2 even suggests indicators for selected cards).</p>
+      </details>
+      <details class="step"><summary>Step 3: which ids</summary>
+        <p>Chapter 4: an id is "needed if the view needs to be referenced by other views or Java/Kotlin code". Every card, operator, and command button plus the expression TextView is touched from code (Tutorial 2 wires R.id.card1..card4; Tutorial 3 wires repick, checkinput, left, right, plus, minus, multiply, divide, clear, input), so all of them get @+id names.</p>
+      </details>
+      <details class="step"><summary>Step 4: the Kotlin declaration</summary>
+        <p>Tutorial 2: "private lateinit var cards: Array&lt;ImageButton&gt;" with its own comment "lateinit: will be initialized later", assigned in onCreate before use (Tutorial 3 carries the same declaration).</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p>(1) ScrollView → one vertical LinearLayout → horizontal LinearLayout rows (cards; operators; commands) with the expression TextView between them. One direct child in the ScrollView: it is a FrameLayout whose single child carries the entire scrollable contents. (2) Principle 4, finger-friendly tap targets of at least 7-10 mm with clear visual feedback. (3) Every view referenced from code gets an id: the Chapter 4 rule is that an id is needed when the view is referenced by other views or by Java/Kotlin code. Here that is all four cards, all operator and command buttons, and the expression TextView. (4) private lateinit var cards: Array&lt;ImageButton&gt;, where lateinit defers initialisation to onCreate.</p>
+        <div class="callout pitfall"><span class="tag">Trap</span>
+          <p>Putting several LinearLayouts directly inside the ScrollView "because the tutorial shows a diagram with many rows". The diagram shows nesting: the ScrollView's one child is a layout that contains the rows. Also easy to miss: wrap_content rows inside a match_parent height ScrollView only scroll if their combined height exceeds the viewport; set the child's height to wrap_content, as the course's ScrollView example does.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="source">Source: COMP3330_Tutorial2.pdf, slides 8-17 (implementation details, nested layout guidance, ScrollView, card ids and lateinit); COMP3330_Tutorial3.pdf, slides 3-4 (view wiring); COMP3330_Ch01_Introduction.pdf, slide 34 (tap targets); COMP3330_Ch04_Layout.pdf, slides 5-6, 17, 35.</p>
+
+    <h2>Discuss</h2>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>Chapter 4 says ConstraintLayout is the default and recommended layout, yet it teaches LinearLayout, RelativeLayout, FrameLayout and TableLayout too. Take a position: should a first project use ConstraintLayout everywhere or LinearLayout until the nesting hurts? Evidence that would change your mind: a concrete screen from Card 24 or BMI calculator work where the other choice is measurably simpler.</p>
+    </div>
+    <div class="discuss">
+      <span class="tag">Discuss</span>
+      <p>The lecture argues XML layouts are "more orthogonal": the same code serves different display sizes, orientations and languages, while also allowing run-time modification. Take a side on how much of a screen should be declared in XML versus built in code. Evidence that would change your mind: a case from this course's apps (BMI calculator, Card 24) where the other side of the line is clearly right.</p>
+    </div>
+
+    <h2>Flashcard recap</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What is a View? A ViewGroup?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">A View is an Android class in charge of a rectangle area: drawing, measurement, and user interaction events (scroll, press, key, focus change). A ViewGroup (layout: Linear, Relative, ...) contains other views. Drawing is done from the root of the hierarchy.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">match_parent vs wrap_content.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">match_parent (same as fill_parent, old name, API 8+): expand to take all space available in the parent. wrap_content: expand only far enough to contain the view's contents or child controls.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">The five common layouts and their behaviours.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">FrameLayout: one item at a time, overlapping. LinearLayout: single line, horizontal or vertical. RelativeLayout: positions relative to siblings and parent. TableLayout: rows in XML, columns inferred (layout_column, layout_span). ConstraintLayout: default layout; constraints position widgets relative to others or the parent.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does @+id mean, and when is an id needed?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">"@": parse and expand; "+": add to resources (R). An id is needed whenever the view is referenced by other views or by Java/Kotlin code (findViewById(R.id.name)).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">How does an XML layout become a screen?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">At run time the XML is inflated for Activity.onCreate() via setContentView(R.layout.activity_main); no extra coding is needed to draw it.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">dp vs sp vs px.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">dp: density-independent, 1 dp = 1 px at 160 dpi, 2 px at 320 dpi. sp: dp plus the user's font-size preference; recommended for fonts. px: raw screen pixels, density-blind.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">ConstraintLayout bias and dimension ratio.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">layout_constraintHorizontal_bias="0.3" places a widget 30% along its opposing constraints instead of centred. A dimension ratio needs the constrained dimension set to 0dp (MATCH_CONSTRAINT), then layout_constraintDimensionRatio like "1:1" or "H,16:9".</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Attaching an event listener, Kotlin and Java.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Kotlin: val listener = View.OnClickListener { ... }; button.setOnClickListener(listener). Java: Button.OnClickListener listener = new Button.OnClickListener() { public void onClick(View dummy) { ... } }; button.setOnClickListener(listener); captured locals must be final.</span>
+      </span></button>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 4-41; COMP3330_Tutorial2.pdf, slides 8-13.</p>
+
+    <nav class="pager">
+      <a href="practice-03-ide-and-tooling.html"><span class="dir">Previous</span><span class="name">IDE and tooling</span></a>
+      <a class="next" href="practice-05-kotlin-and-java-syntax.html"><span class="dir">Next</span><span class="name">Kotlin and Java syntax</span></a>
+    </nav>
+  </main>
+</body>
+</html>

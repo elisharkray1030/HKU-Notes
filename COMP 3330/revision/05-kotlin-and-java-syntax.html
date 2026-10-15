@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMP 3330 revision: Kotlin and Java syntax</title>
+  <link rel="stylesheet" href="assets/revision.css">
+  <script src="assets/revision.js" defer></script>
+</head>
+<body class="subject-3330">
+  <header class="site-header">
+    <div class="bar">
+      <span class="course-chip">COMP 3330</span>
+      <span class="page-kind">Re-teach</span>
+      <span class="spacer"></span>
+      <a class="top-link" href="index.html">Revision hub</a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Kotlin and Java syntax</h1>
+    <p class="lede">Chapter 5 assumes you know Java and teaches the Kotlin the course code is
+    written in. Learn it as a set of correspondences: every Kotlin construct on this page is a
+    shorter spelling of a Java construct you already recognise: and the null-safety rules, which
+    are the one genuinely new idea.</p>
+
+    <h2>The mental model: Java with the boilerplate removed</h2>
+    <p>The course's own framing (Chapter 0): Kotlin is "a variation of Java and is intended to
+    simplify the use of Java", and Chapter 5's slides close with "if you can remember Kotlin
+    syntax well, a Kotlin program can be much shorter than its Java counterpart". So do not learn
+    two languages. Learn the mapping: where Java writes a keyword, Kotlin writes punctuation; where
+    Java repeats a type, Kotlin infers it; where Java permits null and crashes at run time, Kotlin
+    makes you decide at compile time. Tutorials use Kotlin, so Kotlin is primary here, with the
+    Java shape always one tab away.</p>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 2-28; COMP3330_Ch00_CourseInfo.pdf, slide 3.</p>
+
+    <h2>Types</h2>
+    <p>Java has 8 primitive types, each with a wrapper class: boolean/Boolean, char/Character
+    (16 bits, 0 to 65535), byte/Byte (8 bits, -128 to 127), short/Short (16 bits, -32768 to
+    32767), int/Integer (32 bits, about -2.1 billion to 2.1 billion), long/Long (64 bits),
+    float/Float (32 bits) and double/Double (64 bits). Kotlin's source-level types are
+    Boolean, Char, Byte, Short, Int, Long, Float, Double, String: same bit depths and ranges, but
+    spelled as classes rather than primitives.</p>
+    <div class="callout pitfall"><span class="tag">Pitfall</span>
+      <p>The slide says "Kotlin doesn't have primitive types. It uses classes as an object wrapper
+      for primitives." True at the level you write code: everything is an object. The durable
+      detail underneath: on the JVM, the Kotlin compiler still uses real primitives where possible,
+      so you lose neither speed nor memory. Answer with the slide's wording in the exam; know the
+      engine detail for your own sanity.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 3-4.</p>
+
+    <h2>Functions</h2>
+    <p>The signature moves: the keyword <code>fun</code>, colon notation for parameter types and
+    return type, and no semicolons. Three spellings of the same function, all equivalent:</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>public fun sum(a: Int, b: Int): Int {
+    return a + b
+}
+
+public fun sum(a: Int, b: Int): Int = a + b
+
+public fun sum(a: Int, b: Int) = a + b</code></pre></div>
+    <p>The third form drops the return type entirely: Kotlin infers it. A function with no return
+    value has no return type at all (the void function <code>fun calculate(num1: Int, num2: Int,
+    num3: Int) { ... }</code>).</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>fun sum(a: Int, b: Int): Int {
+    return a + b
+}</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>public int sum(int a, int b) {
+    return a + b;
+}</code></pre></div>
+      </section>
+    </div>
+
+    <h3>Default values and named arguments</h3>
+    <p>Kotlin parameters may carry default values, and call sites may name their arguments. Both
+    are impossible in Java without method overloading:</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>fun calculate(num1: Int, num2: Int = 2, num3: Int = 4) {
+    …
+}
+calculate(1, 3)            // num2 = 3, num3 = default 4
+calculate(1, num2 = 3)     // num3 = default 4
+calculate(1, num3 = 5)     // num2 = default 2</code></pre></div>
+    <p>The lecture's challenge (how to provide the 1st and 3rd parameters while missing the 2nd)
+    has a one-line answer, exactly the third call: <code>calculate(1, num3 = 5)</code>. Parameter names can be used in
+    calls, which is also how you skip a defaulted parameter.</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>calculate(1, num3 = 5)   // num2 gets its default 2</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>// Java has no defaults or named args: write overloads instead.
+static void calculate(int num1)                  { calculate(num1, 2, 4); }
+static void calculate(int num1, int num2)        { calculate(num1, num2, 4); }
+static void calculate(int num1, int num2, int num3) { … }
+
+calculate(1, 2, 5);   // skipping num2's default must be spelled out</code></pre></div>
+      </section>
+    </div>
+
+    <h2>Variables: val and var</h2>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>val a: Int = 1            // immutable version 1: explicit type
+val b: String = "tim"
+var a: Int = 1            // mutable version 1
+var b: String = "tim"
+
+val a = 1                 // immutable version 2: inferred type is Int
+val b = "tim"             // inferred type is String
+var a = 1                 // mutable, inferred type is Int</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>int a = 1;
+String b = "tim";
+final int a = 1;          // Java's closest match to val</code></pre></div>
+      </section>
+    </div>
+    <p><code>val</code> means the reference cannot be reassigned: value re-assignment to
+    <code>a</code> and <code>b</code> above is a compile error. The slides describe
+    <code>val</code> properties as "read-only". Type inference decides the type from the initialiser,
+    so <code>val a = 1</code> is an Int without anyone writing Int. Rule: reach for
+    <code>val</code> first, use <code>var</code> when the value must change.</p>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 5-10.</p>
+
+    <h2>Arrays and collections</h2>
+    <p>Java arrays: <code>int[] num = {1, 2, 3, 4};</code> or allocate then fill
+    (<code>num = new int[4]; num[0] = 1; ...</code>). Kotlin builds them with functions:</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>val num = arrayOf(1, 2, 3, 4)        // implicit type declaration
+val num = arrayOf&lt;Int&gt;(1, 2, 3, 4)   // explicit type declaration
+
+for (i in 0..num.size-1) {
+    print(" " + num[i])
+}
+
+// Array is a class: the constructor takes a size and a function from index to value
+val num = Array(3, {i-&gt; i*1})
+// equivalent to val num = arrayOf(0, 1, 2)</code></pre></div>
+    <p>Two creation idioms (factory function <code>arrayOf</code>, constructor
+    <code>Array(size) { index -&gt; value }</code>) and one traversal idiom
+    (<code>for (i in 0..num.size-1)</code>: the <code>..</code> builds an inclusive range). The
+    constructor's second parameter is a function: <code>{i -&gt; i*1}</code> maps each index to
+    its initial value, so indices 0, 1, 2 produce 0, 1, 2.</p>
+    <div class="quiz">
+      <span class="qnum">Q1</span>
+      <p class="quiz-q">What does <code>Array(3, {i-&gt; i*1})</code> hold?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">0, 1, 2: three elements whose values are their indices times 1.</button>
+        <button class="quiz-option">1, 2, 3: three elements numbered from 1.</button>
+        <button class="quiz-option">Three copies of the number 1.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The slide states it is equivalent to arrayOf(0, 1, 2): size 3, and the function maps index i to i*1, so index 0 gives 0, index 1 gives 1, index 2 gives 2.</span></p>
+    </div>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 11-12.</p>
+
+    <h2>Null safety: the one genuinely new idea</h2>
+    <p>The type system distinguishes references that can hold null (<strong>nullable</strong>) from
+    those that cannot (<strong>non-null</strong>). A regular <code>String</code> cannot hold null;
+    <code>str = null</code> is a compile error. Put <code>?</code> after the type to allow null:
+    <code>var str: String? = "hku"</code>.</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>var s1: String = "hku"
+val l = s1.length            // safe: s1 is non-null, no NPE possible
+
+var s2: String? = "hku"
+val l = s2.length            // error: variable 's2' can be null
+
+val l = if (s2 != null) s2.length else null   // handle both options
+val l = s2?.length           // safe call: l is null if s2 is null; type Int?</code></pre></div>
+    <p>The <strong>safe call</strong> <code>?.</code> is the workhorse. From the lecture's
+    examples: <code>println(b?.length)</code> on a null <code>b</code> prints <code>null</code>;
+    <code>a?.length</code> on non-null <code>a</code> is an unnecessary safe call (the compiler
+    says so) and prints 8 for "Computer". Note the type rule: expressions like
+    <code>a?.length</code> and <code>b?.length</code> have type <code>Int?</code>: a safe call
+    always yields a nullable result.</p>
+    <p>Safe calls chain: <code>tim?.department?.head?.name</code> returns null if
+    <em>any</em> property in the chain is null. The lecture's side-by-side sells the point:</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>fun getZipCode(user: User?): ZipCode? {
+    return user?.address?.zipCode
+}
+// or, with inferred return type:
+fun getZipCode(user: User?) = user?.address?.zipCode</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>public ZipCode getZipCode(User user) {
+    if (user != null) {
+        if (user.address != null) {
+            return user.address.zipCode;
+        }
+    }
+    return null;
+}</code></pre></div>
+      </section>
+    </div>
+    <div class="callout why"><span class="tag">Why it matters</span>
+      <p>Null Pointer Exceptions are a compile error in Kotlin wherever the type is non-null. The
+      <code>?</code> on variables like <code>private var height: EditText? = null</code> (Tutorial
+      1) is not decoration: it says "may not be bound yet", and the <code>!!</code> you see in
+      tutorial code is the author asserting non-null, throwing at run time if wrong. Prefer
+      <code>?.</code> unless the assertion is genuinely guaranteed.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 13-18.</p>
+
+    <h2>String interpolation</h2>
+    <p><code>$</code> embeds variables in a string literal. The lecture's three equivalent
+    <code>toString()</code> versions show the compression:</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>override fun toString(): String {
+    return "Song{id=" + id + ", title='" + title + "', author='" + author + "'}"
+}
+override fun toString(): String {
+    return "Song{id=$id, title='$title', author='$author'}"
+}
+override fun toString() = "Song{id=$id, title='$title', author='$author'}"</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>@Override
+public String toString() {
+    return "Song{id=" + id + ", title='" + title + "', author='" + author + "'}";
+}</code></pre></div>
+      </section>
+    </div>
+    <p>This is also what powers lines like
+    <code>result!!.text = "Your BMI is: $bmi"</code> in the BMI calculator.</p>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slide 19.</p>
+
+    <h2>Classes and objects</h2>
+    <p>A Kotlin class can declare its properties and primary constructor in one header. There is no
+    <code>new</code> keyword: instantiation looks like a constructor call. Note the default
+    parameter value doing Java's overloading job:</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class Person constructor(val name: String, val age: Int? = null)
+// or simply:
+class Person(val name: String, val age: Int? = null)
+// name and age are read-only here
+
+val person1 = Person("Sam", 20)
+val person2 = Person("Priscilla")   // age is assigned null value</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>class Person {
+    final String name;
+    final Integer age;
+    public Person(String name) {
+        this.name = name;
+        this.age = null;
+    }
+    public Person(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+Person person1 = new Person("Sam", 20);
+Person person2 = new Person("Priscilla");</code></pre></div>
+      </section>
+    </div>
+    <p>The Java side needs two constructors and field declarations; the Kotlin side is one line.
+    The slides add: like Java, the compiler generates a no-argument constructor on the JVM for
+    this shape, instantiating with default values.</p>
+    <p><strong>Initialization.</strong> You cannot put code in the primary constructor; use an
+    <code>init</code> block, which runs after the primary constructor and can access class fields:</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class Person(val name: String, val age: Int? = null) {
+    init {
+        println("Hello, I'm $name")
+    }
+}
+val person1 = Person("Sam", 20)   // prints: Hello, I'm Sam</code></pre></div>
+    <p><strong>Secondary constructors</strong> are prefixed with <code>constructor</code> and can
+    delegate to the primary one with <code>this</code>:</p>
+    <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>class Car(val id: String, val type: String) {
+    constructor(id: String) : this(id, "unknown")
+}
+val car1 = Car("1", "BYD")
+val car2 = Car("2", "Isuzu")
+
+// a class with no primary constructor: assign fields in the secondary one
+class Car {
+    val id: String
+    val type: String
+    constructor(id: String, type: String) {
+        this.id = id
+        this.type = type
+    }
+}</code></pre></div>
+    <p>(The slides note a trailing comma is allowed when declaring class properties.)</p>
+
+    <h3>Inheritance</h3>
+    <p>Two rules change everything: classes are <strong>final by default</strong>, so a class must
+    be marked <code>open</code> (or <code>abstract</code>) to be inherited from; and overriding a
+    method requires the <code>override</code> keyword (plus the method being <code>open</code> or
+    <code>abstract</code> in the parent). A subclass passes arguments to the superclass's primary
+    constructor in its header:</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>open class Polygon {
+    open fun draw() {
+        // some default polygon drawing method
+    }
+}
+
+abstract class WildShape : Polygon() {
+    // classes that inherit WildShape must provide their own draw
+    abstract override fun draw()
+}
+
+abstract class Polygon2 {
+    abstract fun draw()
+}
+class Rectangle : Polygon2() {
+    override fun draw() {
+        // draw the rectangle
+    }
+}
+
+class Employee(name: String, val salary: Int) : Person(name)
+// passes name to Person's primary constructor, adds salary</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>class Polygon {
+    void draw() { … }
+}
+
+abstract class WildShape extends Polygon {
+    @Override
+    abstract void draw();
+}
+
+abstract class Polygon2 {
+    abstract void draw();
+}
+class Rectangle extends Polygon2 {
+    @Override
+    void draw() { /* draw the rectangle */ }
+}
+
+class Employee extends Person {
+    final int salary;
+    Employee(String name, int salary) {
+        super(name);
+        this.salary = salary;
+    }
+}</code></pre></div>
+      </section>
+    </div>
+    <p>Java classes are inheritable by default (which is why <code>extends</code> needs no
+    permission); Kotlin makes inheritance opt-in with <code>open</code>. Both spell the contract
+    the same way: abstract methods force subclasses to provide implementations.</p>
+    <div class="discuss"><span class="tag">Discuss</span>
+      <p>Take a position: the slides' claim that "a Kotlin program can be much shorter than its
+      Java counterpart" is a maintenance win for a 1-5 person group project, not merely a typing
+      win. Argue with the Person example and the null-safety example as evidence. Evidence that
+      would change your mind: data showing bugs that stem from Kotlin's brevity itself: inferred
+      types or <code>!!</code> assertions hiding errors that Java's verbosity would have forced
+      into the open.</p>
+    </div>
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 20-27.</p>
+
+    <h2>Listeners and callbacks, in this syntax</h2>
+    <p>The course's Java prerequisite covers interfaces and anonymous classes; Kotlin turns them
+    into lambdas. A listener is just an object whose method the system calls later: a
+    <strong>callback</strong>. Both languages attach one to a button (Chapter 4 example):</p>
+    <div class="tabs">
+      <section class="tab-panel" data-label="Kotlin">
+        <div class="code-block"><span class="lang-label">Kotlin</span><pre><code>val listener = View.OnClickListener {
+    edit_text1.setText(random!!.nextInt(100).toString())
+}
+button1.setOnClickListener(listener)
+
+// or inline, as the Card 24 code does:
+cards[0].setOnClickListener { clickCard(0) }
+left!!.setOnClickListener { expression.append("(") }</code></pre></div>
+      </section>
+      <section class="tab-panel" data-label="Java">
+        <div class="code-block"><span class="lang-label">Java</span><pre><code>Button.OnClickListener listener = new Button.OnClickListener() {
+    public void onClick(View dummy) {
+        edit_text1.setText(String.valueOf(random.nextInt(100)));
+    }
+};
+button1.setOnClickListener(listener);</code></pre></div>
+      </section>
+    </div>
+    <p>The Kotlin <code>{ ... }</code> after <code>OnClickListener</code> or
+    <code>setOnClickListener</code> <em>is</em> the onClick method: the parameter it receives is
+    the clicked View. When you read <code>cards[0].setOnClickListener { clickCard(0) }</code>,
+    translate it as: "when card 0 is clicked, call clickCard(0)". That single translation habit
+    makes the whole tutorial codebase readable.</p>
+    <p class="source">Source: COMP3330_Ch04_Layout.pdf, slides 9-10; COMP3330_Tutorial3.pdf, slides 9-11.</p>
+
+    <h2>Check yourself</h2>
+    <div class="quiz">
+      <span class="qnum">Q2</span>
+      <p class="quiz-q">With <code>fun calculate(num1: Int, num2: Int = 2, num3: Int = 4)</code>,
+      what values do num2 and num3 take in <code>calculate(1, num3 = 5)</code>?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">num2 = 2 (default), num3 = 5 (named argument).</button>
+        <button class="quiz-option">num2 = 5, num3 = 4: arguments fill left to right.</button>
+        <button class="quiz-option">Compile error: defaults can only be used by skipping trailing parameters.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">This is the lecture's own challenge and answer: parameter names may be used in calls, so num3 = 5 is bound by name and num2 falls back to its default 2.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q3</span>
+      <p class="quiz-q">Given <code>var s2: String? = null</code>, what is the type of
+      <code>s2?.length</code>?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Int?: a safe call yields a nullable result.</button>
+        <button class="quiz-option">Int: the compiler knows length is an Int.</button>
+        <button class="quiz-option">Compile error: length cannot be called on a nullable reference.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">"The type of expressions a?.length and b?.length is Int?". The safe call returns null when the receiver is null, so the result type must admit null.</span></p>
+    </div>
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Why does <code>class Employee(name: String, val salary: Int) : Person(name)</code>
+      compile only if Person is declared a certain way?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true">Person must be open (or abstract): Kotlin classes are final by default.</button>
+        <button class="quiz-option">Person must be a data class.</button>
+        <button class="quiz-option">Person must have exactly one parameter in its primary constructor.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">The slide's note: "All classes in Kotlin are final by default. We need to add the open keyword so that we can inherit from our Person class."</span></p>
+    </div>
+
+    <h2>Recap flashcards</h2>
+    <div class="flashcards">
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Kotlin function vs. Java function: the four syntactic differences.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">Keyword "fun"; parameter types in colon notation (a: Int); return type in colon notation; no semicolons. Plus expression-body "=" form and inferred return types.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">val vs. var.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">val: read-only reference, re-assignment is a compile error. var: mutable. Types can be explicit or inferred from the initialiser.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Declare a nullable String and read its length safely.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">var s: String? = "hku"; val l = s?.length. Type Int?, null if s is null. Or branch: if (s != null) s.length else null.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">What does tim?.department?.head?.name return if department is null?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">null: the whole safe-call chain short-circuits at the first null property.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Kotlin class header that replaces two Java constructors.<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">class Person(val name: String, val age: Int? = null): properties declared in the header, default value replaces the overload, no "new" keyword at the call site.</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Where does initialization code go in a Kotlin class?<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">An init block (runs after the primary constructor), or secondary constructors prefixed "constructor", which delegate to the primary with this(...).</span>
+      </span></button>
+      <button class="flashcard" type="button"><span class="fc-inner">
+        <span class="fc-front">Read this aloud: cards[0].setOnClickListener { clickCard(0) }<span class="fc-hint">Click to flip</span></span>
+        <span class="fc-back">"When card 0 is clicked, call clickCard(0)." The lambda body is the callback method (onClick) that the system invokes later.</span>
+      </span></button>
+    </div>
+
+    <h2>Can you yet?</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" class="persist" data-id="05-syntax-1">
+          <span class="check-text">Translate a Java method signature into Kotlin and back.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-syntax-2">
+          <span class="check-text">Use default values and named arguments to skip a middle parameter.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-syntax-3">
+          <span class="check-text">Say what ?., !! and ? mean in a line of tutorial code, and when !! is dangerous.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-syntax-4">
+          <span class="check-text">Write a class with a default property value and an init block, and instantiate it two ways.</span></li>
+      <li><input type="checkbox" class="persist" data-id="05-syntax-5">
+          <span class="check-text">Explain why open/override exist in Kotlin's inheritance model.</span></li>
+    </ul>
+
+    <div class="callout tip"><span class="tag">Practise this</span>
+      <p><a href="practice-05-kotlin-and-java-syntax.html">Practice set 5: Kotlin and Java
+      syntax</a>: translation drills, null-safety predictions and class construction, with full
+      worked answers.</p>
+    </div>
+
+    <p class="source">Source: COMP3330_Ch05_Syntax.pdf, slides 2-28 (chapter read in full).</p>
+
+    <nav class="pager">
+      <a class="prev" href="04-ui-and-layouts.html">&larr; Previous: UI and layouts</a>
+      <a class="next" href="06-activities-and-fragments.html">Next: activities and fragments &rarr;</a>
+    </nav>
+  </main>
+</body>
+</html>
