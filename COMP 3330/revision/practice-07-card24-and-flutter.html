@@ -187,12 +187,12 @@ private fun clickCard(i: Int) {
         imageCount[i]++
     }
 }</code></pre></div>
-      <p>After pickCard() has dealt data = [4, 5, 9, 10] and card = [4, 5, 9, 10] and called setClear(): (a) what is the state of the four buttons and the expression TextView? (b) The user taps card button 1 twice, then card button 3. What is on screen and what is imageCount? (c) The user presses "Clear". State everything setClear() changes. (d) When "=" is pressed, how does the code know that all four cards were used exactly once?</p>
+      <p>After pickCard() has dealt data = [4, 5, 9, 10] and card = [4, 5, 9, 10] and called setClear(): (a) what is the state of the four buttons and the expression TextView? (b) The user clicks cards[1] twice, then cards[2]. What is on screen and what is imageCount? (c) The user presses "Clear". State everything setClear() changes. (d) When "=" is pressed, how does the code know that all four cards were used exactly once?</p>
       <details class="step"><summary>Step 1: initial state</summary>
         <p>setClear() empties the expression text, zeroes imageCount, and gives each button its face image "card" + card[i] (card4, card5, card9, card10) with isClickable = true. imageCount = [0, 0, 0, 0].</p>
       </details>
       <details class="step"><summary>Step 2: the taps</summary>
-        <p>Tap 1 on button 1: image becomes back_0, isClickable false, expression appends data[1] = "5", imageCount[1] = 1. The second tap on button 1 does nothing: the card is not clickable, and even if it were, clickCard's imageCount[i] == 0 guard fails. Tap on button 3: expression becomes "59" (appends data[3] = 9), imageCount = [0, 1, 0, 1].</p>
+        <p>Tap 1 on cards[1]: image becomes back_0, isClickable false, expression appends data[1] = "5", imageCount[1] = 1. The second tap on cards[1] does nothing: the card is not clickable, and even if it were, clickCard's imageCount[i] == 0 guard fails. Tap on cards[2]: expression becomes "59" (appends data[2] = 9), imageCount = [0, 1, 1, 0].</p>
       </details>
       <details class="step"><summary>Step 3: Clear</summary>
         <p>expression.text = ""; every imageCount[i] = 0; every button's image reset to its "card" + card[i] face; every button clickable again. The deal itself (data and card arrays) is unchanged; Clear resets the round, not the cards.</p>
@@ -201,7 +201,7 @@ private fun clickCard(i: Int) {
         <p>Each successful clickCard(i) increments imageCount[i] exactly once and disables the button, and the guard makes a second increment impossible. So "used exactly once" is equivalent to imageCount == [1, 1, 1, 1] (or its sum being 4) at "=" time. Tutorial 3 leaves this as Task 5.2 for the student to add.</p>
       </details>
       <details class="answer"><summary>Full answer</summary>
-        <p>(a) All four buttons show their face images and are clickable; the expression TextView is empty; imageCount = [0, 0, 0, 0]. (b) Button 1 shows back_0 and is disabled; button 3 shows back_0 and is disabled; the expression reads "59"; imageCount = [0, 1, 0, 1]. (c) setClear() clears the expression text, zeroes all of imageCount, restores each button's face image, and makes each clickable again. (d) Because clickCard increments imageCount[i] once and disables the button, the check at "=" is imageCount == [1, 1, 1, 1] (or sum == 4).</p>
+        <p>(a) All four buttons show their face images and are clickable; the expression TextView is empty; imageCount = [0, 0, 0, 0]. (b) cards[1] shows back_0 and is disabled; cards[2] shows back_0 and is disabled; the expression reads "59"; imageCount = [0, 1, 1, 0]. (c) setClear() clears the expression text, zeroes all of imageCount, restores each button's face image, and makes each clickable again. (d) Because clickCard increments imageCount[i] once and disables the button, the check at "=" is imageCount == [1, 1, 1, 1] (or sum == 4).</p>
         <div class="callout pitfall"><span class="tag">Trap</span>
           <p>Confusing the two arrays: data holds the 1-13 values that go into the expression; card holds the 1-52 identifiers used to build the drawable name "card" + card[i]. A second trap is checking the formula string instead of imageCount: the string does not record which card buttons were pressed (two cards can share the same value, as in the dealt 4 and 4 of a real deal).</p>
         </div>
