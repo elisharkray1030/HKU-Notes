@@ -12,11 +12,13 @@ HKU-Notes/
 ├── COMP 3297/
 │   ├── README.md
 │   ├── materials/     # lecture slides and handouts (PDF, etc.)
-│   └── notes/         # study guides, summaries, revision notes
+│   ├── notes/         # study guides and summaries (Markdown)
+│   └── revision/      # interactive HTML revision packs (re-teach + practice)
 └── COMP 3330/
     ├── README.md
     ├── materials/
-    └── notes/
+    ├── notes/
+    └── revision/
 ```
 
 Each course folder follows the same convention:
@@ -25,6 +27,7 @@ Each course folder follows the same convention:
 | --- | --- |
 | `materials/` | Slides and handouts exactly as provided by the course. |
 | `notes/` | Notes I write: summaries, study guides, worked examples, exam prep. |
+| `revision/` | Interactive HTML revision packs: one re-teach page and one practice page per topic, linked from `revision/index.html`. The shared CSS and widget JS live in `revision/assets/`. |
 
 ## Courses
 
@@ -36,7 +39,11 @@ Each course folder follows the same convention:
 1. Drop new slides into the relevant `materials/` folder.
 2. Write notes as Markdown in the relevant `notes/` folder and link them from
    the course README.
-3. Commit and push.
+3. For a revision pack, add `NN-<topic>.html` (re-teach) and
+   `practice-NN-<topic>.html` (exercises) to the course's `revision/` folder,
+   link the shared kit in `revision/assets/` instead of copying it, and list
+   both in that course's `revision/index.html` hub.
+4. Commit and push.
 
 If the repository grows large, large binary slides can be moved to
 [Git LFS](https://git-lfs.com/) later.
