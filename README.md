@@ -14,7 +14,12 @@ HKU-Notes/
 │   ├── materials/     # lecture slides and handouts (PDF, etc.)
 │   ├── notes/         # study guides and summaries (Markdown)
 │   └── revision/      # interactive HTML revision packs (re-teach + practice)
-└── COMP 3330/
+├── COMP 3330/
+│   ├── README.md
+│   ├── materials/
+│   ├── notes/
+│   └── revision/
+└── LING 2027/
     ├── README.md
     ├── materials/
     ├── notes/
@@ -33,6 +38,7 @@ Each course folder follows the same convention:
 
 - [COMP 3297](COMP%203297/) — see course folder for details.
 - [COMP 3330](COMP%203330/) — see course folder for details.
+- [LING 2027](LING%202027/) — see course folder for details.
 
 ## Adding new material
 

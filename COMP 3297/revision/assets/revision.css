@@ -1,7 +1,8 @@
 /* ==========================================================================
    HKU-Notes revision pack — shared stylesheet
-   Used by COMP 3330 and COMP 3297 revision pages. Self-contained, offline.
-   Subject accent: <body class="subject-3330"> or <body class="subject-3297">
+   Used by COMP 3330, COMP 3297 and LING 2027 revision pages. Self-contained, offline.
+   Subject accent: <body class="subject-3330">, <body class="subject-3297"> or
+   <body class="subject-ling2027">
    ========================================================================== */
 
 :root {
@@ -40,6 +41,12 @@ body.subject-3297 {
   --accent: #0d7a6e;
   --accent-ink: #0a5c53;
   --accent-wash: #e6f3f1;
+}
+
+body.subject-ling2027 {
+  --accent: #a21caf;
+  --accent-ink: #86198f;
+  --accent-wash: #fbeefa;
 }
 
 * { box-sizing: border-box; }
@@ -206,6 +213,14 @@ th {
 tbody tr:nth-child(even) { background: #fbfaf7; }
 
 .table-wrap { overflow-x: auto; }
+
+.table-wrap caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 600;
+  color: var(--accent-ink);
+  padding: 0 0 0.35rem;
+}
 
 /* ---------- code -------------------------------------------------------- */
 
