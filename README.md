@@ -19,11 +19,15 @@ HKU-Notes/
 │   ├── materials/
 │   ├── notes/
 │   └── revision/
-└── LING 2027/
+├── LING 2027/
+│   ├── README.md
+│   ├── materials/
+│   ├── notes/
+│   └── revision/
+└── JAPN 2089/
     ├── README.md
-    ├── materials/
-    ├── notes/
-    └── revision/
+    ├── materials/     # readings inventory (the PDFs stay in the local course folder)
+    └── notes/         # study guides + digests/ of the whole reading set
 ```
 
 Each course folder follows the same convention:
@@ -39,6 +43,8 @@ Each course folder follows the same convention:
 - [COMP 3297](COMP%203297/) — see course folder for details.
 - [COMP 3330](COMP%203330/) — see course folder for details.
 - [LING 2027](LING%202027/) — see course folder for details.
+- [JAPN 2089](JAPN%202089/) — *Twentieth century Japan: History, state and society*; reading
+  notes (no `revision/` pack — the course is 100% coursework).
 
 ## Adding new material
 
