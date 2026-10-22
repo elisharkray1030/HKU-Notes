@@ -14,16 +14,16 @@
 
 **No PDFs are copied into `materials/`.** The lecture slides, the textbook chapters and
 the tutorial decks are the property of their authors and of The University of Hong Kong,
-and the full set is ~37 MB — the six textbook chapters alone are ~26 MB — which does not
-belong in a notes repo. So only this inventory is committed, and the files themselves
+and the full set is ~37 MB — the textbook chapters alone are ~26 MB across the six the
+course issues (19 MB for the five on disk) — which does not belong in a notes repo. So only this inventory is committed, and the files themselves
 stay in the local course folder at
 `/home/elijahdelgado/Documents/HKU/LING 2027`, organised as `Textbook/` and `Notes/`.
 The `materials/` folder keeps the usual convention: drop slides and handouts here
 exactly as provided by the course, and list them below.
 
 The table is the course's full materials list. The **On disk** column records what is
-actually in the local course folder (checked 22 Oct 2026): the six textbook chapters are
-listed, of which five are present, and no lecture or tutorial deck is on disk. Rows
+actually in the local course folder (checked 22 Oct 2026): the **seven** textbook chapters
+are listed, of which five are present, and no lecture or tutorial deck is on disk. Rows
 marked — still name the file the course issued; they are kept so the inventory is
 complete, and they are cited in the notes as sources from earlier reading rather than
 re-opened locally.
@@ -36,7 +36,7 @@ re-opened locally.
 | `Textbook/…_(4_A_Map_of_the_Vowels).pdf` | Ch. 4 — vowels | — |
 | `Textbook/…_(10_Phonology_1).pdf` | Ch. 10 — abstraction, contrast, predictability: phonemes and allophones, phonemic analysis | ✓ |
 | `Textbook/…_(11_Phonotactics_and_Alternations).pdf` | Ch. 11 — phonotactics (§11.1) and alternations (§11.2–3, the reading behind this pack's Topic 04; the course itself numbers only Topics 0–3, and alternations follows on from Topic 3) | ✓ |
-| `Textbook/…_(12_What_Is_A_Possible_Language).pdf` | Ch. 12 — what is a possible language (picked up early; not yet a pack topic) | ✓ |
+| `Textbook/…_(12_What_Is_A_Possible_Language_).pdf` | Ch. 12 — what is a possible language (picked up early; not yet a pack topic) | ✓ |
 | `Lectures/Topic 0. Introduction.pdf` | Introduction: syllabus, the eight theoretical topics, staff | — |
 | `Lectures/Topic 1. Phonetics, part I.pdf` | Phonetics: articulation, vowel and consonant parameters, VOT | — |
 | `Lectures/Topic 2. Abstraction, contrast, predictability.pdf` | Phonemes vs allophones, minimal pairs, complementary distribution, four-step phonemic analysis | — |

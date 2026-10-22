@@ -5,15 +5,15 @@ provides them.
 
 ## Nothing is committed here
 
-No PDFs are committed to this folder. The lecture slides, the six textbook chapters and
+No PDFs are committed to this folder. The lecture slides, the textbook chapters and
 the tutorial decks are the property of their authors and of The University of Hong Kong,
-and the set is far too big for a notes repo — ~37 MB in total, of which the six textbook
+and the set is far too big for a notes repo — ~37 MB in total, of which the textbook
 chapters alone are ~26 MB. So the course README commits the inventory only, and the files
 themselves stay in the local course folder:
 
 ```
 /home/elijahdelgado/Documents/HKU/LING 2027
-├── Textbook/    6 chapters of Zsiga, The Sounds of Language (5 on disk)
+├── Textbook/    7 chapters of Zsiga, The Sounds of Language (5 on disk)
 └── Notes/       per-reading study sets (Ch11.1-*, Ch11.2-3-*)
 ```
 
