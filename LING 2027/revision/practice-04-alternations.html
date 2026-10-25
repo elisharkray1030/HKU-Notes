@@ -24,6 +24,11 @@
 
     <h2>Quiz</h2>
 
+    <div class="callout exam"><span class="tag">Quiz 4 shape</span>
+      <p>Quiz 4 was a definition quiz, not a dataset: "Define at least three of the four terms:" debuccalization, epenthesis, coalescence, metathesis — "(One concise sentence is enough for each.)" It was scored "3 points — three terms correctly defined", "2 points — two terms correctly defined", "1 point — one term correctly defined" (Topic 4, slide 4). Q4 below rehearses that paper.<br>
+      Formal notation is optional and the course says so: "Correct formal notation for rules/constraints (e.g., [ ], / /, ...) is not so important at the intro level", because "It's more important to correctly describe the patterns verbally and understand the reasons behind the patterns" (Topic 4, slide 11). A pattern stated in words plus its reason is a full answer; a perfect arrow with no reason is not.</p>
+    </div>
+
     <div class="quiz">
       <span class="qnum">Q1</span>
       <p class="quiz-q">In Chontal the imperative suffix has two shapes. It is [ɬaʔ] in kan-ɬaʔ 'leave it!' and ko-ɬaʔ 'say it!', but [laʔ] in panx-laʔ 'sit down!' and fuʃ-laʔ 'blow it!'. Which type of alternation from Table 11.1 is this?</p>
@@ -60,6 +65,18 @@
       <p class="quiz-feedback"><span class="verdict"></span> <span class="why">This is the diagnostic the chapter tells you to memorise (p. 243): "the quality of epenthetic vowels is predictable, and the quality of deleted vowels is not." Yawelmani's alternating vowel is always [i] (or [u] under rounding harmony), so it is inserted; Tagalog's must be /i/, /o/ or /a/ depending on the word (kapit / putol / bukas), so it is deleted. The environment alone decides nothing: both vowels turn up next to a vowel-initial suffix. Hanunoo (44) is the warning case — a single-quality deletion — where "the analyst just has to try it both ways".</span></p>
     </div>
 
+    <div class="quiz">
+      <span class="qnum">Q4</span>
+      <p class="quiz-q">Quiz 4 in its own words: "Define at least three of the four terms" — debuccalization, epenthesis, coalescence, metathesis — "(One concise sentence is enough for each.)" Which of these answers would take the full three points?</p>
+      <div class="options">
+        <button class="quiz-option" data-correct="true"><strong>Debuccalization:</strong> a consonant loses its oral articulation and becomes [h] or [ʔ] — a subcategory of lenition. <strong>Epenthesis:</strong> a segment, vowel or consonant, is inserted. <strong>Coalescence:</strong> two segments merge into one, and the merged segment has some properties of each of the input segments.</button>
+        <button class="quiz-option"><strong>Debuccalization:</strong> a consonant is deleted. <strong>Epenthesis:</strong> a feature is inserted into a segment. <strong>Coalescence:</strong> two segments become more similar to one another.</button>
+        <button class="quiz-option"><strong>Debuccalization:</strong> a consonant loses its voicing. <strong>Epenthesis:</strong> a segment is removed to repair an illegal cluster. <strong>Coalescence:</strong> two segments switch places.</button>
+        <button class="quiz-option">None of the above is needed: the quiz shows you a dataset and asks you to name the process, so knowing the labels is enough.</button>
+      </div>
+      <p class="quiz-feedback"><span class="verdict"></span> <span class="why">Only the first answer defines all three terms correctly, and the other options fail in the specific ways this quiz is built to catch. <strong>Epenthesis is the insertion of a whole segment</strong> — "Insertion including both vowels and consonants" (Topic 4, slide 24) — not the insertion of a feature, which would be an assimilation or dissimilation story. <strong>Deletion means a whole phoneme is gone</strong>: the deck's warning is that "if a property of the segment disappears (e.g., [+nas] is not there anymore), it is NOT considered deletion" and "Only the case where a complete phoneme is deleted is considered “deletion” in phonology" (slide 25) — which is why a lost feature is not deletion, and why "a consonant is deleted" cannot define debuccalization, a process that keeps the segment and strips its oral articulation. <strong>Coalescence is one segment out of two</strong>: "Two segments merge into one, with the merged segment displaying some properties of each of the input segments" (slide 18); "two segments become more similar" is assimilation, and "two segments switch places" is metathesis — "Two segments switch in order" (slide 26). The fourth option is wrong about the question itself: slide 4 asks for definitions, and slide 3 is the "To be revealed" cover that kept the paper hidden until class. One detail separates a debuccalization definition from a definition of lenition: the deck's line that debuccalization "is a subcategory of lenition" (slide 23), plus the fact that the output is specifically [h] or [ʔ].</span></p>
+    </div>
+
     <h2>Guided exercises</h2>
 
     <section class="exercise">
@@ -90,7 +107,7 @@
         <p>One morpheme, three positional variants: [t], [d], [ɨd]. Each column is a list of the words that take that variant. The three variants are allomorphs of a single morpheme (the past-tense suffix), so they cannot contrast — no minimal-pair test applies to an alternation problem. The first question is only: what are the forms to be accounted for?</p>
       </details>
       <details class="step"><summary>Step 2: list the environment of each allomorph</summary>
-        <p>Write each environment as the sound immediately before the suffix slot plus `__`:</p>
+        <p>Write each environment as the sound immediately before the suffix slot plus <code>__</code>:</p>
         <p>[t] after tʃ__, p__, f__, s__, ʃ__, k__ · [d] after o__, b__, v__, m__, z__, ɹ__, dʒ__, g__, ŋ__, n__, l__, u__ · [ɨd] after t__, d__.</p>
         <p>The lists must be exhaustive and in complementary distribution — check that no sound appears in two columns. (The book's own table of environments prints p__ twice in the [t] column; reproduce it as printed — the duplication is in the source, not an extraction error.)</p>
       </details>
@@ -102,7 +119,7 @@
         <p>Two constraints, one per changed allomorph. Constraint 1: two stops with the same place of articulation cannot appear in sequence — so a vowel is inserted between them (that is what produces [ɨd]). Constraint 2: obstruents must agree in voicing — so the suffix is voiceless [t] after a voiceless sound.</p>
       </details>
       <details class="step"><summary>Step 5: choose the underlying form, then order the rule</summary>
-        <p>Apply the elsewhere test to the conditioning sets: [d] is taken by the most heterogeneous set (vowels, sonorants and voiced obstruents side by side), so /d/ is the underlying form and the other two are derived. Then apply the rule for the most specific case first (Pāṇini's Theorem): the insertion before an alveolar stop outranks the voicing change, so "hated" gets [ɨd] and not *[hetɪt].</p>
+        <p>Apply the elsewhere test to the conditioning sets: [d] is taken by the most heterogeneous set (vowels, sonorants and voiced obstruents side by side), so /d/ is the underlying form and the other two are derived. Then apply the rule for the most specific case first (Pāṇini's Theorem): the insertion before an alveolar stop outranks the voicing change, so "hated" gets [ɨd] and not *[hett].</p>
       </details>
       <details class="step"><summary>Step 6: write the type and the UR in the course's template</summary>
         <p>Three slots carry the marks. <strong>Type of alternation:</strong> name the type(s) from Table 11.1 — this paradigm needs two, epenthesis (the inserted [ɨ]) and local assimilation (the voicing agreement that gives [t]). <strong>Motivating phonotactic constraint:</strong> the two constraints from Step 4. <strong>UR:</strong> the elsewhere form from Step 5, /d/. The environment lists and the ordered rule are the working that supports the slots, not extra slots.</p>
@@ -225,7 +242,7 @@
         <p><strong>A — dissimilation.</strong> The suffix /ɬ/ becomes [l] after a voiceless fricative ([x], [ʃ]) and stays [ɬ] elsewhere (after vowels, and after the nasal in kan-ɬaʔ). The lateral loses its voicelessness and so becomes <em>less</em> like its neighbour: "[ɬ] becomes [l] when preceded by a voiceless fricative", and "the voiceless form is the basic, elsewhere case". Dissimilation, not assimilation — the change moves the two segments apart in voicing, and both segments remain.</p>
         <p><strong>B — coalescence.</strong> /məN/ + a voiceless stop yields <em>one</em> nasal segment that carries nasality from the prefix and place from the stop: [m] before [p], [n] before [t], [ŋ] before [k]. The output is a single segment sharing properties of both inputs, which is the §11.3.3 definition of coalescence ("two segments merge into one, with the merged segment displaying some properties of each of the input segments"), as against assimilation, where two segments "become more similar, but remain a sequence of two distinct segments".</p>
         <p><strong>C — deletion (two ordered deletions).</strong> The uninflected forms are shorter than the underlying forms the future reveals: /putaka/, /ŋawuŋawu/, /muŋkumuŋku/. First the word-final vowel deletes (V → Ø / __ #); that "exposes" a final consonant, and then a non-apical consonant left word-finally deletes as well (only [l, n, r] may end a word). Nothing is inserted, and the vowels are gone, not changed. The lesson: "Lardil serves as a dramatic warning against assuming that the uninflected form is always going to be equivalent to the underlying form."</p>
-        <p><strong>D — metathesis, fed by deletion (two ordered changes).</strong> Every prefixed form loses a vowel: /u/ deletes medially, so /ka-ʔusa/ → /kaʔsa/ and /duwa/ → /dwa/. That is deletion. Then, only when the first consonant of the new cluster is a glottal stop, the glottal stop and the following consonant switch places: /kaʔsa/ → [kasʔa], /ka-ʔupat/ → [ka-pʔat], /ka-ʔunum/ → [ka-nʔum]. That is metathesis ("two segments switch in order", §11.3.9). The order is forced: the metathesis only has a cluster to work with after deletion has happened, and it never applies in the two-/u/-deletion rows (ka-dwa, ka-tlu) because there the first consonant is not [ʔ].</p>
+        <p><strong>D — metathesis, fed by deletion (two ordered changes).</strong> Every prefixed form loses a vowel: /u/ deletes medially, so /ka-ʔusa/ → /kaʔsa/ and /duwa/ → /dwa/. That is deletion. Then, only when the first consonant of the new cluster is a glottal stop, the glottal stop and the following consonant switch places: /kaʔsa/ → [kasʔa], /ka-ʔupat/ → [ka-pʔat], /ka-ʔunum/ → [ka-nʔum]. That is metathesis ("two segments switch in order", §11.3.9). The order is forced: the metathesis only has a cluster to work with after deletion has happened, and it never applies in the two rows whose first consonant is not [ʔ] (ka-dwa, ka-tlu).</p>
         <p><strong>Reasoning chain:</strong> compare input and output segment counts → test "more alike / less alike / merged / reordered" → assign the Table 11.1 label → for the two-step sets, check whether the second change could have applied to the input, and order the rules accordingly.</p>
       </details>
     </section>
@@ -258,7 +275,7 @@
         <p>A constraint makes a prediction; check it against the data you have not yet used. If the constraint is about [s] + consonant, [s] + vowel words must be left alone — that is exactly what súper and surfear show. Then look for a second thing the set does.</p>
       </details>
       <details class="answer"><summary>Full answer</summary>
-        <p><strong>1. Constraint and repair.</strong> Spanish obeys "no [s]-consonant sequence at the beginning of a word" (the course's own wording for this example). The repair is prothetic [e]: a vowel is inserted before the illegal cluster, so #sC becomes #esC. In the §11.3 typology this is epenthesis — "a segment is inserted" — used to satisfy a phonotactic constraint, exactly the way [ɨ] is inserted in the English past tense or [ɪ] in the plural — the plural vowel is the low-confidence read, so follow the printed [ɪ(z)] and flag the symbol.</p>
+        <p><strong>1. Constraint and repair.</strong> Spanish obeys "no [s]-consonant sequence at the beginning of a word" (the course's own wording for this example). The repair is prothetic [e]: a vowel is inserted before the illegal cluster, so #sC becomes #esC. In the §11.3 typology this is epenthesis — "a segment is inserted" — used to satisfy a phonotactic constraint, exactly the way [ɨ] is inserted in the English past tense and in the plural — <code>[wɪʃɨz]</code>, Zsiga p. 241, where the book prints <code>ɨ</code> in both (Topic 3's <code>-z</code> slide writes the plural allomorph <code>/əz/</code> and Tutorial D's Q7 table <code>[-ɪz]</code>, so say which of the three tables you are reproducing).</p>
         <p><strong>2. Why súper and surfear escape.</strong> They begin with [s] + a <em>vowel</em>, not [s] + a consonant, so they contain no violation for the constraint to act on. This is the control group that proves the constraint is about the cluster and not about [s] itself — if the rule were "no word-initial [s]", these two words would have to be changed as well.</p>
         <p><strong>3. A further adaptation: the borrowed vowels, not just the prothesis.</strong> The prothetic [e] is not the only thing the set does. English <em>smoking</em> /ˈsmoʊkɪŋ/ is borrowed as <em>esmoquin</em> [esˈmokin]: the borrowed word's own vowels are remade to Spanish — the stressed [oʊ] surfaces as plain [o], and the final nasal-plus-stop ending is nativised — so the adaptation is two-layered, with [e] repairing the #sC cluster and the vowels inside the word reshaped to the Spanish inventory. (Stress placement is a second, equally visible adaptation: the borrowed words take Spanish stress, as the accents in <em>súper</em>, <em>estrés</em> and <em>escáner</em> show.)</p>
         <p><strong>Source note.</strong> The salt/student/smoking/snob set and the "no [s]-consonant sequence" wording are Tutorial D's; the wider Spanish table (<em>estrés</em>, <em>escáner</em>) and the loanword/cognate distinction for <em>súper</em> vs <em>estado</em>, <em>surfear</em> vs <em>esculpir</em> come from the Topic 3 lecture and Tutorial D respectively.</p>
@@ -269,7 +286,7 @@
     <section class="exercise">
       <div class="ex-head">
         <span class="ex-num">Exercise 5</span>
-        <span class="ex-skill">skill: writing the course's four-slot answer template (Zoque)</span>
+        <span class="ex-skill">skill: writing the course's three-slot answer template (Zoque)</span>
         <span class="difficulty">hard</span>
       </div>
       <p>Zoque (Southern Mexico) has a first-person possessive prefix. It is [m], [n] or [ŋ] before stops, and it disappears before other consonants. Analyse it and answer in the course's template — <strong>Type of alternation:</strong>, <strong>Motivating phonotactic constraint:</strong>, <strong>UR:</strong> — plus a description of the environments using features and a statement of the rule.</p>
@@ -293,7 +310,7 @@
         </table>
       </div>
       <details class="step"><summary>Step 1: describe the environment of each allomorph, with features</summary>
-        <p>Four allomorphs, and the environment is the word-initial segment of the noun: [m] before labial stops; [n] before alveolar stops, glides and the glottal stop; [ŋ] before velar stops; [Ø] before consonants that are not stops (fricatives and liquids). In features: [m] / __ [−cont, +nasal, +labial] … the nasal agrees in place with the following stop; [Ø] / __ [+cont].</p>
+        <p>Four allomorphs, and the environment is the word-initial segment of the noun: [m] before labial stops; [n] before alveolar stops, glides and the glottal stop; [ŋ] before velar stops; [Ø] before consonants that are not stops (fricatives and liquids). In features: [m] / __ [+labial, −cont] — the nasal agrees in place with the following stop; [Ø] / __ [+cont].</p>
       </details>
       <details class="step"><summary>Step 2: generalise into natural classes and name the type</summary>
         <p>The three nasal allomorphs differ only in place, and the place is copied from the following stop — the segments stay two segments, so this is assimilation, and the trigger is adjacent, so it is local assimilation. The fourth allomorph is a zero form produced by deleting the nasal — a separate change, deletion, with its own environment.</p>
@@ -317,13 +334,84 @@
       </details>
     </section>
 
+    <section class="exercise">
+      <div class="ex-head">
+        <span class="ex-num">Exercise 6</span>
+        <span class="ex-skill">skill: trigger vs target, then a positive-feature statement that covers the group and nothing else</span>
+        <span class="difficulty">medium</span>
+      </div>
+      <p>Language X (invented data, not from the book or the tutorial). The genitive suffix has two shapes, and the choice is made by the last sound of the noun. Do it in the deck's order: say which segment is the <strong>trigger</strong> and which is the <strong>target</strong> before you write any environment, then state the environments as feature classes — positive features first — and test your statement against every row.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>noun</th><th>genitive</th><th>gloss</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>kalam</td><td>kalam-mu</td><td>river</td></tr>
+            <tr><td>sap</td><td>sap-mu</td><td>basket</td></tr>
+            <tr><td>tub</td><td>tub-mu</td><td>stone</td></tr>
+            <tr><td>daf</td><td>daf-nu</td><td>rope</td></tr>
+            <tr><td>kan</td><td>kan-nu</td><td>house</td></tr>
+            <tr><td>tas</td><td>tas-nu</td><td>salt</td></tr>
+            <tr><td>dal</td><td>dal-nu</td><td>bird</td></tr>
+            <tr><td>tʃik</td><td>tʃik-nu</td><td>knife</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details class="step"><summary>Step 1: name the target and the trigger</summary>
+        <p>Two segments are in play in every row: the noun's last consonant and the suffix's first consonant. Only one of them varies — the suffix shows up as [m] or [n] — while the noun-final consonants stay exactly as they are. The segment that changes is the <strong>target</strong>; the segment that makes it change is the <strong>trigger</strong>. So <strong>target = the suffix's initial nasal</strong>, <strong>trigger = the noun-final consonant</strong>.</p>
+        <p>Note where the trigger sits relative to the target: before it. The frame is therefore <code>n → m / [+labial, …] __</code> — the target left of the slash, the trigger in the left-hand context, the right-hand context empty. Writing <code>n → m / __ [+labial]</code> puts the trigger on the wrong side and describes a language that does not exist.</p>
+      </details>
+      <details class="step"><summary>Step 2: list the environments</summary>
+        <p>[-mu] after [m], [p], [b] · [-nu] after [f], [n], [s], [l], [k]. Every row is accounted for, and no segment appears in both lists — the two allomorphs are in complementary distribution.</p>
+      </details>
+      <details class="step"><summary>Step 3: kill the two hypotheses that die on the data</summary>
+        <p><strong>Voicing?</strong> No: [p] is voiceless and [b] is voiced, and both take [-mu], while [f] is voiceless and takes [-nu]. Whatever the trigger is, it is not voicing. <strong>Manner?</strong> No again: [m] is a nasal, [p] and [b] are stops, and all three pattern together, while [f] (a fricative) and [n] (a nasal) go the other way. So the trigger is neither voicing nor manner on its own — it is place.</p>
+      </details>
+      <details class="step"><summary>Step 4: state the class positively, then test it against every row</summary>
+        <p>The positive statement is <code>[+labial]</code>, and it is nearly right. Test it: [m], [p], [b] are labial and take [-mu] — but [f] is labial too (a labio-dental fricative) and takes [-nu]. So <code>[+labial]</code> predicts *daf-mu and is too wide. That is the "hold ONLY for the group concerned" failure, and it is worth naming in your answer.</p>
+        <p>Now narrow it. A positive feature alone will not isolate the three; the deck allows the next move — "Primarily with positive features; if impossible, incorporate negative features" — so add [−cont]: <code>[+labial, −cont]</code> picks out the labial stops [p, b] and the labial nasal [m], and excludes [f]. Check the class against every row (the answer below does this in full). The same fact in words, which is what the marks are for: <em>the suffix nasal becomes [m] after a labial stop or [m], and stays [n] everywhere else.</em></p>
+      </details>
+      <details class="step"><summary>Step 5: which allomorph is stored, and the two formalisations</summary>
+        <p>The [-nu] set — [f, n, s, l, k] — is not a natural class at all: coronal and dorsal, fricatives and a liquid and a nasal. So [-nu] is the <strong>elsewhere case</strong> and <code>/-nu/</code> is the underlying form; [m] is derived. Rule style: <code>n → m / [+labial, −cont] __</code> — "what changes to what in what context". Constraint style: what is banned is a labial stop or [m] followed by an alveolar nasal, <code>*[+labial, −cont][+coronal]</code> — "what is bad". Same fact, two questions.</p>
+      </details>
+      <details class="answer"><summary>Full answer</summary>
+        <p><strong>Target and trigger.</strong> Target: the initial nasal of the genitive suffix, which surfaces as [m] or [n]. Trigger: the final consonant of the noun, which does not itself change. The change is leftward-conditioned: the trigger precedes the target.</p>
+        <p><strong>Environments, sorted row by row.</strong> Eight nouns, eight distinct final sounds, and each one falls on exactly one side of the split:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>noun-final sound</th><th>features</th><th>allomorph</th><th>row</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>[m]</td><td>[+labial, −cont, +nasal]</td><td>[-mu]</td><td>kalam</td></tr>
+              <tr><td>[p]</td><td>[+labial, −cont, −voice]</td><td>[-mu]</td><td>sap</td></tr>
+              <tr><td>[b]</td><td>[+labial, −cont, +voice]</td><td>[-mu]</td><td>tub</td></tr>
+              <tr><td>[f]</td><td>[+labial, +cont]</td><td>[-nu]</td><td>daf</td></tr>
+              <tr><td>[n]</td><td>[+coronal, +nasal]</td><td>[-nu]</td><td>kan</td></tr>
+              <tr><td>[s]</td><td>[+coronal, +cont]</td><td>[-nu]</td><td>tas</td></tr>
+              <tr><td>[l]</td><td>[+coronal, +sonorant, +cont]</td><td>[-nu]</td><td>dal</td></tr>
+              <tr><td>[k]</td><td>[+dorsal, −cont]</td><td>[-nu]</td><td>tʃik</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The last row of that table is the interesting one: [k] is [−cont], like [p] and [b], and still takes [-nu]. So the environment cannot be "[−cont]" either — it is the conjunction that works. The column that matters is the feature pair: <code>[+labial, −cont]</code> is true of exactly [m], [p], [b] and of nothing else in the data.</p>
+        <p><strong>Type of alternation.</strong> Local assimilation — the target is immediately adjacent to its trigger, and both segments survive as two segments. Sub-type: place assimilation, but only within the labial class — the nasal takes the place of a preceding labial stop or nasal, and of nothing else.</p>
+        <p><strong>Motivating phonotactic constraint.</strong> State it no wider than the data: no coronal nasal may follow a labial non-continuant. The general sentence the course uses ("a nasal will agree in its place of articulation with a following stop consonant", Topic 3) is the English pattern, and this language instantiates only its labial half — [k] is [−cont] and does <em>not</em> turn [n] into [ŋ], and [f] is labial but [+cont], so it takes [-nu] as well. Writing the general version here would be exactly the "hold ONLY for the group concerned" failure the lecture warns about. As a prohibition: <code>*[+labial, −cont][+coronal nasal]</code>.</p>
+        <p><strong>UR: /-nu/.</strong> The [-nu] conditioning set — [f, n, s, l, k] — has nothing in common, which is the elsewhere test in its usual form. [-mu] is phonologically conditioned and therefore derived. (Contrast the Turkish case in Exercise 2, where no allomorph was the elsewhere case and the UR had to be underspecified.)</p>
+        <p><strong>The two formalisations.</strong> SPE / rule-based: <code>n → m / [+labial, −cont] __</code>. Constraint-based (Optimality Theory): <code>*[+labial, −cont][+coronal]</code>. The first says what changes to what in what context; the second says what is bad. Neither is worth more than the sentence in Step 4 — "the suffix nasal becomes [m] after a labial stop or [m], and stays [n] everywhere else" — which is the answer a marker can actually check.</p>
+        <p><strong>Deliberate traps, named.</strong> (1) <em>[f]</em>: [+labial] is the obvious positive statement and it overgenerates onto the labio-dental fricative — the fix is one negative feature, [−cont], which is exactly the deck's "if impossible, incorporate negative features". (2) <em>[m]</em>: the near-miss "labial stops" undergenerates, because [m] is a nasal and still triggers the change; the class is labial <em>non-continuants</em>, not labial stops. (3) <em>[k]</em>: "[−cont]" alone would sweep in the velar stop, which takes [-nu]. (4) <em>voicing</em>: [p] and [b] behave alike and [f] does not, so any voicing-based statement is dead on inspection.</p>
+        <p><strong>Reasoning chain:</strong> fix target and trigger first (suffix nasal; noun-final consonant) → write each environment → test voicing and manner and discard both → state the positive class, then find the row that breaks it ([f]) → narrow with the one negative feature the data require → pick the heterogeneous set as the elsewhere case and store /-nu/ → write the arrow and the starred constraint, then the sentence in words.</p>
+      </details>
+    </section>
+
     <h2>Discuss</h2>
     <div class="discuss">
       <span class="tag">Discuss</span>
       <p>Take a position: "Naming the alternation type is the easy half of the analysis; choosing the underlying form is the half that goes wrong." Test it on Lardil from Exercise 3 — [puta] "short" looks exactly like the underlying form until [putaka-r] shows that it is not. Then test it the other way: name one case in this reading where you cannot pick an underlying form at all (Igbo), and one where the alternation type itself is arguable because two processes are involved (Hanunoo, Zoque). Defend or attack the claim. Evidence that would change your mind: a language where the uninflected, freestanding form is always the underlying form, or an alternation whose type label cannot be assigned before the underlying form is known. Be ready to state two things and discuss each — that is how the short quiz is marked.</p>
     </div>
 
-    <p class="source">Source: Zsiga, <em>The Sounds of Language</em> (2013), Ch. 11.2 "Analyzing alternations" (book pp. 225–231, incl. examples (1)–(3), the <em>in-</em> illustration, and Zoque (4)–(9)) and Ch. 11.3 "Alternations: what to expect" (book pp. 232–245, incl. Table 11.1 and examples (16)–(44): Russian (16), Chontal (30), Turkish (25), Indonesian (28), Tagalog (40), Lardil (41), Hanunoo (44)); LING 2027 Topic 3 "Phonotactics" (the four-slot answer template "Type of alternation: / Motivating phonotactic constraint: / UR:", the <em>/in-/</em> elsewhere-case worked example, and "English loanwords in Spanish"); Tutorial D "Phonotactics" (the three-step alternation method, the [t]/[d]/[ɨd] worked example with its two constraints, and the loanword-adaptation sets incl. English→Japanese). IPA is reproduced from the reading digest's arbitrated reads; forms flagged there as low-confidence ([kɯz], the Zoque fricative-initial nouns) are marked in the relevant answer.</p>
+    <p class="source">Source: Zsiga, <em>The Sounds of Language</em> (2013), Ch. 11.2 "Analyzing alternations" (book pp. 225–231, incl. examples (1)–(3), the <em>in-</em> illustration, and Zoque (4)–(9)) and Ch. 11.3 "Alternations: what to expect" (book pp. 232–245, incl. Table 11.1 and examples (16)–(44): Russian (16), Chontal (30), Turkish (25), Indonesian (28), Tagalog (40), Lardil (41), Hanunoo (44)); LING 2027 Topic 3 "Phonotactics" (the three-slot answer template "Type of alternation: / Motivating phonotactic constraint: / UR:", the <em>/in-/</em> elsewhere-case worked example, and "English loanwords in Spanish"); Tutorial D "Phonotactics" (the three-step alternation method, the [t]/[d]/[ɨd] worked example with its two constraints, and the loanword-adaptation sets incl. English→Japanese); Topic 4 "Alternations" (Quiz 4's paper and its 3/2/1 grading, slides 3–4; the HOW/WHAT/WHY steps, trigger vs target and the "not so important at the intro level" notation policy, slides 5–11; the two formalisation styles, slides 12–14; the type-by-type definitions quoted in Q4's key, slides 18, 23, 24, 25, 26). IPA is reproduced from the reading digest's arbitrated reads; forms flagged there as low-confidence ([kɯz], the Zoque fricative-initial nouns) are marked in the relevant answer.</p>
 
     <h2>Recap</h2>
     <div class="flashcards">
